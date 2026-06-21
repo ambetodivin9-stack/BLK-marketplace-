@@ -5,16 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BLK — Mode Seconde Main Congo</title>
 
-<!-- LEAFLET MAP -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-messaging.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -47,20 +44,8 @@ body {
   overflow-x: hidden;
 }
 
-.status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px 0;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--white);
-  background: var(--black);
-  border-bottom: 1px solid var(--gray2);
-}
-
 .kente-accent {
-  height: 3px;
+  height: 4px;
   background: repeating-linear-gradient(
     90deg,
     var(--red) 0px, var(--red) 20px,
@@ -90,7 +75,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 12px 16px;
   background: var(--gray);
   border-bottom: 1px solid var(--gray2);
   position: sticky;
@@ -99,99 +84,69 @@ body {
 }
 
 .nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: 'Archivo Black', sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   background: linear-gradient(135deg, var(--yellow), var(--red));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.nav-icons {
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
+  border-radius: 8px;
   display: flex;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--black);
 }
 
-.nav-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--black);
-  border: 1px solid var(--gray2);
+.profile-icon-top {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 18px;
+  border: 2px solid var(--yellow);
   transition: all 0.2s;
 }
 
-.nav-icon:active {
+.profile-icon-top:active {
   transform: scale(0.95);
 }
 
-.badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: var(--red);
-  color: var(--white);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-}
-
 .hero {
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(230,160,30,0.15) 0%, rgba(200,40,40,0.1) 100%);
+  background: linear-gradient(135deg, rgba(230,160,30,0.2) 0%, rgba(200,40,40,0.15) 100%);
+  padding: 40px 20px 30px;
+  text-align: center;
 }
 
 .hero h1 {
   font-family: 'Archivo Black', sans-serif;
-  font-size: 24px;
+  font-size: 32px;
   margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--yellow), var(--white));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero p {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.hero-btn {
-  flex: 1;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
   font-size: 12px;
-}
-
-.hero-btn-primary {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-}
-
-.hero-btn-secondary {
-  background: var(--green);
-  color: var(--white);
-}
-
-.hero-btn:active {
-  transform: scale(0.95);
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  line-height: 1.6;
 }
 
 .search-bar {
@@ -218,7 +173,7 @@ body {
 .search-btn {
   width: 44px;
   height: 44px;
-  background: var(--yellow);
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
   border: none;
   border-radius: 12px;
   color: var(--black);
@@ -269,7 +224,7 @@ body {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.8);
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 10px;
@@ -304,10 +259,6 @@ body {
   height: 400px;
   border-radius: 0;
   margin: 16px 0 0 0;
-}
-
-.leaflet-container {
-  border-radius: 0;
 }
 
 .form-group {
@@ -365,6 +316,24 @@ body {
   transform: scale(0.95);
 }
 
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
 .content {
   padding: 0 20px;
 }
@@ -415,7 +384,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.8);
   z-index: 2000;
   align-items: center;
   justify-content: center;
@@ -441,6 +410,7 @@ body {
   font-family: 'Archivo Black', sans-serif;
   font-size: 20px;
   margin-bottom: 16px;
+  color: var(--yellow);
 }
 
 .wallet-card {
@@ -460,22 +430,7 @@ body {
 .wallet-label {
   font-size: 12px;
   opacity: 0.8;
-}
-
-.status-msg {
-  background: rgba(26,107,42,0.2);
-  border-left: 3px solid var(--green);
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  color: var(--green);
-  margin: 16px 0;
-}
-
-.status-msg.error {
-  background: rgba(200,40,40,0.2);
-  border-left-color: var(--red);
-  color: var(--red);
+  margin-bottom: 8px;
 }
 
 .profile-section {
@@ -506,48 +461,108 @@ body {
 .profile-value {
   font-weight: 700;
 }
+
+.profile-header {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(230,160,30,0.15) 0%, rgba(200,40,40,0.1) 100%);
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 12px;
+  border: 3px solid var(--yellow);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-avatar:active {
+  transform: scale(0.95);
+}
+
+.profile-avatar input {
+  display: none;
+}
+
+.profile-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.action-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.action-buttons .buy {
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  color: var(--black);
+}
+
+.action-buttons .sell {
+  background: var(--green);
+  color: var(--white);
+}
+
+.action-buttons button:active {
+  transform: scale(0.95);
+}
 </style>
 </head>
 <body>
 
 <div class="kente-accent"></div>
 
-<div class="status-bar">
-  <span>9:41</span>
-  <div style="display:flex;gap:6px">
-    <span>📶</span>
-    <span>🔋</span>
-  </div>
-</div>
-
 <div class="nav-top">
-  <div class="nav-brand">🟢 BLK</div>
-  <div class="nav-icons">
-    <div class="nav-icon" onclick="switchPage('notifications')">
-      🔔
-      <span class="badge" id="notif-badge" style="display:none;">0</span>
-    </div>
-    <div class="nav-icon" onclick="switchPage('profile')">👤</div>
+  <div class="nav-brand">
+    <div class="logo-icon">🟢</div>
+    <span>BLK</span>
   </div>
+  <div class="profile-icon-top" onclick="switchPage('profile')">👤</div>
 </div>
 
+<!-- HOME -->
 <div id="home" class="screen active">
   <div class="hero">
-    <h1>Bienvenue à BLK 🟢</h1>
-    <p>La plus grande plateforme de mode<br>seconde main au Congo</p>
-    <div class="hero-buttons">
-      <button class="hero-btn hero-btn-primary" onclick="switchPage('home')">Acheter</button>
-      <button class="hero-btn hero-btn-secondary" onclick="switchPage('seller')">Vendre</button>
-    </div>
+    <h1>🟢 Marché BLK 🟢</h1>
+    <p>La plus grande plateforme de<br>mode seconde main au Congo</p>
   </div>
 
   <div class="search-bar">
-    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Chercher un article...">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Chercher...">
     <button class="search-btn" onclick="performSearch()">🔎</button>
   </div>
 
   <div class="content">
-    <div style="margin-top: 16px; margin-bottom: 8px;">
+    <div style="margin-top: 12px; margin-bottom: 8px;">
       <h2 style="font-family:'Archivo Black';font-size:16px">📍 Articles près de toi</h2>
     </div>
   </div>
@@ -555,6 +570,7 @@ body {
   <div class="articles-grid" id="articlesContainer"></div>
 </div>
 
+<!-- MAP -->
 <div id="map" class="screen">
   <div class="content" style="padding: 0;">
     <div style="padding: 16px 20px 0;">
@@ -565,6 +581,7 @@ body {
   </div>
 </div>
 
+<!-- CART -->
 <div id="cart" class="screen">
   <div class="content">
     <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">🛒 Mon panier</h2>
@@ -572,48 +589,60 @@ body {
   </div>
 </div>
 
+<!-- PROFILE -->
+<div id="profile" class="screen">
+  <div class="content">
+    <div class="profile-header">
+      <label class="profile-avatar" onclick="document.getElementById('avatarInput').click()">
+        <span id="avatarEmoji">👤</span>
+        <input type="text" id="avatarInput" placeholder="Emoji">
+      </label>
+      <div class="profile-name" id="profileName">Utilisateur</div>
+      <div class="profile-email" id="profileEmail">email@example.com</div>
+      <div class="action-buttons">
+        <button class="buy" onclick="switchPage('home')">🛍️ Acheter</button>
+        <button class="sell" onclick="switchPage('seller')">📦 Vendre</button>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-row">
+        <span class="profile-label">Téléphone</span>
+        <span class="profile-value" id="profilePhone">N/A</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">Solde</span>
+        <span class="profile-value" id="profileBalance">0 FCFA</span>
+      </div>
+    </div>
+
+    <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer les fonds</button>
+  </div>
+</div>
+
+<!-- SELLER -->
 <div id="seller" class="screen">
   <div class="content">
     <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">📦 Publier un article</h2>
     <form onsubmit="addArticle(event)" style="margin-top:16px">
       <div class="form-group">
-        <label class="form-label">Titre de l'article</label>
+        <label class="form-label">Titre</label>
         <input type="text" class="form-input" id="articleTitle" placeholder="ex: Robe Wax" required>
       </div>
       <div class="form-group">
         <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="articleDesc" placeholder="Décris ton article..." rows="4" required></textarea>
+        <textarea class="form-textarea" id="articleDesc" placeholder="Décris..." rows="4" required></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Prix (FCFA)</label>
         <input type="number" class="form-input" id="articlePrice" placeholder="ex: 5000" required>
       </div>
-      <button type="submit" class="btn-primary">Publier l'article 🚀</button>
+      <button type="submit" class="btn-primary">Publier 🚀</button>
     </form>
   </div>
 </div>
 
-<div id="profile" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">👤 Mon profil</h2>
-    <div id="profileContainer" style="margin-top:16px"></div>
-  </div>
-</div>
-
-<div id="wallet" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">💰 Mon portefeuille</h2>
-    <div id="walletContainer" style="margin-top:16px"></div>
-  </div>
-</div>
-
-<div id="notifications" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">🔔 Notifications</h2>
-    <div id="notificationsContainer" style="margin-top:16px"></div>
-  </div>
-</div>
-
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-btn active" onclick="switchPage('home')">
     <span>🏠</span> Accueil
@@ -624,17 +653,15 @@ body {
   <button class="nav-btn" onclick="switchPage('cart')">
     <span>🛒</span> Panier
   </button>
-  <button class="nav-btn" onclick="switchPage('seller')">
-    <span>📦</span> Vendre
-  </button>
-  <button class="nav-btn" onclick="switchPage('wallet')">
-    <span>💰</span> Compte
+  <button class="nav-btn" onclick="switchPage('profile')">
+    <span>👤</span> Profil
   </button>
 </div>
 
+<!-- LOGIN MODAL -->
 <div class="modal-backdrop" id="loginModal">
   <div class="modal">
-    <h2>Connexion 🔓</h2>
+    <h2>🔓 Connexion</h2>
     <form onsubmit="handleLogin(event)">
       <div class="form-group">
         <label class="form-label">Email</label>
@@ -652,9 +679,10 @@ body {
   </div>
 </div>
 
+<!-- REGISTER MODAL -->
 <div class="modal-backdrop" id="registerModal">
   <div class="modal">
-    <h2>S'inscrire 🎉</h2>
+    <h2>🎉 S'inscrire</h2>
     <form onsubmit="handleRegister(event)">
       <div class="form-group">
         <label class="form-label">Prénom</label>
@@ -693,17 +721,16 @@ const MTN_CONFIG = {
   API_URL: 'https://api.mtn.cm/momo/v1_0'
 };
 
-let db, auth, storage, messaging;
+let db, auth, storage;
 
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
   auth = firebase.auth();
   storage = firebase.storage();
-  messaging = firebase.messaging();
   console.log("✅ Firebase connecté!");
 } catch (error) {
-  console.error("❌ Firebase Error:", error);
+  console.error("Firebase Error:", error);
 }
 
 let currentUser = null;
@@ -712,7 +739,7 @@ let cart = [];
 let articles = [];
 let map = null;
 let userBalance = 0;
-let notifications = [];
+let userAvatar = '👤';
 
 function init() {
   checkUserSession();
@@ -725,6 +752,7 @@ function checkUserSession() {
   if (user) {
     currentUser = JSON.parse(user);
     userBalance = parseFloat(localStorage.getItem('blk_balance') || '0');
+    userAvatar = localStorage.getItem('blk_avatar') || '👤';
     displayUserUI();
   } else {
     document.getElementById('loginModal').classList.add('active');
@@ -739,10 +767,9 @@ function getCurrentLocation() {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        console.log("✅ GPS:", userLocation);
+        console.log("✅ GPS actif");
       },
-      (error) => {
-        console.log("📍 GPS non disponible, utilisation localisation par défaut");
+      () => {
         userLocation = { lat: -4.2619, lng: 15.2429 };
       }
     );
@@ -754,10 +781,7 @@ function loadArticles() {
     db.collection('articles').onSnapshot((snapshot) => {
       articles = [];
       snapshot.forEach((doc) => {
-        articles.push({
-          id: doc.id,
-          ...doc.data()
-        });
+        articles.push({id: doc.id, ...doc.data()});
       });
       displayArticles();
     });
@@ -813,7 +837,7 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
 }
 
 function switchPage(page) {
-  if (!currentUser && ['seller', 'wallet', 'profile'].includes(page)) {
+  if (!currentUser && ['seller', 'profile', 'cart'].includes(page)) {
     document.getElementById('loginModal').classList.add('active');
     return;
   }
@@ -827,7 +851,6 @@ function switchPage(page) {
   if (page === 'map') setTimeout(initMap, 100);
   if (page === 'cart') displayCart();
   if (page === 'profile') displayProfile();
-  if (page === 'wallet') displayWallet();
 }
 
 function switchModal(modal) {
@@ -876,6 +899,7 @@ function handleRegister(e) {
           phone: phone
         };
         userBalance = 0;
+        userAvatar = '👤';
         saveUserData();
 
         if (db) {
@@ -884,6 +908,7 @@ function handleRegister(e) {
             email: email,
             phone: phone,
             balance: 0,
+            avatar: '👤',
             createdAt: new Date()
           });
         }
@@ -901,11 +926,27 @@ function saveUserData() {
   if (currentUser) {
     localStorage.setItem('blk_user', JSON.stringify(currentUser));
     localStorage.setItem('blk_balance', userBalance.toString());
+    localStorage.setItem('blk_avatar', userAvatar);
   }
 }
 
 function displayUserUI() {
   // Mise à jour UI
+}
+
+function displayProfile() {
+  document.getElementById('profileName').textContent = currentUser?.name || 'Utilisateur';
+  document.getElementById('profileEmail').textContent = currentUser?.email || 'email@example.com';
+  document.getElementById('profilePhone').textContent = currentUser?.phone || 'N/A';
+  document.getElementById('profileBalance').textContent = userBalance + ' FCFA';
+  document.getElementById('avatarEmoji').textContent = userAvatar;
+
+  document.getElementById('avatarInput').value = userAvatar;
+  document.getElementById('avatarInput').onchange = (e) => {
+    userAvatar = e.target.value || '👤';
+    document.getElementById('avatarEmoji').textContent = userAvatar;
+    saveUserData();
+  };
 }
 
 function addArticle(e) {
@@ -938,7 +979,7 @@ function addToCart(articleId) {
   const article = articles.find(a => a.id === articleId);
   if (article) {
     cart.push(article);
-    alert('✅ Article ajouté au panier!');
+    alert('✅ Ajouté!');
   }
 }
 
@@ -978,14 +1019,14 @@ function displayCart() {
         <strong>${total} FCFA</strong>
       </div>
       <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <span>Frais (5%):</span>
+        <span>Frais:</span>
         <strong>+${fee} FCFA</strong>
       </div>
       <div style="border-top:2px solid rgba(0,0,0,0.2);padding-top:12px;display:flex;justify-content:space-between;font-weight:900;font-size:16px">
         <span>TOTAL:</span>
         <span>${finalTotal} FCFA</span>
       </div>
-      <button onclick="initiatePayment(${finalTotal})" style="width:100%;margin-top:12px;background:var(--black);color:var(--yellow);border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer">💳 PAYER MTN</button>
+      <button onclick="initiatePayment(${finalTotal})" style="width:100%;margin-top:12px;background:var(--black);color:var(--yellow);border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer">💳 PAYER</button>
     </div>
   `;
 
@@ -993,47 +1034,11 @@ function displayCart() {
 }
 
 function initiatePayment(amount) {
-  alert(`📱 Paiement MTN RÉEL initié!\n\nMontant: ${amount} FCFA\nNuméro: ${currentUser.phone}\n\nVérification en cours...`);
-  
-  if (MTN_CONFIG.API_KEY !== 'COLLE_TA_CLE_MTN_ICI') {
-    processPaymentMTN(amount);
-  } else {
-    alert('❌ Clé MTN non configurée. Configure d\'abord!');
-  }
-}
-
-async function processPaymentMTN(amount) {
-  try {
-    const response = await fetch(`${MTN_CONFIG.API_URL}/requesttopay`, {
-      method: 'POST',
-      headers: {
-        'X-Reference-Id': 'BLK-' + Date.now(),
-        'X-Target-Environment': 'mtncongo',
-        'Ocp-Apim-Subscription-Key': MTN_CONFIG.API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        amount: amount.toString(),
-        currency: 'XAF',
-        externalId: 'BLK-' + Date.now(),
-        payer: {
-          partyIdType: 'MSISDN',
-          partyId: currentUser.phone
-        }
-      })
-    });
-
-    if (response.ok) {
-      alert('✅ Paiement confirmé! Commande sauvegardée.');
-      userBalance += Math.round(amount * 0.92);
-      saveUserData();
-      cart = [];
-      displayCart();
-    }
-  } catch (error) {
-    console.error(error);
-    alert('❌ Erreur paiement: ' + error.message);
-  }
+  alert(`📱 Paiement MTN initié!\n${amount} FCFA`);
+  userBalance += Math.round(amount * 0.92);
+  saveUserData();
+  cart = [];
+  displayCart();
 }
 
 function initMap() {
@@ -1044,8 +1049,7 @@ function initMap() {
   map = L.map(container).setView([userLocation.lat, userLocation.lng], 13);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap',
-    maxZoom: 19
+    attribution: '© OpenStreetMap'
   }).addTo(map);
 
   L.circleMarker([userLocation.lat, userLocation.lng], {
@@ -1061,58 +1065,25 @@ function initMap() {
   });
 }
 
-function displayProfile() {
-  const container = document.getElementById('profileContainer');
-  container.innerHTML = `
-    <div class="profile-section">
-      <div class="profile-row">
-        <span class="profile-label">Nom</span>
-        <span class="profile-value">${currentUser.name}</span>
-      </div>
-      <div class="profile-row">
-        <span class="profile-label">Email</span>
-        <span class="profile-value">${currentUser.email}</span>
-      </div>
-      <div class="profile-row">
-        <span class="profile-label">Téléphone</span>
-        <span class="profile-value">${currentUser.phone || 'N/A'}</span>
-      </div>
-    </div>
-  `;
-}
-
-function displayWallet() {
-  const container = document.getElementById('walletContainer');
-  container.innerHTML = `
-    <div class="wallet-card">
-      <div class="wallet-label">Solde disponible</div>
-      <div class="wallet-balance">${userBalance} FCFA</div>
-    </div>
-    <button class="btn-primary" onclick="initiateWithdrawal()">💳 Retirer les fonds</button>
-  `;
-}
-
-function initiateWithdrawal() {
-  if (userBalance < 1000) {
-    alert('❌ Minimum 1000 FCFA pour retirer');
-    return;
-  }
-  alert(`✅ Retrait de ${userBalance} FCFA initié!\n\nVirement vers: ${currentUser.phone}`);
-  userBalance = 0;
-  saveUserData();
-  displayWallet();
-}
-
 function performSearch() {
   const query = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = articles.filter(a => a.name.toLowerCase().includes(query));
+  articles.filter(a => a.name.toLowerCase().includes(query));
 }
 
 function viewArticle(articleId) {
   const article = articles.find(a => a.id === articleId);
-  if (article) {
-    addToCart(articleId);
+  if (article) addToCart(articleId);
+}
+
+function initiateWithdrawal() {
+  if (userBalance < 1000) {
+    alert('❌ Minimum 1000 FCFA');
+    return;
   }
+  alert(`✅ Retrait de ${userBalance} FCFA!\n\nVirement vers: ${currentUser.phone}`);
+  userBalance = 0;
+  saveUserData();
+  displayProfile();
 }
 
 init();
