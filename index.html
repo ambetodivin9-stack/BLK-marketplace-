@@ -12,6 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-functions.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
@@ -256,13 +257,6 @@ body {
   color: var(--text-muted);
 }
 
-.map-container {
-  width: 100%;
-  height: 400px;
-  border-radius: 0;
-  margin: 16px 0 0 0;
-}
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -316,6 +310,11 @@ body {
 
 .btn-primary:active {
   transform: scale(0.95);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-secondary {
@@ -386,11 +385,12 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.95);
   z-index: 2000;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  justify-content: flex-start;
+  padding: 0;
+  overflow-y: auto;
 }
 
 .modal-backdrop.active {
@@ -399,644 +399,196 @@ body {
 
 .modal {
   background: var(--gray);
-  border-radius: 16px;
-  padding: 24px;
   width: 100%;
-  max-width: 360px;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-width: 390px;
+  min-height: 100vh;
+  padding: 24px 20px;
   border: 1px solid var(--gray2);
+  margin: auto;
+  position: relative;
 }
 
 .modal h2 {
   font-family: 'Archivo Black', sans-serif;
-  font-size: 20px;
+  font-size: 28px;
   margin-bottom: 16px;
   color: var(--yellow);
 }
 
-.tracking-container {
-  background: var(--gray);
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--yellow);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 3000;
+}
+
+.signup-hero {
+  background: linear-gradient(135deg, rgba(230,160,30,0.3) 0%, rgba(200,40,40,0.2) 100%);
+  padding: 24px;
   border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--gray2);
-  margin: 16px 0;
-}
-
-.tracking-header {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-  padding: 16px;
   text-align: center;
-  font-weight: 700;
+  margin-bottom: 20px;
+  border: 1px solid var(--gray2);
 }
 
-.tracking-status {
-  padding: 16px;
+.signup-hero-emoji {
+  font-size: 48px;
+  margin-bottom: 12px;
 }
 
-.status-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--gray2);
+.signup-hero h3 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  margin-bottom: 8px;
 }
 
-.status-item:last-child {
-  border-bottom: none;
+.signup-hero p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
-.status-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+.benefits-list {
   background: var(--black);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid var(--gray2);
+}
+
+.benefit-item {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.benefit-item:last-child {
+  margin-bottom: 0;
+}
+
+.benefit-icon {
+  color: var(--green);
   font-size: 16px;
   flex-shrink: 0;
 }
 
-.status-icon.active {
-  background: var(--green);
-}
-
-.status-text {
-  flex: 1;
-}
-
-.status-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 2px;
-}
-
-.status-value {
-  font-weight: 700;
+.error-message {
+  background: rgba(200, 40, 40, 0.2);
+  border: 1px solid var(--red);
   color: var(--white);
-}
-
-.timer {
-  text-align: center;
-  padding: 16px;
-  background: linear-gradient(135deg, rgba(26,107,42,0.2), rgba(230,160,30,0.15));
-  border-top: 1px solid var(--gray2);
-}
-
-.timer-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
-.timer-display {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 32px;
-  color: var(--green);
-  font-weight: 900;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 6px;
-  background: var(--black);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 8px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--green), var(--yellow));
-  width: 0%;
-  transition: width 0.3s;
-}
-
-.confirm-btn {
-  width: 100%;
-  padding: 14px;
-  background: var(--green);
-  color: var(--white);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 12px;
-  transition: all 0.2s;
-}
-
-.confirm-btn:active {
-  transform: scale(0.95);
-}
-
-.confirm-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.wallet-card {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-  padding: 24px;
-  border-radius: 14px;
-  margin: 16px 0;
-}
-
-.wallet-balance {
-  font-size: 32px;
-  font-weight: 900;
-  font-family: 'Archivo Black', sans-serif;
-}
-
-.wallet-label {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-bottom: 8px;
-}
-
-.profile-section {
-  background: var(--gray);
-  padding: 16px;
-  border-radius: 12px;
-  margin: 16px 0;
-  border: 1px solid var(--gray2);
-}
-
-.profile-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--gray2);
-}
-
-.profile-row:last-child {
-  border-bottom: none;
-}
-
-.profile-label {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.profile-value {
-  font-weight: 700;
-}
-
-.profile-header {
-  text-align: center;
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(230,160,30,0.15) 0%, rgba(200,40,40,0.1) 100%);
-  border-radius: 14px;
+  padding: 12px;
+  border-radius: 8px;
   margin-bottom: 16px;
-}
-
-.profile-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  margin: 0 auto 12px;
-  border: 3px solid var(--yellow);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.profile-avatar:active {
-  transform: scale(0.95);
-}
-
-.profile-avatar input {
+  font-size: 12px;
   display: none;
 }
 
-.profile-name {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
-  margin-bottom: 4px;
+.error-message.show {
+  display: block;
 }
 
-.profile-email {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.action-buttons button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.2s;
-}
-
-.action-buttons .buy {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-}
-
-.action-buttons .sell {
-  background: var(--green);
-  color: var(--white);
-}
-
-.action-buttons button:active {
-  transform: scale(0.95);
-}
-
-.stats-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 16px 0;
-}
-
-.stat-box {
-  background: var(--gray);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gray2);
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--yellow);
-  font-family: 'Archivo Black', sans-serif;
-}
-
-.stat-label {
-  font-size: 10px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.chart-container {
-  background: var(--gray);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gray2);
-  margin: 16px 0;
-  position: relative;
-  height: 250px;
-}
-
-.earnings-card {
-  background: linear-gradient(135deg, rgba(26,107,42,0.2), rgba(230,160,30,0.15));
-  padding: 16px;
-  border-radius: 12px;
+.success-message {
+  background: rgba(26, 107, 42, 0.2);
   border: 1px solid var(--green);
-  margin: 16px 0;
-}
-
-.earnings-label {
-  font-size: 12px;
-  color: var(--green);
-  margin-bottom: 8px;
-}
-
-.earnings-amount {
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--green);
-  font-family: 'Archivo Black', sans-serif;
-}
-
-.shop-section {
-  background: var(--gray);
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--gray2);
-  margin: 16px 0;
-}
-
-.shop-title {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 14px;
-  margin-bottom: 12px;
-  color: var(--yellow);
-}
-
-.shop-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.shop-tab {
-  flex: 1;
-  padding: 8px;
-  background: var(--black);
-  border: 1px solid var(--gray2);
-  border-radius: 8px;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--text-muted);
-}
-
-.shop-tab.active {
-  background: var(--yellow);
-  color: var(--black);
-}
-
-.shop-items {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.shop-item {
-  background: var(--black);
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--gray2);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-}
-
-.shop-item-info {
-  flex: 1;
-}
-
-.shop-item-name {
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.shop-item-price {
-  color: var(--yellow);
-  font-weight: 700;
-}
-
-.shop-item-status {
-  padding: 4px 8px;
-  background: var(--green);
   color: var(--white);
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  display: none;
 }
 
-.shop-item-status.sold {
+.success-message.show {
+  display: block;
+}
+
+.password-strength {
+  height: 4px;
+  background: var(--gray2);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.password-strength-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--red);
+  transition: width 0.3s, background-color 0.3s;
+}
+
+.password-strength-bar.weak {
+  width: 33%;
   background: var(--red);
 }
 
-.chat-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.password-strength-bar.medium {
+  width: 66%;
+  background: var(--yellow);
 }
 
-.chat-item {
-  background: var(--gray);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gray2);
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.password-strength-bar.strong {
+  width: 100%;
+  background: var(--green);
 }
 
-.chat-item:active {
-  transform: translateX(5px);
-}
-
-.chat-avatar {
-  width: 40px;
-  height: 40px;
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--yellow);
+  border-top: 2px solid transparent;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
 }
 
-.chat-info {
-  flex: 1;
-  min-width: 0;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-.chat-name {
-  font-weight: 700;
-  margin-bottom: 4px;
-  font-size: 13px;
-}
-
-.chat-message {
-  font-size: 11px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chat-time {
+.code-container {
+  background: var(--black);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--yellow);
+  margin: 20px 0;
+  font-family: 'Courier New', monospace;
   font-size: 10px;
-  color: var(--text-muted);
-  flex-shrink: 0;
-}
-
-.messages-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px);
-}
-
-.messages-list {
-  flex: 1;
+  line-height: 1.6;
+  color: var(--yellow);
+  max-height: 300px;
   overflow-y: auto;
-  padding: 16px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
-.message {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
-
-.message.sent {
-  justify-content: flex-end;
-}
-
-.message-content {
-  background: var(--gray);
-  padding: 10px 14px;
-  border-radius: 10px;
-  max-width: 70%;
-  border: 1px solid var(--gray2);
-  word-wrap: break-word;
-}
-
-.message.sent .message-content {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-}
-
-.message-time {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.message-input {
-  display: flex;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--gray2);
-  border-top: 1px solid var(--gray2);
-}
-
-.message-input input {
-  flex: 1;
-  background: var(--gray);
-  border: 1px solid var(--gray2);
-  border-radius: 20px;
-  padding: 10px 14px;
+.copy-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--green);
   color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-}
-
-.message-input button {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
   border: none;
-  border-radius: 50%;
-  color: var(--black);
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 12px;
 }
 
-.message-input button:active {
+.copy-btn:active {
   transform: scale(0.95);
 }
 
-.chat-header {
-  background: var(--gray);
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--gray2);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 0;
-}
-
-.chat-header-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-
-.chat-header-name {
-  flex: 1;
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  color: var(--yellow);
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.orders-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.order-card {
-  background: var(--gray);
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--gray2);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.order-card:active {
-  transform: translateX(5px);
-}
-
-.order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.order-id {
-  font-weight: 700;
-  color: var(--yellow);
-}
-
-.order-status {
-  padding: 4px 8px;
-  background: var(--green);
-  color: var(--white);
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.order-status.pending {
-  background: var(--text-muted);
-}
-
-.order-status.shipped {
-  background: var(--yellow);
-  color: var(--black);
-}
-
-.order-info {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.order-amount {
-  font-weight: 700;
-  color: var(--white);
-  margin-top: 8px;
+.section-divider {
+  height: 1px;
+  background: var(--gray2);
+  margin: 20px 0;
 }
 </style>
 </head>
@@ -1073,60 +625,11 @@ body {
   <div class="articles-grid" id="articlesContainer"></div>
 </div>
 
-<!-- MAP & TRACKING -->
-<div id="map" class="screen">
-  <div class="content" style="padding: 0;">
-    <div style="padding: 16px 20px 0;">
-      <h2 style="font-family:'Archivo Black';font-size:16px">🗺️ Suivi des livraisons</h2>
-    </div>
-    
-    <div id="trackingContainer" style="padding: 16px 20px;">
-      <div class="orders-list" id="ordersList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- TRACKING DETAIL -->
-<div id="trackingDetail" class="screen">
-  <div class="content">
-    <button class="back-btn" onclick="backToOrders()" style="margin-bottom: 16px;">← Retour</button>
-    <div class="tracking-container">
-      <div class="tracking-header">📦 Suivi de Livraison</div>
-      <div class="tracking-status" id="trackingStatus"></div>
-      <div class="timer">
-        <div class="timer-label">Temps écoulé</div>
-        <div class="timer-display" id="timerDisplay">00:00:00</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-      </div>
-    </div>
-    <button class="confirm-btn" id="confirmBtn" onclick="confirmDelivery()" disabled>✅ Confirmer la réception</button>
-  </div>
-</div>
-
 <!-- MESSAGES -->
 <div id="messages" class="screen">
-  <div id="chatListView" style="display:block">
-    <div class="content">
-      <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">💬 Messages</h2>
-      <div class="chat-list" id="chatsList"></div>
-    </div>
-  </div>
-  
-  <div id="chatDetailView" style="display:none;height:100%">
-    <div class="chat-header">
-      <button class="back-btn" onclick="backToChatList()">←</button>
-      <div class="chat-header-avatar" id="detailAvatar">👤</div>
-      <div class="chat-header-name" id="detailName">Conversation</div>
-    </div>
-    <div class="messages-container">
-      <div class="messages-list" id="messagesList"></div>
-      <div class="message-input">
-        <input type="text" id="messageInput" placeholder="Message...">
-        <button onclick="sendMessage()">📤</button>
-      </div>
-    </div>
+  <div class="content">
+    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">💬 Messages</h2>
+    <p style="color:var(--text-muted);text-align:center;padding:40px 20px">Chat à venir...</p>
   </div>
 </div>
 
@@ -1141,88 +644,8 @@ body {
 <!-- PROFILE -->
 <div id="profile" class="screen">
   <div class="content">
-    <div class="profile-header">
-      <label class="profile-avatar" onclick="document.getElementById('avatarInput').click()">
-        <span id="avatarEmoji">👤</span>
-        <input type="text" id="avatarInput" placeholder="Emoji">
-      </label>
-      <div class="profile-name" id="profileName">Utilisateur</div>
-      <div class="profile-email" id="profileEmail">email@example.com</div>
-      <div class="action-buttons">
-        <button class="buy" onclick="switchPage('home')">🛍️ Acheter</button>
-        <button class="sell" onclick="switchPage('seller')">📦 Vendre</button>
-      </div>
-    </div>
-
-    <div class="earnings-card">
-      <div class="earnings-label">💰 Mes revenus</div>
-      <div class="earnings-amount" id="earningsAmount">0 FCFA</div>
-    </div>
-
-    <h3 style="font-family:'Archivo Black';font-size:14px;margin:16px 0 12px">📊 Statistiques</h3>
-    
-    <div class="stats-container">
-      <div class="stat-box">
-        <div class="stat-number" id="viewCount">0</div>
-        <div class="stat-label">Vues</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" id="orderCount">0</div>
-        <div class="stat-label">Commandes</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" id="conversionRate">0%</div>
-        <div class="stat-label">Conversion</div>
-      </div>
-    </div>
-
-    <div class="chart-container">
-      <canvas id="salesChart"></canvas>
-    </div>
-
-    <div class="profile-section">
-      <div class="profile-row">
-        <span class="profile-label">Téléphone</span>
-        <span class="profile-value" id="profilePhone">N/A</span>
-      </div>
-      <div class="profile-row">
-        <span class="profile-label">Solde</span>
-        <span class="profile-value" id="profileBalance">0 FCFA</span>
-      </div>
-    </div>
-
-    <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer</button>
-
-    <div class="shop-section">
-      <div class="shop-title">🏪 Mon Magasin</div>
-      <div class="shop-tabs">
-        <div class="shop-tab active" onclick="switchShopTab('selling')">En vente</div>
-        <div class="shop-tab" onclick="switchShopTab('sold')">Vendus</div>
-      </div>
-      <div class="shop-items" id="shopItems"></div>
-    </div>
-  </div>
-</div>
-
-<!-- SELLER -->
-<div id="seller" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">📦 Publier</h2>
-    <form onsubmit="addArticle(event)" style="margin-top:16px">
-      <div class="form-group">
-        <label class="form-label">Titre</label>
-        <input type="text" class="form-input" id="articleTitle" placeholder="ex: Robe Wax" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="articleDesc" placeholder="Décris..." rows="4" required></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Prix (FCFA)</label>
-        <input type="number" class="form-input" id="articlePrice" placeholder="ex: 5000" required>
-      </div>
-      <button type="submit" class="btn-primary">Publier 🚀</button>
-    </form>
+    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">👤 Profil</h2>
+    <div id="profileContent" style="margin-top:16px"></div>
   </div>
 </div>
 
@@ -1230,9 +653,6 @@ body {
 <div class="bottom-nav">
   <button class="nav-btn active" onclick="switchPage('home')">
     <span>🏠</span> Accueil
-  </button>
-  <button class="nav-btn" onclick="switchPage('map')">
-    <span>🗺️</span> Suivi
   </button>
   <button class="nav-btn" onclick="switchPage('messages')">
     <span>💬</span> Messages
@@ -1245,10 +665,80 @@ body {
   </button>
 </div>
 
+<!-- SIGNUP MODAL -->
+<div class="modal-backdrop" id="signupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSignupModal()">✕</button>
+    
+    <div class="signup-hero">
+      <div class="signup-hero-emoji">🚀</div>
+      <h3>Deviens Créateur BLK</h3>
+      <p>Crée ton app personnalisée en 2 minutes</p>
+    </div>
+
+    <div class="error-message" id="signupError"></div>
+    <div class="success-message" id="signupSuccess"></div>
+
+    <form id="signupForm" onsubmit="handleSignup(event)">
+      <div class="form-group">
+        <label class="form-label">Nom complet</label>
+        <input type="text" class="form-input" id="creatorName" placeholder="ex: Divin Ambeto" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="creatorEmail" placeholder="toi@gmail.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Pays</label>
+        <select class="form-select" id="creatorCountry" required>
+          <option value="">Sélectionne ton pays</option>
+          <option value="Congo">🇨🇬 Congo</option>
+          <option value="RDC">🇨🇩 RDC</option>
+          <option value="Cameroun">🇨🇲 Cameroun</option>
+          <option value="Senegal">🇸🇳 Sénégal</option>
+          <option value="Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
+          <option value="Autre">🌍 Autre</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" class="form-input" id="creatorPassword" placeholder="••••••••" required onchange="checkPasswordStrength()">
+        <div class="password-strength">
+          <div class="password-strength-bar" id="passwordBar"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirmer le mot de passe</label>
+        <input type="password" class="form-input" id="creatorPasswordConfirm" placeholder="••••••••" required>
+      </div>
+
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:20px;font-size:12px;cursor:pointer">
+        <input type="checkbox" id="agreeTerms" required style="margin-top:3px;cursor:pointer">
+        <span>Je accepte les <strong>conditions d'utilisation</strong> et la <strong>politique de confidentialité</strong></span>
+      </label>
+
+      <button type="submit" class="btn-primary" id="signupBtn">🚀 Créer mon app</button>
+    </form>
+
+    <p style="text-align:center;margin-top:20px;font-size:11px;color:var(--text-muted)">
+      Déjà inscrit? <a onclick="switchModal('loginModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">Se connecter →</a>
+    </p>
+  </div>
+</div>
+
 <!-- LOGIN MODAL -->
 <div class="modal-backdrop" id="loginModal">
   <div class="modal">
+    <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    
     <h2>🔓 Connexion</h2>
+    
+    <div class="error-message" id="loginError"></div>
+
     <form onsubmit="handleLogin(event)">
       <div class="form-group">
         <label class="form-label">Email</label>
@@ -1260,35 +750,49 @@ body {
       </div>
       <button type="submit" class="btn-primary">Se connecter</button>
     </form>
-    <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-muted)">
-      Pas de compte? <a onclick="switchModal('registerModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">S'inscrire →</a>
+    
+    <p style="text-align:center;margin-top:20px;font-size:12px;color:var(--text-muted)">
+      Pas de compte? <a onclick="switchModal('signupModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">S'inscrire →</a>
     </p>
   </div>
 </div>
 
-<!-- REGISTER MODAL -->
-<div class="modal-backdrop" id="registerModal">
+<!-- CODE DELIVERY MODAL -->
+<div class="modal-backdrop" id="codeModal">
   <div class="modal">
-    <h2>🎉 S'inscrire</h2>
-    <form onsubmit="handleRegister(event)">
-      <div class="form-group">
-        <label class="form-label">Prénom</label>
-        <input type="text" class="form-input" id="registerName" placeholder="Joëlle" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="registerEmail" placeholder="toi@gmail.com" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Téléphone MTN</label>
-        <input type="tel" class="form-input" id="registerPhone" placeholder="+242 06 XXX XXX" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input type="password" class="form-input" id="registerPassword" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="btn-primary">Créer</button>
-    </form>
+    <button class="modal-close" onclick="closeCodeModal()">✕</button>
+    
+    <h2>✅ Inscription réussie!</h2>
+    
+    <div class="signup-hero" style="background:rgba(26,107,42,0.2);border-color:var(--green)">
+      <div class="signup-hero-emoji">🎉</div>
+      <h3>Bienvenue <span id="welcomeName"></span>!</h3>
+      <p>Ton code a été envoyé à ton email</p>
+    </div>
+
+    <div style="margin:20px 0">
+      <h3 style="font-family:'Archivo Black';font-size:14px;margin-bottom:12px">📧 Vérifiez votre email</h3>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.6">
+        Un email contenant le <strong>code HTML complet à coller sur GitHub</strong> a été envoyé à <strong id="displayEmail"></strong>. Cet email contient aussi les instructions complètes.
+      </p>
+    </div>
+
+    <div style="background:var(--yellow);color:var(--black);padding:16px;border-radius:12px;margin:20px 0">
+      <h4 style="font-family:'Archivo Black';margin-bottom:8px">📋 Instructions rapides:</h4>
+      <ol style="font-size:12px;padding-left:20px;line-height:1.8">
+        <li>Ouvre ton email (vérifie aussi les spams)</li>
+        <li>Copie le code HTML complet</li>
+        <li>Va sur <strong>github.com → blk-marketplace</strong></li>
+        <li>Clique sur <strong>index.html</strong></li>
+        <li>Clique le <strong>crayon ✏️</strong> (Edit)</li>
+        <li>Sélectionne tout (Ctrl+A) et supprime</li>
+        <li>Colle ton code (Ctrl+V)</li>
+        <li>Clique "Commit changes"</li>
+        <li>Attends 30 secondes et refresh!</li>
+      </ol>
+    </div>
+
+    <button class="btn-primary" onclick="closeCodeModal();switchPage('home')">🏠 Retour à l'accueil</button>
   </div>
 </div>
 
@@ -1302,546 +806,42 @@ const FIREBASE_CONFIG = {
   appId: "1:701093221836:web:809a62273256fbabce3969"
 };
 
-const MTN_CONFIG = {
-  API_KEY: '20a3746253a646a19f803a2b46eb5c58',
-  BUSINESS_ID: 'e21820a3-320d-400a-b28e-8a2b53589ddc',
-  API_URL: 'https://api.mtn.cm/momo/v1_0'
-};
-
-let db, auth, storage;
+let db, auth, functions;
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
   auth = firebase.auth();
-  storage = firebase.storage();
+  functions = firebase.functions();
 } catch (error) {
   console.error("Firebase Error:", error);
 }
 
 let currentUser = null;
-let userLocation = null;
 let cart = [];
 let articles = [];
-let map = null;
-let userBalance = 0;
-let userAvatar = '👤';
-let messages = [];
-let conversations = {};
-let selectedConversation = null;
-let salesChart = null;
-let currentShopTab = 'selling';
-let orders = [];
-let selectedOrder = null;
-let timerInterval = null;
 
-let stats = {
-  views: 0,
-  orders: 0,
-  earnings: 0
-};
-
-const DELIVERY_STATUSES = {
-  pending: '⏳ En attente',
-  confirmed: '✅ Confirmée',
-  shipped: '📦 Expédiée',
-  delivered: '🎁 Livrée',
-  completed: '✓ Complétée'
-};
-
-function init() {
-  checkUserSession();
-  getCurrentLocation();
-  loadArticles();
-  loadConversations();
-  loadStats();
-  loadOrders();
+// AFFICHAGE DES MODALS
+function openSignupModal() {
+  document.getElementById('signupModal').classList.add('active');
 }
 
-function checkUserSession() {
-  const user = localStorage.getItem('blk_user');
-  if (user) {
-    currentUser = JSON.parse(user);
-    userBalance = parseFloat(localStorage.getItem('blk_balance') || '0');
-    userAvatar = localStorage.getItem('blk_avatar') || '👤';
-  } else {
-    document.getElementById('loginModal').classList.add('active');
-  }
+function closeSignupModal() {
+  document.getElementById('signupModal').classList.remove('active');
+  document.getElementById('signupForm').reset();
+  document.getElementById('signupError').classList.remove('show');
+  document.getElementById('signupSuccess').classList.remove('show');
 }
 
-function getCurrentLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        userLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      },
-      () => {
-        userLocation = { lat: -4.2619, lng: 15.2429 };
-      }
-    );
-  }
+function openLoginModal() {
+  document.getElementById('loginModal').classList.add('active');
 }
 
-function loadArticles() {
-  if (db) {
-    db.collection('articles').onSnapshot((snapshot) => {
-      articles = [];
-      snapshot.forEach((doc) => {
-        articles.push({id: doc.id, ...doc.data()});
-      });
-      displayArticles();
-    });
-  }
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.remove('active');
 }
 
-function loadOrders() {
-  if (db && currentUser) {
-    db.collection('orders')
-      .where('buyerId', '==', currentUser.id)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((snapshot) => {
-        orders = [];
-        snapshot.forEach((doc) => {
-          orders.push({id: doc.id, ...doc.data()});
-        });
-        displayOrders();
-      });
-  }
-}
-
-function displayOrders() {
-  const container = document.getElementById('ordersList');
-  container.innerHTML = '';
-
-  if (orders.length === 0) {
-    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:16px">Aucune commande</p>';
-    return;
-  }
-
-  orders.forEach(order => {
-    const statusKey = order.status || 'pending';
-    const html = `
-      <div class="order-card" onclick="openTracking('${order.id}')">
-        <div class="order-header">
-          <div class="order-id">Commande #${order.id.slice(0, 6)}</div>
-          <div class="order-status ${statusKey}">${DELIVERY_STATUSES[statusKey] || 'Inconnu'}</div>
-        </div>
-        <div class="order-info">${order.articleName}</div>
-        <div class="order-amount">${order.totalAmount} FCFA</div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-}
-
-function openTracking(orderId) {
-  selectedOrder = orders.find(o => o.id === orderId);
-  if (!selectedOrder) return;
-
-  document.getElementById('trackingContainer').style.display = 'none';
-  document.getElementById('trackingDetail').style.display = 'block';
-
-  displayTrackingStatus();
-  startTimer();
-}
-
-function displayTrackingStatus() {
-  if (!selectedOrder) return;
-
-  const container = document.getElementById('trackingStatus');
-  container.innerHTML = '';
-
-  const statuses = ['pending', 'confirmed', 'shipped', 'delivered'];
-  const currentIndex = statuses.indexOf(selectedOrder.status || 'pending');
-
-  statuses.forEach((status, index) => {
-    const isActive = index <= currentIndex;
-    const html = `
-      <div class="status-item">
-        <div class="status-icon ${isActive ? 'active' : ''}">
-          ${isActive ? '✓' : '○'}
-        </div>
-        <div class="status-text">
-          <div class="status-label">${DELIVERY_STATUSES[status]}</div>
-          <div class="status-value">${selectedOrder[status + 'Time'] || ''}</div>
-        </div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-
-  const confirmBtn = document.getElementById('confirmBtn');
-  confirmBtn.disabled = selectedOrder.status !== 'delivered';
-}
-
-function startTimer() {
-  if (timerInterval) clearInterval(timerInterval);
-
-  const createdAt = selectedOrder.createdAt?.toDate?.() || new Date(selectedOrder.createdAt);
-  const now = new Date();
-  let elapsed = Math.floor((now - createdAt) / 1000);
-
-  timerInterval = setInterval(() => {
-    elapsed++;
-    const hours = Math.floor(elapsed / 3600);
-    const minutes = Math.floor((elapsed % 3600) / 60);
-    const seconds = elapsed % 60;
-
-    document.getElementById('timerDisplay').textContent = 
-      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-    const maxTime = 3 * 3600; // 3 heures
-    const progress = Math.min((elapsed / maxTime) * 100, 100);
-    document.getElementById('progressFill').style.width = progress + '%';
-  }, 1000);
-}
-
-function confirmDelivery() {
-  if (!selectedOrder || selectedOrder.status !== 'delivered') return;
-
-  if (db) {
-    db.collection('orders').doc(selectedOrder.id).update({
-      status: 'completed',
-      completedTime: new Date()
-    }).then(() => {
-      // Paiement automatique MTN
-      processAutomaticPayment(selectedOrder.totalAmount, selectedOrder.sellerId);
-      alert('✅ Livraison confirmée! Paiement effectué.');
-      backToOrders();
-    });
-  }
-}
-
-async function processAutomaticPayment(amount, sellerId) {
-  try {
-    const response = await fetch(`${MTN_CONFIG.API_URL}/requesttopay`, {
-      method: 'POST',
-      headers: {
-        'X-Reference-Id': 'BLK-' + Date.now(),
-        'X-Target-Environment': 'mtncongo',
-        'Ocp-Apim-Subscription-Key': MTN_CONFIG.API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        amount: amount.toString(),
-        currency: 'XAF',
-        externalId: 'BLK-' + Date.now(),
-        payer: {
-          partyIdType: 'MSISDN',
-          partyId: currentUser.phone
-        }
-      })
-    });
-
-    if (response.ok) {
-      // Mettre à jour le solde du vendeur
-      if (db && sellerId) {
-        const vendorDoc = await db.collection('users').doc(sellerId).get();
-        const vendorBalance = vendorDoc.data()?.balance || 0;
-        const commission = Math.round(amount * 0.03);
-        
-        await db.collection('users').doc(sellerId).update({
-          balance: vendorBalance + amount - commission,
-          stats: {
-            earnings: (vendorDoc.data()?.stats?.earnings || 0) + amount - commission
-          }
-        });
-      }
-    }
-  } catch (error) {
-    console.error('Erreur paiement:', error);
-  }
-}
-
-function backToOrders() {
-  selectedOrder = null;
-  clearInterval(timerInterval);
-  document.getElementById('trackingContainer').style.display = 'block';
-  document.getElementById('trackingDetail').style.display = 'none';
-  loadOrders();
-}
-
-function loadConversations() {
-  if (db && currentUser) {
-    db.collection('conversations')
-      .where('users', 'array-contains', currentUser.id)
-      .orderBy('lastMessage', 'desc')
-      .onSnapshot((snapshot) => {
-        conversations = {};
-        snapshot.forEach((doc) => {
-          conversations[doc.id] = {id: doc.id, ...doc.data()};
-        });
-        displayConversations();
-      });
-  }
-}
-
-function displayConversations() {
-  const container = document.getElementById('chatsList');
-  container.innerHTML = '';
-
-  Object.values(conversations).forEach(conv => {
-    const html = `
-      <div class="chat-item" onclick="openConversation('${conv.id}', '${conv.otherUserName || 'Utilisateur'}')">
-        <div class="chat-avatar">${conv.otherUserAvatar || '👤'}</div>
-        <div class="chat-info">
-          <div class="chat-name">${conv.otherUserName || 'Utilisateur'}</div>
-          <div class="chat-message">${conv.lastMessageText || 'Pas de messages'}</div>
-        </div>
-        <div class="chat-time">${getTimeAgo(conv.lastMessage)}</div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-}
-
-function openConversation(conversationId, otherUserName) {
-  selectedConversation = conversationId;
-  document.getElementById('chatListView').style.display = 'none';
-  document.getElementById('chatDetailView').style.display = 'block';
-  document.getElementById('detailName').textContent = otherUserName;
-  loadConversationMessages();
-}
-
-function backToChatList() {
-  selectedConversation = null;
-  document.getElementById('chatListView').style.display = 'block';
-  document.getElementById('chatDetailView').style.display = 'none';
-}
-
-function loadConversationMessages() {
-  if (db && selectedConversation) {
-    db.collection('conversations').doc(selectedConversation).collection('messages')
-      .orderBy('timestamp', 'asc')
-      .onSnapshot((snapshot) => {
-        messages = [];
-        snapshot.forEach((doc) => {
-          messages.push({id: doc.id, ...doc.data()});
-        });
-        displayConversationMessages();
-      });
-  }
-}
-
-function displayConversationMessages() {
-  const container = document.getElementById('messagesList');
-  container.innerHTML = '';
-
-  messages.forEach(msg => {
-    const isOwn = msg.senderId === currentUser.id;
-    const date = new Date(msg.timestamp?.toDate?.() || msg.timestamp).toLocaleTimeString('fr-FR', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    
-    const html = `
-      <div class="message ${isOwn ? 'sent' : ''}">
-        <div class="message-content">${msg.text}</div>
-        <div class="message-time">${date}</div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-
-  container.scrollTop = container.scrollHeight;
-}
-
-function sendMessage() {
-  const input = document.getElementById('messageInput');
-  const text = input.value.trim();
-
-  if (!text || !selectedConversation) return;
-
-  if (db && currentUser) {
-    db.collection('conversations').doc(selectedConversation).collection('messages').add({
-      senderId: currentUser.id,
-      text: text,
-      timestamp: new Date()
-    });
-
-    db.collection('conversations').doc(selectedConversation).update({
-      lastMessage: new Date(),
-      lastMessageText: text
-    });
-
-    input.value = '';
-    loadConversationMessages();
-  }
-}
-
-function loadStats() {
-  if (db && currentUser) {
-    db.collection('users').doc(currentUser.id).onSnapshot((doc) => {
-      if (doc.exists) {
-        stats = doc.data().stats || {views: 0, orders: 0, earnings: 0};
-        updateStatsDisplay();
-      }
-    });
-  }
-}
-
-function updateStatsDisplay() {
-  document.getElementById('viewCount').textContent = stats.views || 0;
-  document.getElementById('orderCount').textContent = stats.orders || 0;
-  document.getElementById('conversionRate').textContent = 
-    stats.views > 0 ? Math.round((stats.orders / stats.views) * 100) + '%' : '0%';
-  document.getElementById('earningsAmount').textContent = (stats.earnings || 0).toLocaleString() + ' FCFA';
-
-  if (!salesChart) {
-    const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if (ctx) {
-      salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jour 1', 'Jour 2', 'Jour 3', 'Jour 4', 'Jour 5'],
-          datasets: [{
-            label: 'Commandes',
-            data: [1, 2, 2, 4, 3],
-            borderColor: '#E6A01E',
-            backgroundColor: 'rgba(230,160,30,0.1)',
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: '#FFF' } }
-          },
-          scales: {
-            y: { ticks: { color: '#777' }, grid: { color: '#2a2a2a' } },
-            x: { ticks: { color: '#777' }, grid: { color: '#2a2a2a' } }
-          }
-        }
-      });
-    }
-  }
-}
-
-function switchShopTab(tab) {
-  currentShopTab = tab;
-  document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  displayShopItems();
-}
-
-function displayShopItems() {
-  const container = document.getElementById('shopItems');
-  container.innerHTML = '';
-
-  const myArticles = articles.filter(a => a.seller === currentUser.name);
-  const filtered = currentShopTab === 'selling' 
-    ? myArticles.filter(a => !a.sold)
-    : myArticles.filter(a => a.sold);
-
-  if (filtered.length === 0) {
-    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:16px">Aucun article</p>';
-    return;
-  }
-
-  filtered.forEach(item => {
-    const status = item.sold ? 'Vendu' : 'En vente';
-    const html = `
-      <div class="shop-item">
-        <div class="shop-item-info">
-          <div class="shop-item-name">${item.name}</div>
-          <div class="shop-item-price">${item.price} FCFA</div>
-        </div>
-        <div class="shop-item-status ${item.sold ? 'sold' : ''}">${status}</div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-}
-
-function calculateDistance(lat1, lng1, lat2, lng2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLng/2) * Math.sin(dLng/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return Math.round(R * c * 10) / 10;
-}
-
-function getTimeAgo(date) {
-  if (!date) return '';
-  const now = new Date();
-  const time = date.toDate ? date.toDate() : new Date(date);
-  const diff = now - time;
-  const minutes = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-
-  if (minutes < 1) return 'À l\'instant';
-  if (minutes < 60) return minutes + 'm';
-  if (hours < 24) return hours + 'h';
-  if (days < 7) return days + 'j';
-  return time.toLocaleDateString('fr-FR');
-}
-
-function displayArticles() {
-  if (!userLocation) {
-    setTimeout(displayArticles, 500);
-    return;
-  }
-
-  const container = document.getElementById('articlesContainer');
-  container.innerHTML = '';
-
-  const sorted = articles
-    .map(a => ({
-      ...a,
-      distance: calculateDistance(
-        userLocation.lat, userLocation.lng,
-        a.lat || -4.2619, a.lng || 15.2429
-      )
-    }))
-    .filter(a => !a.sold)
-    .sort((a, b) => a.distance - b.distance);
-
-  sorted.forEach(article => {
-    const html = `
-      <div class="article-card" onclick="viewArticle('${article.id}')">
-        <div class="card-image">
-          ${article.image || '👗'}
-          <div class="card-distance">📍 ${article.distance}km</div>
-        </div>
-        <div class="card-info">
-          <div class="card-title">${article.name}</div>
-          <div class="card-price">${article.price} FCFA</div>
-          <div class="card-seller">👤 ${article.seller}</div>
-        </div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-}
-
-function switchPage(page) {
-  if (!currentUser && ['seller', 'profile', 'cart', 'messages', 'map'].includes(page)) {
-    document.getElementById('loginModal').classList.add('active');
-    return;
-  }
-
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  event.target?.classList.add('active');
-
-  if (page === 'cart') displayCart();
-  if (page === 'profile') {
-    displayProfile();
-    setTimeout(() => updateStatsDisplay(), 100);
-  }
-  if (page === 'messages') {
-    backToChatList();
-  }
+function closeCodeModal() {
+  document.getElementById('codeModal').classList.remove('active');
 }
 
 function switchModal(modal) {
@@ -1849,223 +849,505 @@ function switchModal(modal) {
   document.getElementById(modal).classList.add('active');
 }
 
-function handleLogin(e) {
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
+// VALIDATION PASSWORD
+function checkPasswordStrength() {
+  const password = document.getElementById('creatorPassword').value;
+  const bar = document.getElementById('passwordBar');
+  
+  let strength = 0;
+  if (password.length >= 8) strength++;
+  if (/[A-Z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[^A-Za-z0-9]/.test(password)) strength++;
 
-  if (auth) {
-    auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        currentUser = {
-          id: userCredential.user.uid,
-          email: email,
-          name: email.split('@')[0]
-        };
-        localStorage.setItem('blk_user', JSON.stringify(currentUser));
-        document.getElementById('loginModal').classList.remove('active');
-        loadArticles();
-        loadConversations();
-        loadStats();
-        loadOrders();
-      })
-      .catch((error) => {
-        alert('❌ ' + error.message);
-      });
-  }
+  bar.className = 'password-strength-bar';
+  if (strength <= 1) bar.classList.add('weak');
+  else if (strength <= 2) bar.classList.add('medium');
+  else bar.classList.add('strong');
 }
 
-function handleRegister(e) {
-  e.preventDefault();
-  const name = document.getElementById('registerName').value;
-  const email = document.getElementById('registerEmail').value;
-  const phone = document.getElementById('registerPhone').value;
-  const password = document.getElementById('registerPassword').value;
-
-  if (auth) {
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        currentUser = {
-          id: userCredential.user.uid,
-          email: email,
-          name: name,
-          phone: phone
-        };
-        userBalance = 0;
-        userAvatar = '👤';
-        localStorage.setItem('blk_user', JSON.stringify(currentUser));
-
-        if (db) {
-          db.collection('users').doc(userCredential.user.uid).set({
-            name: name,
-            email: email,
-            phone: phone,
-            balance: 0,
-            avatar: '👤',
-            stats: { views: 0, orders: 0, earnings: 0 },
-            createdAt: new Date()
-          });
-        }
-
-        document.getElementById('registerModal').classList.remove('active');
-      })
-      .catch((error) => {
-        alert('❌ ' + error.message);
-      });
-  }
-}
-
-function displayProfile() {
-  document.getElementById('profileName').textContent = currentUser?.name || 'Utilisateur';
-  document.getElementById('profileEmail').textContent = currentUser?.email || 'email@example.com';
-  document.getElementById('profilePhone').textContent = currentUser?.phone || 'N/A';
-  document.getElementById('profileBalance').textContent = userBalance + ' FCFA';
-  document.getElementById('avatarEmoji').textContent = userAvatar;
-
-  document.getElementById('avatarInput').value = userAvatar;
-  document.getElementById('avatarInput').onchange = (e) => {
-    userAvatar = e.target.value || '👤';
-    document.getElementById('avatarEmoji').textContent = userAvatar;
-    localStorage.setItem('blk_avatar', userAvatar);
-  };
-
-  displayShopItems();
-}
-
-function addArticle(e) {
+// INSCRIPTION
+async function handleSignup(e) {
   e.preventDefault();
   
-  const article = {
-    name: document.getElementById('articleTitle').value,
-    desc: document.getElementById('articleDesc').value,
-    price: parseInt(document.getElementById('articlePrice').value),
-    seller: currentUser.name,
-    lat: userLocation?.lat || -4.2619,
-    lng: userLocation?.lng || 15.2429,
-    image: '📦',
-    sold: false,
-    createdAt: new Date()
-  };
+  const name = document.getElementById('creatorName').value.trim();
+  const email = document.getElementById('creatorEmail').value.trim();
+  const country = document.getElementById('creatorCountry').value;
+  const password = document.getElementById('creatorPassword').value;
+  const passwordConfirm = document.getElementById('creatorPasswordConfirm').value;
+  const errorDiv = document.getElementById('signupError');
+  const btnSignup = document.getElementById('signupBtn');
 
-  if (db) {
-    db.collection('articles').add(article)
-      .then(() => {
-        alert('✅ Article publié!');
-        e.target.reset();
-        loadArticles();
-        switchPage('home');
-      })
-      .catch(err => alert('❌ ' + err.message));
-  }
-}
-
-function addToCart(articleId) {
-  const article = articles.find(a => a.id === articleId);
-  if (article) {
-    cart.push(article);
-    alert('✅ Ajouté!');
-  }
-}
-
-function displayCart() {
-  const container = document.getElementById('cartContainer');
-  
-  if (cart.length === 0) {
-    container.innerHTML = '<p style="text-align:center;padding:40px;color:var(--text-muted)">Panier vide</p>';
+  // VALIDATION
+  if (password.length < 8) {
+    showError('Le mot de passe doit faire au moins 8 caractères', errorDiv);
     return;
   }
 
-  let total = 0;
-  let html = '';
+  if (password !== passwordConfirm) {
+    showError('Les mots de passe ne correspondent pas', errorDiv);
+    return;
+  }
 
-  cart.forEach((item, i) => {
-    total += item.price;
-    html += `
-      <div style="background:var(--gray);padding:12px;border-radius:10px;margin-bottom:10px;border:1px solid var(--gray2)">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-weight:700">${item.name}</div>
-            <div style="font-size:12px;color:var(--text-muted)">${item.price} FCFA</div>
-          </div>
-          <button onclick="cart.splice(${i},1);displayCart()" style="background:var(--red);color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer">❌</button>
-        </div>
-      </div>
-    `;
-  });
+  if (!document.getElementById('agreeTerms').checked) {
+    showError('Tu dois accepter les conditions', errorDiv);
+    return;
+  }
 
-  const fee = Math.round(total * 0.05);
-  const finalTotal = total + fee;
+  // DÉSACTIVER BOUTON
+  btnSignup.disabled = true;
+  btnSignup.innerHTML = '<span class="loading-spinner"></span>Création en cours...';
 
-  html += `
-    <div style="background:linear-gradient(135deg,var(--yellow),#c8880a);color:var(--black);padding:16px;border-radius:12px;margin-top:16px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-        <span>Sous-total:</span>
-        <strong>${total} FCFA</strong>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <span>Frais:</span>
-        <strong>+${fee} FCFA</strong>
-      </div>
-      <div style="border-top:2px solid rgba(0,0,0,0.2);padding-top:12px;display:flex;justify-content:space-between;font-weight:900;font-size:16px">
-        <span>TOTAL:</span>
-        <span>${finalTotal} FCFA</span>
-      </div>
-      <button onclick="initiatePayment(${finalTotal})" style="width:100%;margin-top:12px;background:var(--black);color:var(--yellow);border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer">💳 PAYER</button>
-    </div>
-  `;
+  try {
+    // Créer utilisateur Firebase
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const userId = userCredential.user.uid;
 
-  container.innerHTML = html;
+    // Sauvegarder les données
+    await db.collection('creators').doc(userId).set({
+      name: name,
+      email: email,
+      country: country,
+      createdAt: new Date(),
+      status: 'active'
+    });
+
+    // GÉNÉRER LE CODE HTML COMPLET
+    const completeCode = generateCompleteAppCode(name, email);
+
+    // ENVOYER L'EMAIL via Firebase Functions
+    await functions.httpsCallable('sendCreatorEmail')({
+      email: email,
+      name: name,
+      code: completeCode
+    });
+
+    // AFFICHER LE CODE MODAL
+    document.getElementById('welcomeName').textContent = name.split(' ')[0];
+    document.getElementById('displayEmail').textContent = email;
+    document.getElementById('codeModal').classList.add('active');
+    closeSignupModal();
+
+  } catch (error) {
+    let errorMsg = error.message;
+    if (error.code === 'auth/email-already-in-use') {
+      errorMsg = 'Cet email est déjà inscrit';
+    } else if (error.code === 'auth/weak-password') {
+      errorMsg = 'Le mot de passe est trop faible';
+    }
+    showError(errorMsg, errorDiv);
+    btnSignup.disabled = false;
+    btnSignup.innerHTML = '🚀 Créer mon app';
+  }
 }
 
-function initiatePayment(amount) {
-  if (!currentUser) return;
+function showError(message, element) {
+  element.textContent = '❌ ' + message;
+  element.classList.add('show');
+  setTimeout(() => {
+    element.classList.remove('show');
+  }, 5000);
+}
 
-  const orderId = 'order_' + Date.now();
-  const order = {
-    id: orderId,
-    buyerId: currentUser.id,
-    articleName: cart.map(c => c.name).join(', '),
-    totalAmount: amount,
-    status: 'pending',
-    createdAt: new Date(),
-    sellerId: cart[0]?.id // À améliorer
-  };
+// CONNEXION
+async function handleLogin(e) {
+  e.preventDefault();
+  
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const errorDiv = document.getElementById('loginError');
 
-  if (db) {
-    db.collection('orders').doc(orderId).set(order).then(() => {
-      alert('✅ Commande créée! Suivi en cours...');
-      userBalance += Math.round(amount * 0.92);
-      cart = [];
-      displayCart();
-      loadOrders();
-    });
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    currentUser = {
+      id: userCredential.user.uid,
+      email: email
+    };
+    localStorage.setItem('blk_user', JSON.stringify(currentUser));
+    closeLoginModal();
+    switchPage('profile');
+    displayProfile();
+  } catch (error) {
+    showError('Email ou mot de passe incorrect', errorDiv);
   }
+}
+
+// GÉNÉRATION CODE COMPLET
+function generateCompleteAppCode(creatorName, creatorEmail) {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BLK — ${creatorName}</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"><\/script>
+<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"><\/script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --red: #C82828;
+  --yellow: #E6A01E;
+  --green: #1A6B2A;
+  --black: #0D0D0D;
+  --white: #F5F0E8;
+  --gray: #1C1C1C;
+  --gray2: #2A2A2A;
+  --text-muted: #777;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--white);
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.kente-accent {
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--red) 0px, var(--red) 20px,
+    var(--yellow) 20px, var(--yellow) 40px,
+    var(--green) 40px, var(--green) 60px,
+    var(--black) 60px, var(--black) 80px
+  );
+}
+
+.nav-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--gray);
+  border-bottom: 1px solid var(--gray2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-brand {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.screen {
+  display: none;
+  min-height: calc(100vh - 80px);
+  padding: 16px 20px 80px;
+}
+
+.screen.active {
+  display: block;
+}
+
+.content {
+  padding: 20px 0;
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(230,160,30,0.2) 0%, rgba(200,40,40,0.15) 100%);
+  padding: 40px 20px 30px;
+  text-align: center;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 28px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--yellow), var(--white));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.article-card {
+  background: var(--gray);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--gray2);
+  cursor: pointer;
+}
+
+.article-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.article-price {
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 390px;
+  margin: 0 auto;
+  background: var(--gray);
+  border-top: 1px solid var(--gray2);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nav-btn.active {
+  color: var(--yellow);
+}
+
+.form-input {
+  width: 100%;
+  background: var(--gray);
+  border: 1px solid var(--gray2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--white);
+  margin-bottom: 12px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  color: var(--black);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+h2 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--yellow);
+}
+</style>
+</head>
+<body>
+
+<div class="kente-accent"><\/div>
+
+<div class="nav-top">
+  <div class="nav-brand">🟢 BLK - ${creatorName}</div>
+</div>
+
+<div id="home" class="screen active">
+  <div class="hero">
+    <h1>🟢 ${creatorName} 🟢</h1>
+    <p>Bienvenue sur ta plateforme BLK personnalisée</p>
+  </div>
+  <div class="content">
+    <h2>📦 Articles</h2>
+    <div id="articlesList"></div>
+  </div>
+</div>
+
+<div id="profile" class="screen">
+  <div class="content">
+    <h2>👤 Profil</h2>
+    <p style="color:var(--text-muted)">Bienvenue ${creatorName}!</p>
+    <p style="color:var(--text-muted);font-size:12px;margin-top:16px">
+      ✅ Inscription réussie!<br>
+      💾 Tes données sont sauvegardées<br>
+      📱 Tu peux maintenant vendre!
+    </p>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="switchScreen('home')">
+    <span>🏠</span> Accueil
+  </button>
+  <button class="nav-btn" onclick="switchScreen('profile')">
+    <span>👤</span> Profil
+  </button>
+</div>
+
+<script>
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB7NwcT-nYQ1jSFxh_m4uOD7YLCdAWSdm8",
+  authDomain: "blk-congo-29463.firebaseapp.com",
+  projectId: "blk-congo-29463",
+  storageBucket: "blk-congo-29463.firebasestorage.app",
+  messagingSenderId: "701093221836",
+  appId: "1:701093221836:web:809a62273256fbabce3969"
+};
+
+try {
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const db = firebase.firestore();
+} catch (error) {
+  console.error("Firebase:", error);
+}
+
+function switchScreen(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screen).classList.add('active');
+  
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.closest('.nav-btn').classList.add('active');
+}
+
+console.log('✅ App de ${creatorName} chargée avec succès!');
+<\/script>
+
+</body>
+</html>`;
+}
+
+// AFFICHAGE PROFILE
+function displayProfile() {
+  const container = document.getElementById('profileContent');
+  
+  if (!currentUser) {
+    container.innerHTML = `
+      <button class="btn-primary" onclick="openSignupModal()">🚀 Créer mon app</button>
+      <button class="btn-secondary" onclick="openLoginModal()" style="background:var(--gray);color:var(--white)">Se connecter</button>
+    `;
+  } else {
+    container.innerHTML = `
+      <p style="color:var(--text-muted)">Connecté: ${currentUser.email}</p>
+      <button class="btn-secondary" onclick="logout()" style="background:var(--red);margin-top:16px">Déconnexion</button>
+    `;
+  }
+}
+
+function logout() {
+  auth.signOut().then(() => {
+    currentUser = null;
+    localStorage.removeItem('blk_user');
+    switchPage('home');
+    displayProfile();
+  });
+}
+
+// PAGES
+function switchPage(page) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target?.closest('.nav-btn')?.classList.add('active');
 }
 
 function performSearch() {
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  articles.filter(a => a.name.toLowerCase().includes(query));
+  console.log('Search...');
 }
 
-function viewArticle(articleId) {
-  const article = articles.find(a => a.id === articleId);
-  if (article) {
-    stats.views = (stats.views || 0) + 1;
-    addToCart(articleId);
+// INIT
+window.onload = function() {
+  const user = localStorage.getItem('blk_user');
+  if (user) {
+    currentUser = JSON.parse(user);
   }
-}
-
-function initiateWithdrawal() {
-  if (userBalance < 1000) {
-    alert('❌ Minimum 1000 FCFA');
-    return;
-  }
-  alert(`✅ Retrait de ${userBalance} FCFA!`);
-  userBalance = 0;
   displayProfile();
+};
+</script>
+
+</body>
+</html>`;
+}
+
+// INIT
+function init() {
+  const user = localStorage.getItem('blk_user');
+  if (user) {
+    currentUser = JSON.parse(user);
+  }
+}
+
+function switchPage(page) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target?.closest('.nav-btn')?.classList.add('active');
+}
+
+function performSearch() {
+  console.log('Search...');
+}
+
+function displayProfile() {
+  const container = document.getElementById('profileContent');
+  
+  if (!currentUser) {
+    container.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <button class="btn-primary" onclick="openSignupModal()">🚀 Créer mon app</button>
+        <button class="btn-secondary" onclick="openLoginModal()" style="background:var(--gray);color:var(--white)">Se connecter</button>
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <p style="color:var(--text-muted);margin-bottom:16px">📧 ${currentUser.email}</p>
+      <button class="btn-secondary" onclick="logout()" style="background:var(--red)">Déconnexion</button>
+    `;
+  }
+}
+
+function logout() {
+  auth.signOut().then(() => {
+    currentUser = null;
+    localStorage.removeItem('blk_user');
+    switchPage('home');
+    displayProfile();
+  });
 }
 
 init();
+openSignupModal();
 </script>
 
 </body>
