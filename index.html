@@ -576,81 +576,6 @@ body {
   height: 250px;
 }
 
-.messages-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px);
-}
-
-.messages-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.message {
-  display: flex;
-  gap: 8px;
-  padding: 0 20px;
-}
-
-.message.sent {
-  justify-content: flex-end;
-}
-
-.message-content {
-  background: var(--gray);
-  padding: 10px 14px;
-  border-radius: 10px;
-  max-width: 70%;
-  border: 1px solid var(--gray2);
-}
-
-.message.sent .message-content {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-}
-
-.message-time {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.message-input {
-  display: flex;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--gray2);
-}
-
-.message-input input {
-  flex: 1;
-  background: var(--gray);
-  border: 1px solid var(--gray2);
-  border-radius: 20px;
-  padding: 10px 14px;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-}
-
-.message-input button {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  border: none;
-  border-radius: 50%;
-  color: var(--black);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.message-input button:active {
-  transform: scale(0.95);
-}
-
 .earnings-card {
   background: linear-gradient(135deg, rgba(26,107,42,0.2), rgba(230,160,30,0.15));
   padding: 16px;
@@ -670,6 +595,265 @@ body {
   font-weight: 900;
   color: var(--green);
   font-family: 'Archivo Black', sans-serif;
+}
+
+.shop-section {
+  background: var(--gray);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--gray2);
+  margin: 16px 0;
+}
+
+.shop-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--yellow);
+}
+
+.shop-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.shop-tab {
+  flex: 1;
+  padding: 8px;
+  background: var(--black);
+  border: 1px solid var(--gray2);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.shop-tab.active {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+.shop-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shop-item {
+  background: var(--black);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--gray2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.shop-item-info {
+  flex: 1;
+}
+
+.shop-item-name {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.shop-item-price {
+  color: var(--yellow);
+  font-weight: 700;
+}
+
+.shop-item-status {
+  padding: 4px 8px;
+  background: var(--green);
+  color: var(--white);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.shop-item-status.sold {
+  background: var(--red);
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat-item {
+  background: var(--gray);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--gray2);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-item:active {
+  transform: translateX(5px);
+}
+
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.chat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-name {
+  font-weight: 700;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.chat-message {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.message.sent {
+  justify-content: flex-end;
+}
+
+.message-content {
+  background: var(--gray);
+  padding: 10px 14px;
+  border-radius: 10px;
+  max-width: 70%;
+  border: 1px solid var(--gray2);
+  word-wrap: break-word;
+}
+
+.message.sent .message-content {
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  color: var(--black);
+}
+
+.message-time {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.message-input {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--gray2);
+  border-top: 1px solid var(--gray2);
+}
+
+.message-input input {
+  flex: 1;
+  background: var(--gray);
+  border: 1px solid var(--gray2);
+  border-radius: 20px;
+  padding: 10px 14px;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+}
+
+.message-input button {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  border: none;
+  border-radius: 50%;
+  color: var(--black);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-input button:active {
+  transform: scale(0.95);
+}
+
+.chat-header {
+  background: var(--gray);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--gray2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.chat-header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.chat-header-name {
+  flex: 1;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--yellow);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
 }
 </style>
 </head>
@@ -717,14 +901,27 @@ body {
   </div>
 </div>
 
-<!-- MESSAGES -->
+<!-- MESSAGES (CHAT WHATSAPP) -->
 <div id="messages" class="screen">
-  <div style="display:flex;flex-direction:column;height:calc(100vh - 100px)">
-    <h2 style="font-family:'Archivo Black';font-size:18px;padding:16px 20px 0">💬 Messages</h2>
-    <div class="messages-list" id="messagesList"></div>
-    <div class="message-input">
-      <input type="text" id="messageInput" placeholder="Envoie un message...">
-      <button onclick="sendMessage()">📤</button>
+  <div id="chatListView" style="display:block">
+    <div class="content">
+      <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">💬 Messages</h2>
+      <div class="chat-list" id="chatsList"></div>
+    </div>
+  </div>
+  
+  <div id="chatDetailView" style="display:none;height:100%">
+    <div class="chat-header">
+      <button class="back-btn" onclick="backToChatList()">←</button>
+      <div class="chat-header-avatar" id="detailAvatar">👤</div>
+      <div class="chat-header-name" id="detailName">Conversation</div>
+    </div>
+    <div class="messages-container">
+      <div class="messages-list" id="messagesList"></div>
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Message...">
+        <button onclick="sendMessage()">📤</button>
+      </div>
     </div>
   </div>
 </div>
@@ -758,7 +955,7 @@ body {
       <div class="earnings-amount" id="earningsAmount">0 FCFA</div>
     </div>
 
-    <h3 style="font-family:'Archivo Black';font-size:14px;margin:16px 0 12px">📊 Statistiques de vente</h3>
+    <h3 style="font-family:'Archivo Black';font-size:14px;margin:16px 0 12px">📊 Statistiques</h3>
     
     <div class="stats-container">
       <div class="stat-box">
@@ -790,14 +987,24 @@ body {
       </div>
     </div>
 
-    <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer les fonds</button>
+    <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer</button>
+
+    <!-- MAGASIN -->
+    <div class="shop-section">
+      <div class="shop-title">🏪 Mon Magasin</div>
+      <div class="shop-tabs">
+        <div class="shop-tab active" onclick="switchShopTab('selling')">En vente</div>
+        <div class="shop-tab" onclick="switchShopTab('sold')">Vendus</div>
+      </div>
+      <div class="shop-items" id="shopItems"></div>
+    </div>
   </div>
 </div>
 
 <!-- SELLER -->
 <div id="seller" class="screen">
   <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">📦 Publier un article</h2>
+    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">📦 Publier</h2>
     <form onsubmit="addArticle(event)" style="margin-top:16px">
       <div class="form-group">
         <label class="form-label">Titre</label>
@@ -877,7 +1084,7 @@ body {
         <label class="form-label">Mot de passe</label>
         <input type="password" class="form-input" id="registerPassword" placeholder="••••••••" required>
       </div>
-      <button type="submit" class="btn-primary">Créer mon compte</button>
+      <button type="submit" class="btn-primary">Créer</button>
     </form>
   </div>
 </div>
@@ -899,13 +1106,11 @@ const MTN_CONFIG = {
 };
 
 let db, auth, storage;
-
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
   auth = firebase.auth();
   storage = firebase.storage();
-  console.log("✅ Firebase connecté!");
 } catch (error) {
   console.error("Firebase Error:", error);
 }
@@ -918,7 +1123,11 @@ let map = null;
 let userBalance = 0;
 let userAvatar = '👤';
 let messages = [];
+let conversations = {};
+let selectedConversation = null;
 let salesChart = null;
+let currentShopTab = 'selling';
+
 let stats = {
   views: 0,
   orders: 0,
@@ -929,7 +1138,7 @@ function init() {
   checkUserSession();
   getCurrentLocation();
   loadArticles();
-  loadMessages();
+  loadConversations();
   loadStats();
 }
 
@@ -939,7 +1148,6 @@ function checkUserSession() {
     currentUser = JSON.parse(user);
     userBalance = parseFloat(localStorage.getItem('blk_balance') || '0');
     userAvatar = localStorage.getItem('blk_avatar') || '👤';
-    displayUserUI();
   } else {
     document.getElementById('loginModal').classList.add('active');
   }
@@ -953,7 +1161,6 @@ function getCurrentLocation() {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        console.log("✅ GPS actif");
       },
       () => {
         userLocation = { lat: -4.2619, lng: 15.2429 };
@@ -974,17 +1181,17 @@ function loadArticles() {
   }
 }
 
-function loadMessages() {
+function loadConversations() {
   if (db && currentUser) {
-    db.collection('messages')
-      .where('userId', '==', currentUser.id)
-      .orderBy('timestamp', 'asc')
+    db.collection('conversations')
+      .where('users', 'array-contains', currentUser.id)
+      .orderBy('lastMessage', 'desc')
       .onSnapshot((snapshot) => {
-        messages = [];
+        conversations = {};
         snapshot.forEach((doc) => {
-          messages.push({id: doc.id, ...doc.data()});
+          conversations[doc.id] = {id: doc.id, ...doc.data()};
         });
-        displayMessages();
+        displayConversations();
       });
   }
 }
@@ -1017,6 +1224,7 @@ function displayArticles() {
         a.lat || -4.2619, a.lng || 15.2429
       )
     }))
+    .filter(a => !a.sold)
     .sort((a, b) => a.distance - b.distance);
 
   sorted.forEach(article => {
@@ -1037,7 +1245,55 @@ function displayArticles() {
   });
 }
 
-function displayMessages() {
+function displayConversations() {
+  const container = document.getElementById('chatsList');
+  container.innerHTML = '';
+
+  Object.values(conversations).forEach(conv => {
+    const otherUserId = conv.users.find(u => u !== currentUser.id);
+    const html = `
+      <div class="chat-item" onclick="openConversation('${conv.id}', '${conv.otherUserName || 'Utilisateur'}')">
+        <div class="chat-avatar">${conv.otherUserAvatar || '👤'}</div>
+        <div class="chat-info">
+          <div class="chat-name">${conv.otherUserName || 'Utilisateur'}</div>
+          <div class="chat-message">${conv.lastMessageText || 'Pas de messages'}</div>
+        </div>
+        <div class="chat-time">${getTimeAgo(conv.lastMessage)}</div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
+}
+
+function openConversation(conversationId, otherUserName) {
+  selectedConversation = conversationId;
+  document.getElementById('chatListView').style.display = 'none';
+  document.getElementById('chatDetailView').style.display = 'block';
+  document.getElementById('detailName').textContent = otherUserName;
+  loadConversationMessages();
+}
+
+function backToChatList() {
+  selectedConversation = null;
+  document.getElementById('chatListView').style.display = 'block';
+  document.getElementById('chatDetailView').style.display = 'none';
+}
+
+function loadConversationMessages() {
+  if (db && selectedConversation) {
+    db.collection('conversations').doc(selectedConversation).collection('messages')
+      .orderBy('timestamp', 'asc')
+      .onSnapshot((snapshot) => {
+        messages = [];
+        snapshot.forEach((doc) => {
+          messages.push({id: doc.id, ...doc.data()});
+        });
+        displayConversationMessages();
+      });
+  }
+}
+
+function displayConversationMessages() {
   const container = document.getElementById('messagesList');
   container.innerHTML = '';
 
@@ -1064,19 +1320,22 @@ function sendMessage() {
   const input = document.getElementById('messageInput');
   const text = input.value.trim();
 
-  if (!text) return;
+  if (!text || !selectedConversation) return;
 
   if (db && currentUser) {
-    db.collection('messages').add({
-      userId: currentUser.id,
+    const msgRef = db.collection('conversations').doc(selectedConversation).collection('messages').add({
       senderId: currentUser.id,
       text: text,
-      timestamp: new Date(),
-      senderName: currentUser.name
-    }).then(() => {
-      input.value = '';
-      loadMessages();
+      timestamp: new Date()
     });
+
+    db.collection('conversations').doc(selectedConversation).update({
+      lastMessage: new Date(),
+      lastMessageText: text
+    });
+
+    input.value = '';
+    loadConversationMessages();
   }
 }
 
@@ -1085,9 +1344,8 @@ function updateStatsDisplay() {
   document.getElementById('orderCount').textContent = stats.orders || 0;
   document.getElementById('conversionRate').textContent = 
     stats.views > 0 ? Math.round((stats.orders / stats.views) * 100) + '%' : '0%';
-  document.getElementById('earningsAmount').textContent = (stats.earnings || 0) + ' FCFA';
+  document.getElementById('earningsAmount').textContent = (stats.earnings || 0).toLocaleString() + ' FCFA';
 
-  // Graphique
   if (!salesChart) {
     const ctx = document.getElementById('salesChart')?.getContext('2d');
     if (ctx) {
@@ -1120,6 +1378,42 @@ function updateStatsDisplay() {
   }
 }
 
+function switchShopTab(tab) {
+  currentShopTab = tab;
+  document.querySelectorAll('.shop-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  displayShopItems();
+}
+
+function displayShopItems() {
+  const container = document.getElementById('shopItems');
+  container.innerHTML = '';
+
+  const myArticles = articles.filter(a => a.seller === currentUser.name);
+  const filtered = currentShopTab === 'selling' 
+    ? myArticles.filter(a => !a.sold)
+    : myArticles.filter(a => a.sold);
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:16px">Aucun article</p>';
+    return;
+  }
+
+  filtered.forEach(item => {
+    const status = item.sold ? 'Vendu' : 'En vente';
+    const html = `
+      <div class="shop-item">
+        <div class="shop-item-info">
+          <div class="shop-item-name">${item.name}</div>
+          <div class="shop-item-price">${item.price} FCFA</div>
+        </div>
+        <div class="shop-item-status ${item.sold ? 'sold' : ''}">${status}</div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
+}
+
 function calculateDistance(lat1, lng1, lat2, lng2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -1129,6 +1423,22 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
             Math.sin(dLng/2) * Math.sin(dLng/2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return Math.round(R * c * 10) / 10;
+}
+
+function getTimeAgo(date) {
+  if (!date) return '';
+  const now = new Date();
+  const time = date.toDate ? date.toDate() : new Date(date);
+  const diff = now - time;
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+
+  if (minutes < 1) return 'À l\'instant';
+  if (minutes < 60) return minutes + 'm';
+  if (hours < 24) return hours + 'h';
+  if (days < 7) return days + 'j';
+  return time.toLocaleDateString('fr-FR');
 }
 
 function switchPage(page) {
@@ -1150,9 +1460,7 @@ function switchPage(page) {
     setTimeout(() => updateStatsDisplay(), 100);
   }
   if (page === 'messages') {
-    setTimeout(() => {
-      document.getElementById('messageInput').focus();
-    }, 100);
+    backToChatList();
   }
 }
 
@@ -1174,11 +1482,10 @@ function handleLogin(e) {
           email: email,
           name: email.split('@')[0]
         };
-        saveUserData();
+        localStorage.setItem('blk_user', JSON.stringify(currentUser));
         document.getElementById('loginModal').classList.remove('active');
-        displayUserUI();
         loadArticles();
-        loadMessages();
+        loadConversations();
         loadStats();
       })
       .catch((error) => {
@@ -1205,7 +1512,7 @@ function handleRegister(e) {
         };
         userBalance = 0;
         userAvatar = '👤';
-        saveUserData();
+        localStorage.setItem('blk_user', JSON.stringify(currentUser));
 
         if (db) {
           db.collection('users').doc(userCredential.user.uid).set({
@@ -1220,23 +1527,12 @@ function handleRegister(e) {
         }
 
         document.getElementById('registerModal').classList.remove('active');
-        displayUserUI();
       })
       .catch((error) => {
         alert('❌ ' + error.message);
       });
   }
 }
-
-function saveUserData() {
-  if (currentUser) {
-    localStorage.setItem('blk_user', JSON.stringify(currentUser));
-    localStorage.setItem('blk_balance', userBalance.toString());
-    localStorage.setItem('blk_avatar', userAvatar);
-  }
-}
-
-function displayUserUI() {}
 
 function displayProfile() {
   document.getElementById('profileName').textContent = currentUser?.name || 'Utilisateur';
@@ -1249,8 +1545,10 @@ function displayProfile() {
   document.getElementById('avatarInput').onchange = (e) => {
     userAvatar = e.target.value || '👤';
     document.getElementById('avatarEmoji').textContent = userAvatar;
-    saveUserData();
+    localStorage.setItem('blk_avatar', userAvatar);
   };
+
+  displayShopItems();
 }
 
 function addArticle(e) {
@@ -1264,6 +1562,7 @@ function addArticle(e) {
     lat: userLocation?.lat || -4.2619,
     lng: userLocation?.lng || 15.2429,
     image: '📦',
+    sold: false,
     createdAt: new Date()
   };
 
@@ -1338,9 +1637,8 @@ function displayCart() {
 }
 
 function initiatePayment(amount) {
-  alert(`📱 Paiement MTN initié!\n${amount} FCFA`);
+  alert(`📱 Paiement MTN!\n${amount} FCFA`);
   userBalance += Math.round(amount * 0.92);
-  saveUserData();
   cart = [];
   displayCart();
 }
@@ -1352,9 +1650,7 @@ function initMap() {
   const container = document.getElementById('mapContainer');
   map = L.map(container).setView([userLocation.lat, userLocation.lng], 13);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
   L.circleMarker([userLocation.lat, userLocation.lng], {
     color: '#E6A01E',
@@ -1362,7 +1658,7 @@ function initMap() {
     weight: 3
   }).addTo(map).bindPopup('📍 Toi');
 
-  articles.forEach(article => {
+  articles.filter(a => !a.sold).forEach(article => {
     L.marker([article.lat || -4.2619, article.lng || 15.2429])
       .addTo(map)
       .bindPopup(`<b>${article.name}</b><br>${article.price} FCFA`);
@@ -1376,7 +1672,10 @@ function performSearch() {
 
 function viewArticle(articleId) {
   const article = articles.find(a => a.id === articleId);
-  if (article) addToCart(articleId);
+  if (article) {
+    stats.views = (stats.views || 0) + 1;
+    addToCart(articleId);
+  }
 }
 
 function initiateWithdrawal() {
@@ -1384,9 +1683,8 @@ function initiateWithdrawal() {
     alert('❌ Minimum 1000 FCFA');
     return;
   }
-  alert(`✅ Retrait de ${userBalance} FCFA!\n\nVirement vers: ${currentUser.phone}`);
+  alert(`✅ Retrait de ${userBalance} FCFA!`);
   userBalance = 0;
-  saveUserData();
   displayProfile();
 }
 
