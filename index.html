@@ -415,6 +415,129 @@ body {
   color: var(--yellow);
 }
 
+.tracking-container {
+  background: var(--gray);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--gray2);
+  margin: 16px 0;
+}
+
+.tracking-header {
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  color: var(--black);
+  padding: 16px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.tracking-status {
+  padding: 16px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray2);
+}
+
+.status-item:last-child {
+  border-bottom: none;
+}
+
+.status-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.status-icon.active {
+  background: var(--green);
+}
+
+.status-text {
+  flex: 1;
+}
+
+.status-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.status-value {
+  font-weight: 700;
+  color: var(--white);
+}
+
+.timer {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(26,107,42,0.2), rgba(230,160,30,0.15));
+  border-top: 1px solid var(--gray2);
+}
+
+.timer-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.timer-display {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 32px;
+  color: var(--green);
+  font-weight: 900;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--black);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--yellow));
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s;
+}
+
+.confirm-btn:active {
+  transform: scale(0.95);
+}
+
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .wallet-card {
   background: linear-gradient(135deg, var(--yellow), #c8880a);
   color: var(--black);
@@ -855,6 +978,66 @@ body {
   font-size: 18px;
   font-weight: 700;
 }
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  background: var(--gray);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--gray2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.order-card:active {
+  transform: translateX(5px);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.order-id {
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+.order-status {
+  padding: 4px 8px;
+  background: var(--green);
+  color: var(--white);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.order-status.pending {
+  background: var(--text-muted);
+}
+
+.order-status.shipped {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+.order-info {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.order-amount {
+  font-weight: 700;
+  color: var(--white);
+  margin-top: 8px;
+}
 </style>
 </head>
 <body>
@@ -890,18 +1073,39 @@ body {
   <div class="articles-grid" id="articlesContainer"></div>
 </div>
 
-<!-- MAP -->
+<!-- MAP & TRACKING -->
 <div id="map" class="screen">
   <div class="content" style="padding: 0;">
     <div style="padding: 16px 20px 0;">
-      <h2 style="font-family:'Archivo Black';font-size:16px">🗺️ Vendeurs près de toi</h2>
+      <h2 style="font-family:'Archivo Black';font-size:16px">🗺️ Suivi des livraisons</h2>
     </div>
-    <div class="map-container" id="mapContainer"></div>
-    <div style="padding: 16px 20px;" id="vendorsNearby"></div>
+    
+    <div id="trackingContainer" style="padding: 16px 20px;">
+      <div class="orders-list" id="ordersList"></div>
+    </div>
   </div>
 </div>
 
-<!-- MESSAGES (CHAT WHATSAPP) -->
+<!-- TRACKING DETAIL -->
+<div id="trackingDetail" class="screen">
+  <div class="content">
+    <button class="back-btn" onclick="backToOrders()" style="margin-bottom: 16px;">← Retour</button>
+    <div class="tracking-container">
+      <div class="tracking-header">📦 Suivi de Livraison</div>
+      <div class="tracking-status" id="trackingStatus"></div>
+      <div class="timer">
+        <div class="timer-label">Temps écoulé</div>
+        <div class="timer-display" id="timerDisplay">00:00:00</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+    <button class="confirm-btn" id="confirmBtn" onclick="confirmDelivery()" disabled>✅ Confirmer la réception</button>
+  </div>
+</div>
+
+<!-- MESSAGES -->
 <div id="messages" class="screen">
   <div id="chatListView" style="display:block">
     <div class="content">
@@ -989,7 +1193,6 @@ body {
 
     <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer</button>
 
-    <!-- MAGASIN -->
     <div class="shop-section">
       <div class="shop-title">🏪 Mon Magasin</div>
       <div class="shop-tabs">
@@ -1029,7 +1232,7 @@ body {
     <span>🏠</span> Accueil
   </button>
   <button class="nav-btn" onclick="switchPage('map')">
-    <span>🗺️</span> Carte
+    <span>🗺️</span> Suivi
   </button>
   <button class="nav-btn" onclick="switchPage('messages')">
     <span>💬</span> Messages
@@ -1127,11 +1330,22 @@ let conversations = {};
 let selectedConversation = null;
 let salesChart = null;
 let currentShopTab = 'selling';
+let orders = [];
+let selectedOrder = null;
+let timerInterval = null;
 
 let stats = {
   views: 0,
   orders: 0,
   earnings: 0
+};
+
+const DELIVERY_STATUSES = {
+  pending: '⏳ En attente',
+  confirmed: '✅ Confirmée',
+  shipped: '📦 Expédiée',
+  delivered: '🎁 Livrée',
+  completed: '✓ Complétée'
 };
 
 function init() {
@@ -1140,6 +1354,7 @@ function init() {
   loadArticles();
   loadConversations();
   loadStats();
+  loadOrders();
 }
 
 function checkUserSession() {
@@ -1181,6 +1396,173 @@ function loadArticles() {
   }
 }
 
+function loadOrders() {
+  if (db && currentUser) {
+    db.collection('orders')
+      .where('buyerId', '==', currentUser.id)
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snapshot) => {
+        orders = [];
+        snapshot.forEach((doc) => {
+          orders.push({id: doc.id, ...doc.data()});
+        });
+        displayOrders();
+      });
+  }
+}
+
+function displayOrders() {
+  const container = document.getElementById('ordersList');
+  container.innerHTML = '';
+
+  if (orders.length === 0) {
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:16px">Aucune commande</p>';
+    return;
+  }
+
+  orders.forEach(order => {
+    const statusKey = order.status || 'pending';
+    const html = `
+      <div class="order-card" onclick="openTracking('${order.id}')">
+        <div class="order-header">
+          <div class="order-id">Commande #${order.id.slice(0, 6)}</div>
+          <div class="order-status ${statusKey}">${DELIVERY_STATUSES[statusKey] || 'Inconnu'}</div>
+        </div>
+        <div class="order-info">${order.articleName}</div>
+        <div class="order-amount">${order.totalAmount} FCFA</div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
+}
+
+function openTracking(orderId) {
+  selectedOrder = orders.find(o => o.id === orderId);
+  if (!selectedOrder) return;
+
+  document.getElementById('trackingContainer').style.display = 'none';
+  document.getElementById('trackingDetail').style.display = 'block';
+
+  displayTrackingStatus();
+  startTimer();
+}
+
+function displayTrackingStatus() {
+  if (!selectedOrder) return;
+
+  const container = document.getElementById('trackingStatus');
+  container.innerHTML = '';
+
+  const statuses = ['pending', 'confirmed', 'shipped', 'delivered'];
+  const currentIndex = statuses.indexOf(selectedOrder.status || 'pending');
+
+  statuses.forEach((status, index) => {
+    const isActive = index <= currentIndex;
+    const html = `
+      <div class="status-item">
+        <div class="status-icon ${isActive ? 'active' : ''}">
+          ${isActive ? '✓' : '○'}
+        </div>
+        <div class="status-text">
+          <div class="status-label">${DELIVERY_STATUSES[status]}</div>
+          <div class="status-value">${selectedOrder[status + 'Time'] || ''}</div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
+
+  const confirmBtn = document.getElementById('confirmBtn');
+  confirmBtn.disabled = selectedOrder.status !== 'delivered';
+}
+
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+
+  const createdAt = selectedOrder.createdAt?.toDate?.() || new Date(selectedOrder.createdAt);
+  const now = new Date();
+  let elapsed = Math.floor((now - createdAt) / 1000);
+
+  timerInterval = setInterval(() => {
+    elapsed++;
+    const hours = Math.floor(elapsed / 3600);
+    const minutes = Math.floor((elapsed % 3600) / 60);
+    const seconds = elapsed % 60;
+
+    document.getElementById('timerDisplay').textContent = 
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+    const maxTime = 3 * 3600; // 3 heures
+    const progress = Math.min((elapsed / maxTime) * 100, 100);
+    document.getElementById('progressFill').style.width = progress + '%';
+  }, 1000);
+}
+
+function confirmDelivery() {
+  if (!selectedOrder || selectedOrder.status !== 'delivered') return;
+
+  if (db) {
+    db.collection('orders').doc(selectedOrder.id).update({
+      status: 'completed',
+      completedTime: new Date()
+    }).then(() => {
+      // Paiement automatique MTN
+      processAutomaticPayment(selectedOrder.totalAmount, selectedOrder.sellerId);
+      alert('✅ Livraison confirmée! Paiement effectué.');
+      backToOrders();
+    });
+  }
+}
+
+async function processAutomaticPayment(amount, sellerId) {
+  try {
+    const response = await fetch(`${MTN_CONFIG.API_URL}/requesttopay`, {
+      method: 'POST',
+      headers: {
+        'X-Reference-Id': 'BLK-' + Date.now(),
+        'X-Target-Environment': 'mtncongo',
+        'Ocp-Apim-Subscription-Key': MTN_CONFIG.API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: amount.toString(),
+        currency: 'XAF',
+        externalId: 'BLK-' + Date.now(),
+        payer: {
+          partyIdType: 'MSISDN',
+          partyId: currentUser.phone
+        }
+      })
+    });
+
+    if (response.ok) {
+      // Mettre à jour le solde du vendeur
+      if (db && sellerId) {
+        const vendorDoc = await db.collection('users').doc(sellerId).get();
+        const vendorBalance = vendorDoc.data()?.balance || 0;
+        const commission = Math.round(amount * 0.03);
+        
+        await db.collection('users').doc(sellerId).update({
+          balance: vendorBalance + amount - commission,
+          stats: {
+            earnings: (vendorDoc.data()?.stats?.earnings || 0) + amount - commission
+          }
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Erreur paiement:', error);
+  }
+}
+
+function backToOrders() {
+  selectedOrder = null;
+  clearInterval(timerInterval);
+  document.getElementById('trackingContainer').style.display = 'block';
+  document.getElementById('trackingDetail').style.display = 'none';
+  loadOrders();
+}
+
 function loadConversations() {
   if (db && currentUser) {
     db.collection('conversations')
@@ -1196,61 +1578,11 @@ function loadConversations() {
   }
 }
 
-function loadStats() {
-  if (db && currentUser) {
-    db.collection('users').doc(currentUser.id).onSnapshot((doc) => {
-      if (doc.exists) {
-        stats = doc.data().stats || {views: 0, orders: 0, earnings: 0};
-        updateStatsDisplay();
-      }
-    });
-  }
-}
-
-function displayArticles() {
-  if (!userLocation) {
-    setTimeout(displayArticles, 500);
-    return;
-  }
-
-  const container = document.getElementById('articlesContainer');
-  container.innerHTML = '';
-
-  const sorted = articles
-    .map(a => ({
-      ...a,
-      distance: calculateDistance(
-        userLocation.lat, userLocation.lng,
-        a.lat || -4.2619, a.lng || 15.2429
-      )
-    }))
-    .filter(a => !a.sold)
-    .sort((a, b) => a.distance - b.distance);
-
-  sorted.forEach(article => {
-    const html = `
-      <div class="article-card" onclick="viewArticle('${article.id}')">
-        <div class="card-image">
-          ${article.image || '👗'}
-          <div class="card-distance">📍 ${article.distance}km</div>
-        </div>
-        <div class="card-info">
-          <div class="card-title">${article.name}</div>
-          <div class="card-price">${article.price} FCFA</div>
-          <div class="card-seller">👤 ${article.seller}</div>
-        </div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-}
-
 function displayConversations() {
   const container = document.getElementById('chatsList');
   container.innerHTML = '';
 
   Object.values(conversations).forEach(conv => {
-    const otherUserId = conv.users.find(u => u !== currentUser.id);
     const html = `
       <div class="chat-item" onclick="openConversation('${conv.id}', '${conv.otherUserName || 'Utilisateur'}')">
         <div class="chat-avatar">${conv.otherUserAvatar || '👤'}</div>
@@ -1323,7 +1655,7 @@ function sendMessage() {
   if (!text || !selectedConversation) return;
 
   if (db && currentUser) {
-    const msgRef = db.collection('conversations').doc(selectedConversation).collection('messages').add({
+    db.collection('conversations').doc(selectedConversation).collection('messages').add({
       senderId: currentUser.id,
       text: text,
       timestamp: new Date()
@@ -1336,6 +1668,17 @@ function sendMessage() {
 
     input.value = '';
     loadConversationMessages();
+  }
+}
+
+function loadStats() {
+  if (db && currentUser) {
+    db.collection('users').doc(currentUser.id).onSnapshot((doc) => {
+      if (doc.exists) {
+        stats = doc.data().stats || {views: 0, orders: 0, earnings: 0};
+        updateStatsDisplay();
+      }
+    });
   }
 }
 
@@ -1441,8 +1784,46 @@ function getTimeAgo(date) {
   return time.toLocaleDateString('fr-FR');
 }
 
+function displayArticles() {
+  if (!userLocation) {
+    setTimeout(displayArticles, 500);
+    return;
+  }
+
+  const container = document.getElementById('articlesContainer');
+  container.innerHTML = '';
+
+  const sorted = articles
+    .map(a => ({
+      ...a,
+      distance: calculateDistance(
+        userLocation.lat, userLocation.lng,
+        a.lat || -4.2619, a.lng || 15.2429
+      )
+    }))
+    .filter(a => !a.sold)
+    .sort((a, b) => a.distance - b.distance);
+
+  sorted.forEach(article => {
+    const html = `
+      <div class="article-card" onclick="viewArticle('${article.id}')">
+        <div class="card-image">
+          ${article.image || '👗'}
+          <div class="card-distance">📍 ${article.distance}km</div>
+        </div>
+        <div class="card-info">
+          <div class="card-title">${article.name}</div>
+          <div class="card-price">${article.price} FCFA</div>
+          <div class="card-seller">👤 ${article.seller}</div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
+}
+
 function switchPage(page) {
-  if (!currentUser && ['seller', 'profile', 'cart', 'messages'].includes(page)) {
+  if (!currentUser && ['seller', 'profile', 'cart', 'messages', 'map'].includes(page)) {
     document.getElementById('loginModal').classList.add('active');
     return;
   }
@@ -1453,7 +1834,6 @@ function switchPage(page) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   event.target?.classList.add('active');
 
-  if (page === 'map') setTimeout(initMap, 100);
   if (page === 'cart') displayCart();
   if (page === 'profile') {
     displayProfile();
@@ -1487,6 +1867,7 @@ function handleLogin(e) {
         loadArticles();
         loadConversations();
         loadStats();
+        loadOrders();
       })
       .catch((error) => {
         alert('❌ ' + error.message);
@@ -1637,32 +2018,28 @@ function displayCart() {
 }
 
 function initiatePayment(amount) {
-  alert(`📱 Paiement MTN!\n${amount} FCFA`);
-  userBalance += Math.round(amount * 0.92);
-  cart = [];
-  displayCart();
-}
+  if (!currentUser) return;
 
-function initMap() {
-  if (map) return;
-  if (!userLocation) return;
+  const orderId = 'order_' + Date.now();
+  const order = {
+    id: orderId,
+    buyerId: currentUser.id,
+    articleName: cart.map(c => c.name).join(', '),
+    totalAmount: amount,
+    status: 'pending',
+    createdAt: new Date(),
+    sellerId: cart[0]?.id // À améliorer
+  };
 
-  const container = document.getElementById('mapContainer');
-  map = L.map(container).setView([userLocation.lat, userLocation.lng], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-  L.circleMarker([userLocation.lat, userLocation.lng], {
-    color: '#E6A01E',
-    radius: 8,
-    weight: 3
-  }).addTo(map).bindPopup('📍 Toi');
-
-  articles.filter(a => !a.sold).forEach(article => {
-    L.marker([article.lat || -4.2619, article.lng || 15.2429])
-      .addTo(map)
-      .bindPopup(`<b>${article.name}</b><br>${article.price} FCFA`);
-  });
+  if (db) {
+    db.collection('orders').doc(orderId).set(order).then(() => {
+      alert('✅ Commande créée! Suivi en cours...');
+      userBalance += Math.round(amount * 0.92);
+      cart = [];
+      displayCart();
+      loadOrders();
+    });
+  }
 }
 
 function performSearch() {
