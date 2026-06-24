@@ -12,9 +12,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-functions.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -257,6 +254,13 @@ body {
   color: var(--text-muted);
 }
 
+.map-container {
+  width: 100%;
+  height: 400px;
+  border-radius: 0;
+  margin: 16px 0 0 0;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -310,11 +314,6 @@ body {
 
 .btn-primary:active {
   transform: scale(0.95);
-}
-
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .btn-secondary {
@@ -385,12 +384,11 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.95);
+  background: rgba(0,0,0,0.8);
   z-index: 2000;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0;
-  overflow-y: auto;
+  justify-content: center;
+  padding: 20px;
 }
 
 .modal-backdrop.active {
@@ -399,199 +397,145 @@ body {
 
 .modal {
   background: var(--gray);
+  border-radius: 16px;
+  padding: 24px;
   width: 100%;
-  max-width: 390px;
-  min-height: 100vh;
-  padding: 24px 20px;
+  max-width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
   border: 1px solid var(--gray2);
-  margin: auto;
-  position: relative;
 }
 
 .modal h2 {
   font-family: 'Archivo Black', sans-serif;
-  font-size: 28px;
+  font-size: 20px;
   margin-bottom: 16px;
   color: var(--yellow);
 }
 
-.modal-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: var(--yellow);
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 3000;
-}
-
-.signup-hero {
-  background: linear-gradient(135deg, rgba(230,160,30,0.3) 0%, rgba(200,40,40,0.2) 100%);
+.wallet-card {
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  color: var(--black);
   padding: 24px;
   border-radius: 14px;
-  text-align: center;
-  margin-bottom: 20px;
-  border: 1px solid var(--gray2);
+  margin: 16px 0;
 }
 
-.signup-hero-emoji {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-
-.signup-hero h3 {
+.wallet-balance {
+  font-size: 32px;
+  font-weight: 900;
   font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
+}
+
+.wallet-label {
+  font-size: 12px;
+  opacity: 0.8;
   margin-bottom: 8px;
 }
 
-.signup-hero p {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-.benefits-list {
-  background: var(--black);
+.profile-section {
+  background: var(--gray);
   padding: 16px;
   border-radius: 12px;
-  margin-bottom: 20px;
+  margin: 16px 0;
   border: 1px solid var(--gray2);
 }
 
-.benefit-item {
+.profile-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  font-size: 13px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray2);
 }
 
-.benefit-item:last-child {
-  margin-bottom: 0;
+.profile-row:last-child {
+  border-bottom: none;
 }
 
-.benefit-icon {
-  color: var(--green);
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.error-message {
-  background: rgba(200, 40, 40, 0.2);
-  border: 1px solid var(--red);
-  color: var(--white);
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 16px;
+.profile-label {
   font-size: 12px;
-  display: none;
+  color: var(--text-muted);
 }
 
-.error-message.show {
-  display: block;
-}
-
-.success-message {
-  background: rgba(26, 107, 42, 0.2);
-  border: 1px solid var(--green);
-  color: var(--white);
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  font-size: 12px;
-  display: none;
-}
-
-.success-message.show {
-  display: block;
-}
-
-.password-strength {
-  height: 4px;
-  background: var(--gray2);
-  border-radius: 2px;
-  margin-top: 8px;
-  overflow: hidden;
-}
-
-.password-strength-bar {
-  height: 100%;
-  width: 0%;
-  background: var(--red);
-  transition: width 0.3s, background-color 0.3s;
-}
-
-.password-strength-bar.weak {
-  width: 33%;
-  background: var(--red);
-}
-
-.password-strength-bar.medium {
-  width: 66%;
-  background: var(--yellow);
-}
-
-.password-strength-bar.strong {
-  width: 100%;
-  background: var(--green);
-}
-
-.loading-spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--yellow);
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-right: 8px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.code-container {
-  background: var(--black);
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--yellow);
-  margin: 20px 0;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  line-height: 1.6;
-  color: var(--yellow);
-  max-height: 300px;
-  overflow-y: auto;
-  word-break: break-all;
-  white-space: pre-wrap;
-}
-
-.copy-btn {
-  width: 100%;
-  padding: 12px;
-  background: var(--green);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
+.profile-value {
   font-weight: 700;
-  cursor: pointer;
-  margin-bottom: 12px;
 }
 
-.copy-btn:active {
+.profile-header {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(230,160,30,0.15) 0%, rgba(200,40,40,0.1) 100%);
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--yellow), var(--red));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 12px;
+  border: 3px solid var(--yellow);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-avatar:active {
   transform: scale(0.95);
 }
 
-.section-divider {
-  height: 1px;
-  background: var(--gray2);
-  margin: 20px 0;
+.profile-avatar input {
+  display: none;
+}
+
+.profile-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.action-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.action-buttons .buy {
+  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  color: var(--black);
+}
+
+.action-buttons .sell {
+  background: var(--green);
+  color: var(--white);
+}
+
+.action-buttons button:active {
+  transform: scale(0.95);
 }
 </style>
-
 </head>
 <body>
 
@@ -626,11 +570,14 @@ body {
   <div class="articles-grid" id="articlesContainer"></div>
 </div>
 
-<!-- MESSAGES -->
-<div id="messages" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">💬 Messages</h2>
-    <p style="color:var(--text-muted);text-align:center;padding:40px 20px">Chat à venir...</p>
+<!-- MAP -->
+<div id="map" class="screen">
+  <div class="content" style="padding: 0;">
+    <div style="padding: 16px 20px 0;">
+      <h2 style="font-family:'Archivo Black';font-size:16px">🗺️ Vendeurs près de toi</h2>
+    </div>
+    <div class="map-container" id="mapContainer"></div>
+    <div style="padding: 16px 20px;" id="vendorsNearby"></div>
   </div>
 </div>
 
@@ -645,8 +592,53 @@ body {
 <!-- PROFILE -->
 <div id="profile" class="screen">
   <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">👤 Profil</h2>
-    <div id="profileContent" style="margin-top:16px"></div>
+    <div class="profile-header">
+      <label class="profile-avatar" onclick="document.getElementById('avatarInput').click()">
+        <span id="avatarEmoji">👤</span>
+        <input type="text" id="avatarInput" placeholder="Emoji">
+      </label>
+      <div class="profile-name" id="profileName">Utilisateur</div>
+      <div class="profile-email" id="profileEmail">email@example.com</div>
+      <div class="action-buttons">
+        <button class="buy" onclick="switchPage('home')">🛍️ Acheter</button>
+        <button class="sell" onclick="switchPage('seller')">📦 Vendre</button>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-row">
+        <span class="profile-label">Téléphone</span>
+        <span class="profile-value" id="profilePhone">N/A</span>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">Solde</span>
+        <span class="profile-value" id="profileBalance">0 FCFA</span>
+      </div>
+    </div>
+
+    <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer les fonds</button>
+  </div>
+</div>
+
+<!-- SELLER -->
+<div id="seller" class="screen">
+  <div class="content">
+    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">📦 Publier un article</h2>
+    <form onsubmit="addArticle(event)" style="margin-top:16px">
+      <div class="form-group">
+        <label class="form-label">Titre</label>
+        <input type="text" class="form-input" id="articleTitle" placeholder="ex: Robe Wax" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="articleDesc" placeholder="Décris..." rows="4" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prix (FCFA)</label>
+        <input type="number" class="form-input" id="articlePrice" placeholder="ex: 5000" required>
+      </div>
+      <button type="submit" class="btn-primary">Publier 🚀</button>
+    </form>
   </div>
 </div>
 
@@ -655,8 +647,8 @@ body {
   <button class="nav-btn active" onclick="switchPage('home')">
     <span>🏠</span> Accueil
   </button>
-  <button class="nav-btn" onclick="switchPage('messages')">
-    <span>💬</span> Messages
+  <button class="nav-btn" onclick="switchPage('map')">
+    <span>🗺️</span> Carte
   </button>
   <button class="nav-btn" onclick="switchPage('cart')">
     <span>🛒</span> Panier
@@ -666,134 +658,50 @@ body {
   </button>
 </div>
 
-<!-- SIGNUP MODAL -->
-<div class="modal-backdrop" id="signupModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeSignupModal()">✕</button>
-
-<div class="signup-hero">
-  <div class="signup-hero-emoji">🚀</div>
-  <h3>Deviens Créateur BLK</h3>
-  <p>Crée ton app personnalisée en 2 minutes</p>
-</div>
-
-<div class="error-message" id="signupError"></div>
-<div class="success-message" id="signupSuccess"></div>
-
-<form id="signupForm" onsubmit="handleSignup(event)">
-  <div class="form-group">
-    <label class="form-label">Nom complet</label>
-    <input type="text" class="form-input" id="creatorName" placeholder="ex: Divin Ambeto" required>
-  </div>
-
-  <div class="form-group">
-    <label class="form-label">Email</label>
-    <input type="email" class="form-input" id="creatorEmail" placeholder="toi@gmail.com" required>
-  </div>
-
-  <div class="form-group">
-    <label class="form-label">Pays</label>
-    <select class="form-select" id="creatorCountry" required>
-      <option value="">Sélectionne ton pays</option>
-      <option value="Congo">🇨🇬 Congo</option>
-      <option value="RDC">🇨🇩 RDC</option>
-      <option value="Cameroun">🇨🇲 Cameroun</option>
-      <option value="Senegal">🇸🇳 Sénégal</option>
-      <option value="Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
-      <option value="Autre">🌍 Autre</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label class="form-label">Mot de passe</label>
-    <input type="password" class="form-input" id="creatorPassword" placeholder="••••••••" required onchange="checkPasswordStrength()">
-    <div class="password-strength">
-      <div class="password-strength-bar" id="passwordBar"></div>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="form-label">Confirmer le mot de passe</label>
-    <input type="password" class="form-input" id="creatorPasswordConfirm" placeholder="••••••••" required>
-  </div>
-
-  <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:20px;font-size:12px;cursor:pointer">
-    <input type="checkbox" id="agreeTerms" required style="margin-top:3px;cursor:pointer">
-    <span>Je accepte les <strong>conditions d'utilisation</strong> et la <strong>politique de confidentialité</strong></span>
-  </label>
-
-  <button type="submit" class="btn-primary" id="signupBtn">🚀 Créer mon app</button>
-</form>
-
-<p style="text-align:center;margin-top:20px;font-size:11px;color:var(--text-muted)">
-  Déjà inscrit? <a onclick="switchModal('loginModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">Se connecter →</a>
-</p>
-  </div>
-</div>
-
 <!-- LOGIN MODAL -->
 <div class="modal-backdrop" id="loginModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeLoginModal()">✕</button>
-
-<h2>🔓 Connexion</h2>
-
-<div class="error-message" id="loginError"></div>
-
-<form onsubmit="handleLogin(event)">
-  <div class="form-group">
-    <label class="form-label">Email</label>
-    <input type="email" class="form-input" id="loginEmail" placeholder="toi@gmail.com" required>
-  </div>
-  <div class="form-group">
-    <label class="form-label">Mot de passe</label>
-    <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required>
-  </div>
-  <button type="submit" class="btn-primary">Se connecter</button>
-</form>
-
-<p style="text-align:center;margin-top:20px;font-size:12px;color:var(--text-muted)">
-  Pas de compte? <a onclick="switchModal('signupModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">S'inscrire →</a>
-</p>
+    <h2>🔓 Connexion</h2>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="loginEmail" placeholder="toi@gmail.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-primary">Se connecter</button>
+    </form>
+    <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-muted)">
+      Pas de compte? <a onclick="switchModal('registerModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">S'inscrire →</a>
+    </p>
   </div>
 </div>
 
-<!-- CODE DELIVERY MODAL -->
-<div class="modal-backdrop" id="codeModal">
+<!-- REGISTER MODAL -->
+<div class="modal-backdrop" id="registerModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeCodeModal()">✕</button>
-
-<h2>✅ Inscription réussie!</h2>
-
-<div class="signup-hero" style="background:rgba(26,107,42,0.2);border-color:var(--green)">
-  <div class="signup-hero-emoji">🎉</div>
-  <h3>Bienvenue <span id="welcomeName"></span>!</h3>
-  <p>Ton code a été envoyé à ton email</p>
-</div>
-
-<div style="margin:20px 0">
-  <h3 style="font-family:'Archivo Black';font-size:14px;margin-bottom:12px">📧 Vérifiez votre email</h3>
-  <p style="font-size:12px;color:var(--text-muted);line-height:1.6">
-    Un email contenant le <strong>code HTML complet à coller sur GitHub</strong> a été envoyé à <strong id="displayEmail"></strong>. Cet email contient aussi les instructions complètes.
-  </p>
-</div>
-
-<div style="background:var(--yellow);color:var(--black);padding:16px;border-radius:12px;margin:20px 0">
-  <h4 style="font-family:'Archivo Black';margin-bottom:8px">📋 Instructions rapides:</h4>
-  <ol style="font-size:12px;padding-left:20px;line-height:1.8">
-    <li>Ouvre ton email (vérifie aussi les spams)</li>
-    <li>Copie le code HTML complet</li>
-    <li>Va sur <strong>github.com → blk-marketplace</strong></li>
-    <li>Clique sur <strong>index.html</strong></li>
-    <li>Clique le <strong>crayon ✏️</strong> (Edit)</li>
-    <li>Sélectionne tout (Ctrl+A) et supprime</li>
-    <li>Colle ton code (Ctrl+V)</li>
-    <li>Clique "Commit changes"</li>
-    <li>Attends 30 secondes et refresh!</li>
-  </ol>
-</div>
-
-<button class="btn-primary" onclick="closeCodeModal();switchPage('home')">🏠 Retour à l'accueil</button>
+    <h2>🎉 S'inscrire</h2>
+    <form onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label class="form-label">Prénom</label>
+        <input type="text" class="form-input" id="registerName" placeholder="Joëlle" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="registerEmail" placeholder="toi@gmail.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone MTN</label>
+        <input type="tel" class="form-input" id="registerPhone" placeholder="+242 06 XXX XXX" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" class="form-input" id="registerPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-primary">Créer mon compte</button>
+    </form>
   </div>
 </div>
 
@@ -807,42 +715,142 @@ const FIREBASE_CONFIG = {
   appId: "1:701093221836:web:809a62273256fbabce3969"
 };
 
-let db, auth, functions;
+const MTN_CONFIG = {
+  API_KEY: '20a3746253a646a19f803a2b46eb5c58',
+  BUSINESS_ID: 'e21820a3-320d-400a-b28e-8a2b53589ddc',
+  API_URL: 'https://api.mtn.cm/momo/v1_0'
+};
+
+let db, auth, storage;
+
 try {
   firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.firestore();
   auth = firebase.auth();
-  functions = firebase.functions();
+  storage = firebase.storage();
+  console.log("✅ Firebase connecté!");
 } catch (error) {
   console.error("Firebase Error:", error);
 }
 
 let currentUser = null;
+let userLocation = null;
 let cart = [];
 let articles = [];
+let map = null;
+let userBalance = 0;
+let userAvatar = '👤';
 
-// AFFICHAGE DES MODALS
-function openSignupModal() {
-  document.getElementById('signupModal').classList.add('active');
+function init() {
+  checkUserSession();
+  getCurrentLocation();
+  loadArticles();
 }
 
-function closeSignupModal() {
-  document.getElementById('signupModal').classList.remove('active');
-  document.getElementById('signupForm').reset();
-  document.getElementById('signupError').classList.remove('show');
-  document.getElementById('signupSuccess').classList.remove('show');
+function checkUserSession() {
+  const user = localStorage.getItem('blk_user');
+  if (user) {
+    currentUser = JSON.parse(user);
+    userBalance = parseFloat(localStorage.getItem('blk_balance') || '0');
+    userAvatar = localStorage.getItem('blk_avatar') || '👤';
+    displayUserUI();
+  } else {
+    document.getElementById('loginModal').classList.add('active');
+  }
 }
 
-function openLoginModal() {
-  document.getElementById('loginModal').classList.add('active');
+function getCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        console.log("✅ GPS actif");
+      },
+      () => {
+        userLocation = { lat: -4.2619, lng: 15.2429 };
+      }
+    );
+  }
 }
 
-function closeLoginModal() {
-  document.getElementById('loginModal').classList.remove('active');
+function loadArticles() {
+  if (db) {
+    db.collection('articles').onSnapshot((snapshot) => {
+      articles = [];
+      snapshot.forEach((doc) => {
+        articles.push({id: doc.id, ...doc.data()});
+      });
+      displayArticles();
+    });
+  }
 }
 
-function closeCodeModal() {
-  document.getElementById('codeModal').classList.remove('active');
+function displayArticles() {
+  if (!userLocation) {
+    setTimeout(displayArticles, 500);
+    return;
+  }
+
+  const container = document.getElementById('articlesContainer');
+  container.innerHTML = '';
+
+  const sorted = articles
+    .map(a => ({
+      ...a,
+      distance: calculateDistance(
+        userLocation.lat, userLocation.lng,
+        a.lat || -4.2619, a.lng || 15.2429
+      )
+    }))
+    .sort((a, b) => a.distance - b.distance);
+
+  sorted.forEach(article => {
+    const html = `
+      <div class="article-card" onclick="viewArticle('${article.id}')">
+        <div class="card-image">
+          ${article.image || '👗'}
+          <div class="card-distance">📍 ${article.distance}km</div>
+        </div>
+        <div class="card-info">
+          <div class="card-title">${article.name}</div>
+          <div class="card-price">${article.price} FCFA</div>
+          <div class="card-seller">👤 ${article.seller}</div>
+        </div>
+      </div>
+    `;
+    container.innerHTML += html;
+  });
+}
+
+function calculateDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng/2) * Math.sin(dLng/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return Math.round(R * c * 10) / 10;
+}
+
+function switchPage(page) {
+  if (!currentUser && ['seller', 'profile', 'cart'].includes(page)) {
+    document.getElementById('loginModal').classList.add('active');
+    return;
+  }
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  if (page === 'map') setTimeout(initMap, 100);
+  if (page === 'cart') displayCart();
+  if (page === 'profile') displayProfile();
 }
 
 function switchModal(modal) {
@@ -850,507 +858,235 @@ function switchModal(modal) {
   document.getElementById(modal).classList.add('active');
 }
 
-// VALIDATION PASSWORD
-function checkPasswordStrength() {
-  const password = document.getElementById('creatorPassword').value;
-  const bar = document.getElementById('passwordBar');
-  
-  let strength = 0;
-  if (password.length >= 8) strength;
-  if (/[A-Z]/.test(password)) strength;
-  if (/[0-9]/.test(password)) strength;
-  if (/[^A-Za-z0-9]/.test(password)) strength;
-
-  bar.className = 'password-strength-bar';
-  if (strength <= 1) bar.classList.add('weak');
-  else if (strength <= 2) bar.classList.add('medium');
-  else bar.classList.add('strong');
-}
-
-// INSCRIPTION
-async function handleSignup(e) {
+function handleLogin(e) {
   e.preventDefault();
-  
-  const name = document.getElementById('creatorName').value.trim();
-  const email = document.getElementById('creatorEmail').value.trim();
-  const country = document.getElementById('creatorCountry').value;
-  const password = document.getElementById('creatorPassword').value;
-  const passwordConfirm = document.getElementById('creatorPasswordConfirm').value;
-  const errorDiv = document.getElementById('signupError');
-  const btnSignup = document.getElementById('signupBtn');
-
-  // VALIDATION
-  if (password.length < 8) {
-    showError('Le mot de passe doit faire au moins 8 caractères', errorDiv);
-    return;
-  }
-
-  if (password ! passwordConfirm) {
-    showError('Les mots de passe ne correspondent pas', errorDiv);
-    return;
-  }
-
-  if (!document.getElementById('agreeTerms').checked) {
-    showError('Tu dois accepter les conditions', errorDiv);
-    return;
-  }
-
-  // DÉSACTIVER BOUTON
-  btnSignup.disabled = true;
-  btnSignup.innerHTML = '<span class="loading-spinner"></span>Création en cours...';
-
-  try {
-    // Créer utilisateur Firebase
-    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-    const userId = userCredential.user.uid;
-
-    // Sauvegarder les données
-    await db.collection('creators').doc(userId).set({
-      name: name,
-      email: email,
-      country: country,
-      createdAt: new Date(),
-      status: 'active'
-    });
-
-    // GÉNÉRER LE CODE HTML COMPLET
-    const completeCode = generateCompleteAppCode(name, email);
-
-    // ENVOYER L'EMAIL via Firebase Functions
-    await functions.httpsCallable('sendCreatorEmail')({
-      email: email,
-      name: name,
-      code: completeCode
-    });
-
-    // AFFICHER LE CODE MODAL
-    document.getElementById('welcomeName').textContent = name.split(' ')[0];
-    document.getElementById('displayEmail').textContent = email;
-    document.getElementById('codeModal').classList.add('active');
-    closeSignupModal();
-
-  } catch (error) {
-    let errorMsg = error.message;
-    if (error.code = 'auth/email-already-in-use') {
-      errorMsg = 'Cet email est déjà inscrit';
-    } else if (error.code === 'auth/weak-password') {
-      errorMsg = 'Le mot de passe est trop faible';
-    }
-    showError(errorMsg, errorDiv);
-    btnSignup.disabled = false;
-    btnSignup.innerHTML = '🚀 Créer mon app';
-  }
-}
-
-function showError(message, element) {
-  element.textContent = '❌ ' + message;
-  element.classList.add('show');
-  setTimeout(() => {
-    element.classList.remove('show');
-  }, 5000);
-}
-
-// CONNEXION
-async function handleLogin(e) {
-  e.preventDefault();
-  
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
-  const errorDiv = document.getElementById('loginError');
 
-  try {
-    const userCredential = await auth.signInWithEmailAndPassword(email, password);
-    currentUser = {
-      id: userCredential.user.uid,
-      email: email
-    };
+  if (auth) {
+    auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        currentUser = {
+          id: userCredential.user.uid,
+          email: email,
+          name: email.split('@')[0]
+        };
+        saveUserData();
+        document.getElementById('loginModal').classList.remove('active');
+        displayUserUI();
+        loadArticles();
+      })
+      .catch((error) => {
+        alert('❌ ' + error.message);
+      });
+  }
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById('registerName').value;
+  const email = document.getElementById('registerEmail').value;
+  const phone = document.getElementById('registerPhone').value;
+  const password = document.getElementById('registerPassword').value;
+
+  if (auth) {
+    auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        currentUser = {
+          id: userCredential.user.uid,
+          email: email,
+          name: name,
+          phone: phone
+        };
+        userBalance = 0;
+        userAvatar = '👤';
+        saveUserData();
+
+        if (db) {
+          db.collection('users').doc(userCredential.user.uid).set({
+            name: name,
+            email: email,
+            phone: phone,
+            balance: 0,
+            avatar: '👤',
+            createdAt: new Date()
+          });
+        }
+
+        document.getElementById('registerModal').classList.remove('active');
+        displayUserUI();
+      })
+      .catch((error) => {
+        alert('❌ ' + error.message);
+      });
+  }
+}
+
+function saveUserData() {
+  if (currentUser) {
     localStorage.setItem('blk_user', JSON.stringify(currentUser));
-    closeLoginModal();
-    switchPage('profile');
-    displayProfile();
-  } catch (error) {
-    showError('Email ou mot de passe incorrect', errorDiv);
+    localStorage.setItem('blk_balance', userBalance.toString());
+    localStorage.setItem('blk_avatar', userAvatar);
   }
 }
 
-// GÉNÉRATION CODE COMPLET
-function generateCompleteAppCode(creatorName, creatorEmail) {
-  return `<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BLK — ${creatorName}</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"><\/script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"><\/script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"><\/script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
-
-:root {
-  --red: #C82828;
-  --yellow: #E6A01E;
-  --green: #1A6B2A;
-  --black: #0D0D0D;
-  --white: #F5F0E8;
-  --gray: #1C1C1C;
-  --gray2: #2A2A2A;
-  --text-muted: #777;
+function displayUserUI() {
+  // Mise à jour UI
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  background: var(--black);
-  font-family: 'DM Sans', sans-serif;
-  color: var(--white);
-  max-width: 390px;
-  margin: 0 auto;
-  min-height: 100vh;
-}
-
-.kente-accent {
-  height: 4px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--red) 0px, var(--red) 20px,
-    var(--yellow) 20px, var(--yellow) 40px,
-    var(--green) 40px, var(--green) 60px,
-    var(--black) 60px, var(--black) 80px
-  );
-}
-
-.nav-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: var(--gray);
-  border-bottom: 1px solid var(--gray2);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.nav-brand {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.screen {
-  display: none;
-  min-height: calc(100vh - 80px);
-  padding: 16px 20px 80px;
-}
-
-.screen.active {
-  display: block;
-}
-
-.content {
-  padding: 20px 0;
-}
-
-.hero {
-  background: linear-gradient(135deg, rgba(230,160,30,0.2) 0%, rgba(200,40,40,0.15) 100%);
-  padding: 40px 20px 30px;
-  text-align: center;
-  border-radius: 14px;
-  margin-bottom: 20px;
-}
-
-.hero h1 {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 28px;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--yellow), var(--white));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero p {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-
-.article-card {
-  background: var(--gray);
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  border: 1px solid var(--gray2);
-  cursor: pointer;
-}
-
-.article-title {
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.article-price {
-  color: var(--yellow);
-  font-weight: 700;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-width: 390px;
-  margin: 0 auto;
-  background: var(--gray);
-  border-top: 1px solid var(--gray2);
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 0;
-  z-index: 1000;
-}
-
-.nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 0;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.nav-btn.active {
-  color: var(--yellow);
-}
-
-.form-input {
-  width: 100%;
-  background: var(--gray);
-  border: 1px solid var(--gray2);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: var(--white);
-  margin-bottom: 12px;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Archivo Black', sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-
-.btn-primary:active {
-  transform: scale(0.95);
-}
-
-h2 {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 20px;
-  margin-bottom: 16px;
-  color: var(--yellow);
-}
-</style>
-
-</head>
-<body>
-
-<div class="kente-accent"><\/div>
-
-<div class="nav-top">
-  <div class="nav-brand">🟢 BLK - ${creatorName}</div>
-</div>
-
-<div id="home" class="screen active">
-  <div class="hero">
-    <h1>🟢 ${creatorName} 🟢</h1>
-    <p>Bienvenue sur ta plateforme BLK personnalisée</p>
-  </div>
-  <div class="content">
-    <h2>📦 Articles</h2>
-    <div id="articlesList"></div>
-  </div>
-</div>
-
-<div id="profile" class="screen">
-  <div class="content">
-    <h2>👤 Profil</h2>
-    <p style="color:var(--text-muted)">Bienvenue ${creatorName}!</p>
-    <p style="color:var(--text-muted);font-size:12px;margin-top:16px">
-      ✅ Inscription réussie!<br>
-      💾 Tes données sont sauvegardées<br>
-      📱 Tu peux maintenant vendre!
-    </p>
-  </div>
-</div>
-
-<div class="bottom-nav">
-  <button class="nav-btn active" onclick="switchScreen('home')">
-    <span>🏠</span> Accueil
-  </button>
-  <button class="nav-btn" onclick="switchScreen('profile')">
-    <span>👤</span> Profil
-  </button>
-</div>
-
-<script>
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyB7NwcT-nYQ1jSFxh_m4uOD7YLCdAWSdm8",
-  authDomain: "blk-congo-29463.firebaseapp.com",
-  projectId: "blk-congo-29463",
-  storageBucket: "blk-congo-29463.firebasestorage.app",
-  messagingSenderId: "701093221836",
-  appId: "1:701093221836:web:809a62273256fbabce3969"
-};
-
-try {
-  firebase.initializeApp(FIREBASE_CONFIG);
-  const db = firebase.firestore();
-} catch (error) {
-  console.error("Firebase:", error);
-}
-
-function switchScreen(screen) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screen).classList.add('active');
-  
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  event.target.closest('.nav-btn').classList.add('active');
-}
-
-console.log('✅ App de ${creatorName} chargée avec succès!');
-<\/script>
-
-</body>
-</html>`;
-}
-
-// AFFICHAGE PROFILE
 function displayProfile() {
-  const container = document.getElementById('profileContent');
+  document.getElementById('profileName').textContent = currentUser?.name || 'Utilisateur';
+  document.getElementById('profileEmail').textContent = currentUser?.email || 'email@example.com';
+  document.getElementById('profilePhone').textContent = currentUser?.phone || 'N/A';
+  document.getElementById('profileBalance').textContent = userBalance + ' FCFA';
+  document.getElementById('avatarEmoji').textContent = userAvatar;
+
+  document.getElementById('avatarInput').value = userAvatar;
+  document.getElementById('avatarInput').onchange = (e) => {
+    userAvatar = e.target.value || '👤';
+    document.getElementById('avatarEmoji').textContent = userAvatar;
+    saveUserData();
+  };
+}
+
+function addArticle(e) {
+  e.preventDefault();
   
-  if (!currentUser) {
-    container.innerHTML = `
-      <button class="btn-primary" onclick="openSignupModal()">🚀 Créer mon app</button>
-      <button class="btn-secondary" onclick="openLoginModal()" style="background:var(--gray);color:var(--white)">Se connecter</button>
-    `;
-  } else {
-    container.innerHTML = `
-      <p style="color:var(--text-muted)">Connecté: ${currentUser.email}</p>
-      <button class="btn-secondary" onclick="logout()" style="background:var(--red);margin-top:16px">Déconnexion</button>
-    `;
+  const article = {
+    name: document.getElementById('articleTitle').value,
+    desc: document.getElementById('articleDesc').value,
+    price: parseInt(document.getElementById('articlePrice').value),
+    seller: currentUser.name,
+    lat: userLocation?.lat || -4.2619,
+    lng: userLocation?.lng || 15.2429,
+    image: '📦',
+    createdAt: new Date()
+  };
+
+  if (db) {
+    db.collection('articles').add(article)
+      .then(() => {
+        alert('✅ Article publié!');
+        e.target.reset();
+        loadArticles();
+        switchPage('home');
+      })
+      .catch(err => alert('❌ ' + err.message));
   }
 }
 
-function logout() {
-  auth.signOut().then(() => {
-    currentUser = null;
-    localStorage.removeItem('blk_user');
-    switchPage('home');
-    displayProfile();
+function addToCart(articleId) {
+  const article = articles.find(a => a.id === articleId);
+  if (article) {
+    cart.push(article);
+    alert('✅ Ajouté!');
+  }
+}
+
+function displayCart() {
+  const container = document.getElementById('cartContainer');
+  
+  if (cart.length === 0) {
+    container.innerHTML = '<p style="text-align:center;padding:40px;color:var(--text-muted)">Panier vide</p>';
+    return;
+  }
+
+  let total = 0;
+  let html = '';
+
+  cart.forEach((item, i) => {
+    total += item.price;
+    html += `
+      <div style="background:var(--gray);padding:12px;border-radius:10px;margin-bottom:10px;border:1px solid var(--gray2)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700">${item.name}</div>
+            <div style="font-size:12px;color:var(--text-muted)">${item.price} FCFA</div>
+          </div>
+          <button onclick="cart.splice(${i},1);displayCart()" style="background:var(--red);color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer">❌</button>
+        </div>
+      </div>
+    `;
+  });
+
+  const fee = Math.round(total * 0.05);
+  const finalTotal = total + fee;
+
+  html += `
+    <div style="background:linear-gradient(135deg,var(--yellow),#c8880a);color:var(--black);padding:16px;border-radius:12px;margin-top:16px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span>Sous-total:</span>
+        <strong>${total} FCFA</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+        <span>Frais:</span>
+        <strong>+${fee} FCFA</strong>
+      </div>
+      <div style="border-top:2px solid rgba(0,0,0,0.2);padding-top:12px;display:flex;justify-content:space-between;font-weight:900;font-size:16px">
+        <span>TOTAL:</span>
+        <span>${finalTotal} FCFA</span>
+      </div>
+      <button onclick="initiatePayment(${finalTotal})" style="width:100%;margin-top:12px;background:var(--black);color:var(--yellow);border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer">💳 PAYER</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function initiatePayment(amount) {
+  alert(`📱 Paiement MTN initié!\n${amount} FCFA`);
+  userBalance += Math.round(amount * 0.92);
+  saveUserData();
+  cart = [];
+  displayCart();
+}
+
+function initMap() {
+  if (map) return;
+  if (!userLocation) return;
+
+  const container = document.getElementById('mapContainer');
+  map = L.map(container).setView([userLocation.lat, userLocation.lng], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  L.circleMarker([userLocation.lat, userLocation.lng], {
+    color: '#E6A01E',
+    radius: 8,
+    weight: 3
+  }).addTo(map).bindPopup('📍 Toi');
+
+  articles.forEach(article => {
+    L.marker([article.lat || -4.2619, article.lng || 15.2429])
+      .addTo(map)
+      .bindPopup(`<b>${article.name}</b><br>${article.price} FCFA`);
   });
 }
 
-// PAGES
-function switchPage(page) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  event.target?.closest('.nav-btn')?.classList.add('active');
-}
-
 function performSearch() {
-  console.log('Search...');
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  articles.filter(a => a.name.toLowerCase().includes(query));
 }
 
-// INIT
-window.onload = function() {
-  const user = localStorage.getItem('blk_user');
-  if (user) {
-    currentUser = JSON.parse(user);
+function viewArticle(articleId) {
+  const article = articles.find(a => a.id === articleId);
+  if (article) addToCart(articleId);
+}
+
+function initiateWithdrawal() {
+  if (userBalance < 1000) {
+    alert('❌ Minimum 1000 FCFA');
+    return;
   }
+  alert(`✅ Retrait de ${userBalance} FCFA!\n\nVirement vers: ${currentUser.phone}`);
+  userBalance = 0;
+  saveUserData();
   displayProfile();
-};
-</script>
-
-
-</body>
-</html>`;
 }
 
-// INIT 
-function init() { 
-const user = localStorage.getItem('blk_user'); 
-if (user) { 
-currentUser = JSON.parse(user); 
-} 
-}
-
-function switchPage(page) { 
-document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
-document.getElementById(page).classList.add('active');
-
-document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); 
-event.target?.closest('.nav-btn')?.classList.add('active'); 
-}
-
-function performSearch() { 
-console.log('Search...'); 
-}
-
-function displayProfile() { 
-const container = document.getElementById('profileContent');
-
-if (!currentUser) { 
-container.innerHTML = <div style="display:flex;flex-direction:column;gap:12px"> <button class="btn-primary" onclick="openSignupModal()">🚀 Créer mon app</button> <button class="btn-secondary" onclick="openLoginModal()" style="background:var(--gray);color:var(--white)">Se connecter</button> </div>; 
-} else { 
-container.innerHTML = <p style="color:var(--text-muted);margin-bottom:16px">📧 ${currentUser.email}</p> <button class="btn-secondary" onclick="logout()" style="background:var(--red)">Déconnexion</button>; 
-} 
-}
-
-
-
-
-
-
-
-
-
-function logout() { 
-auth.signOut().then(() => { 
-currentUser = null; 
-localStorage.removeItem('blk_user'); 
-switchPage('home'); 
-displayProfile(); 
-}); 
-}
-
-init(); 
-openSignupModal(); 
+init();
 </script>
 
 </body>
