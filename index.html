@@ -5,23 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BLK — Mode Seconde Main Congo</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --red: #C82828;
+  --primary: #4A7C59;
   --yellow: #E6A01E;
-  --green: #1A6B2A;
+  --red: #C82828;
   --black: #0D0D0D;
   --white: #F5F0E8;
   --gray: #1C1C1C;
@@ -33,311 +28,173 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--black);
+  background: var(--white);
   font-family: 'DM Sans', sans-serif;
-  color: var(--white);
+  color: var(--black);
   max-width: 390px;
   margin: 0 auto;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 .kente-accent {
-  height: 4px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--red) 0px, var(--red) 20px,
-    var(--yellow) 20px, var(--yellow) 40px,
-    var(--green) 40px, var(--green) 60px,
-    var(--black) 60px, var(--black) 80px
-  );
+  height: 3px;
+  background: var(--primary);
 }
 
 .screen {
   display: none;
-  min-height: calc(100vh - 80px);
-  padding-bottom: 80px;
-  animation: fadeIn 0.3s ease;
+  min-height: 100vh;
+  padding-bottom: 70px;
 }
 
 .screen.active {
   display: block;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 .nav-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  background: var(--gray);
-  border-bottom: 1px solid var(--gray2);
+  padding: 12px 20px;
+  background: var(--white);
+  border-bottom: 1px solid #f0f0f0;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 900;
-  color: var(--black);
-}
-
-.profile-icon-top {
+.icon-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
+  background: #f5f5f5;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 18px;
-  border: 2px solid var(--yellow);
-  transition: all 0.2s;
-}
-
-.profile-icon-top:active {
-  transform: scale(0.95);
-}
-
-.hero {
-  background: linear-gradient(135deg, rgba(230,160,30,0.2) 0%, rgba(200,40,40,0.15) 100%);
-  padding: 40px 20px 30px;
-  text-align: center;
-}
-
-.hero h1 {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 32px;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--yellow), var(--white));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero p {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 20px;
-  line-height: 1.6;
 }
 
 .search-bar {
-  padding: 16px 20px;
   display: flex;
   gap: 10px;
+  padding: 16px 20px;
 }
 
 .search-input {
   flex: 1;
-  background: var(--gray);
-  border: 1px solid var(--gray2);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 16px;
+  color: var(--black);
 }
 
-.search-input::placeholder {
-  color: var(--text-muted);
-}
-
-.search-btn {
+.filter-btn {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
+  background: var(--primary);
   border: none;
-  border-radius: 12px;
-  color: var(--black);
-  font-weight: 700;
+  border-radius: 50%;
+  color: var(--white);
   cursor: pointer;
+  font-size: 18px;
+}
+
+.banner {
+  background: linear-gradient(135deg, #f5deb3 0%, #ffe4b5 100%);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  height: 150px;
+}
+
+.banner-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.categories-section {
+  padding: 20px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.category-icon {
+  width: 56px;
+  height: 56px;
+  background: #f5f5f5;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  font-size: 32px;
 }
 
-.search-btn:active {
-  transform: scale(0.95);
-}
-
-.articles-grid {
+.products-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  padding: 16px 20px;
+  padding: 20px;
 }
 
-.article-card {
-  background: var(--gray);
-  border-radius: 14px;
+.product-card {
+  background: #f9f9f9;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid var(--gray2);
 }
 
-.article-card:active {
-  transform: scale(0.95);
-}
-
-.card-image {
-  background: linear-gradient(135deg, rgba(230,160,30,0.3), rgba(200,40,40,0.3));
-  height: 120px;
+.product-image {
+  width: 100%;
+  height: 150px;
+  background: #f0f0f0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
+  font-size: 60px;
   position: relative;
 }
 
-.card-distance {
+.product-like-btn {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(0,0,0,0.8);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 10px;
-  color: var(--yellow);
-  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-.card-info {
+.product-info {
   padding: 12px;
 }
 
-.card-title {
+.product-title {
   font-size: 12px;
   font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.card-price {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--yellow);
   margin-bottom: 4px;
 }
 
-.card-seller {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.map-container {
-  width: 100%;
-  height: 400px;
-  border-radius: 0;
-  margin: 16px 0 0 0;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-
-.form-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.form-input, .form-select, .form-textarea {
-  background: var(--gray);
-  border: 1px solid var(--gray2);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  transition: border-color 0.2s;
-}
-
-.form-input:focus, .form-select:focus, .form-textarea:focus {
-  outline: none;
-  border-color: var(--yellow);
-  background: #1f1f1f;
-}
-
-.form-input::placeholder {
-  color: var(--text-muted);
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-  border: none;
-  border-radius: 12px;
+.product-price {
   font-family: 'Archivo Black', sans-serif;
   font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 8px 24px rgba(230,160,30,0.3);
-}
-
-.btn-primary:active {
-  transform: scale(0.95);
-}
-
-.btn-secondary {
-  width: 100%;
-  padding: 14px;
-  background: var(--green);
-  color: var(--white);
-  border: none;
-  border-radius: 12px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary:active {
-  transform: scale(0.95);
-}
-
-.content {
-  padding: 0 20px;
+  color: var(--primary);
 }
 
 .bottom-nav {
@@ -347,8 +204,8 @@ body {
   right: 0;
   max-width: 390px;
   margin: 0 auto;
-  background: var(--gray);
-  border-top: 1px solid var(--gray2);
+  background: var(--white);
+  border-top: 1px solid #f0f0f0;
   display: flex;
   justify-content: space-around;
   padding: 8px 0;
@@ -368,15 +225,34 @@ body {
   color: var(--text-muted);
   font-size: 11px;
   font-weight: 700;
-  transition: all 0.2s;
 }
 
 .nav-btn.active {
-  color: var(--yellow);
+  color: var(--primary);
 }
 
-.nav-btn span:first-child {
-  font-size: 20px;
+.cart-item {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cart-total {
+  background: var(--primary);
+  color: var(--white);
+  padding: 16px;
+  border-radius: 12px;
+  margin: 20px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
 }
 
 .modal-backdrop {
@@ -386,11 +262,12 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.7);
   z-index: 2000;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .modal-backdrop.active {
@@ -398,488 +275,407 @@ body {
 }
 
 .modal {
-  background: var(--gray);
+  background: var(--white);
   border-radius: 16px;
   padding: 24px;
   width: 100%;
   max-width: 360px;
   max-height: 90vh;
   overflow-y: auto;
-  border: 1px solid var(--gray2);
+  position: relative;
 }
 
 .modal h2 {
   font-family: 'Archivo Black', sans-serif;
   font-size: 20px;
-  margin-bottom: 16px;
-  color: var(--yellow);
+  margin-bottom: 20px;
 }
 
-.wallet-card {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-  padding: 24px;
-  border-radius: 14px;
-  margin: 16px 0;
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
 
-.wallet-balance {
-  font-size: 32px;
-  font-weight: 900;
-  font-family: 'Archivo Black', sans-serif;
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.wallet-label {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-bottom: 8px;
-}
-
-.profile-section {
-  background: var(--gray);
+.payment-method {
+  background: #f9f9f9;
   padding: 16px;
   border-radius: 12px;
-  margin: 16px 0;
-  border: 1px solid var(--gray2);
-}
-
-.profile-row {
+  border: 2px solid transparent;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--gray2);
 }
 
-.profile-row:last-child {
-  border-bottom: none;
+.payment-method.selected {
+  border-color: var(--primary);
+  background: rgba(74,124,89,0.1);
 }
 
-.profile-label {
-  font-size: 12px;
+.payment-method-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.payment-method-name {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.payment-method-desc {
+  font-size: 11px;
   color: var(--text-muted);
 }
 
-.profile-value {
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  font-size: 11px;
   font-weight: 700;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-input {
+  width: 100%;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--black);
+  font-size: 13px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
 }
 
 .profile-header {
+  background: linear-gradient(135deg, #f5deb3 0%, #ffe4b5 100%);
+  padding: 24px 20px;
   text-align: center;
-  padding: 20px;
-  background: linear-gradient(135deg, rgba(230,160,30,0.15) 0%, rgba(200,40,40,0.1) 100%);
-  border-radius: 14px;
-  margin-bottom: 16px;
 }
 
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--yellow), var(--red));
+  background: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
-  margin: 0 auto 12px;
-  border: 3px solid var(--yellow);
-  cursor: pointer;
-  transition: all 0.2s;
+  font-size: 48px;
+  margin: 0 auto 16px;
 }
 
-.profile-avatar:active {
-  transform: scale(0.95);
+.solde-card {
+  background: var(--primary);
+  color: var(--white);
+  padding: 20px;
+  margin: 20px;
+  border-radius: 12px;
 }
 
-.profile-avatar input {
+.solde-amount {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 32px;
+}
+
+.success-msg {
+  background: rgba(26,107,42,0.1);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
   display: none;
 }
 
-.profile-name {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
-  margin-bottom: 4px;
+.success-msg.show {
+  display: block;
 }
 
-.profile-email {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.action-buttons button {
-  flex: 1;
+.error-msg {
+  background: rgba(200,40,40,0.1);
+  border: 1px solid var(--red);
+  color: var(--red);
   padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
-  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 12px;
   font-size: 12px;
-  transition: all 0.2s;
+  display: none;
 }
 
-.action-buttons .buy {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-}
-
-.action-buttons .sell {
-  background: var(--green);
-  color: var(--white);
-}
-
-.action-buttons button:active {
-  transform: scale(0.95);
-}
-
-.stats-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin: 16px 0;
-}
-
-.stat-box {
-  background: var(--gray);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gray2);
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--yellow);
-  font-family: 'Archivo Black', sans-serif;
-}
-
-.stat-label {
-  font-size: 10px;
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.chart-container {
-  background: var(--gray);
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gray2);
-  margin: 16px 0;
-  position: relative;
-  height: 250px;
-}
-
-.messages-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px);
-}
-
-.messages-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.message {
-  display: flex;
-  gap: 8px;
-  padding: 0 20px;
-}
-
-.message.sent {
-  justify-content: flex-end;
-}
-
-.message-content {
-  background: var(--gray);
-  padding: 10px 14px;
-  border-radius: 10px;
-  max-width: 70%;
-  border: 1px solid var(--gray2);
-}
-
-.message.sent .message-content {
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  color: var(--black);
-}
-
-.message-time {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.message-input {
-  display: flex;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--gray2);
-}
-
-.message-input input {
-  flex: 1;
-  background: var(--gray);
-  border: 1px solid var(--gray2);
-  border-radius: 20px;
-  padding: 10px 14px;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-}
-
-.message-input button {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--yellow), #c8880a);
-  border: none;
-  border-radius: 50%;
-  color: var(--black);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.message-input button:active {
-  transform: scale(0.95);
-}
-
-.earnings-card {
-  background: linear-gradient(135deg, rgba(26,107,42,0.2), rgba(230,160,30,0.15));
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--green);
-  margin: 16px 0;
-}
-
-.earnings-label {
-  font-size: 12px;
-  color: var(--green);
-  margin-bottom: 8px;
-}
-
-.earnings-amount {
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--green);
-  font-family: 'Archivo Black', sans-serif;
+.error-msg.show {
+  display: block;
 }
 </style>
+
 </head>
 <body>
 
 <div class="kente-accent"></div>
 
-<div class="nav-top">
-  <div class="nav-brand">
-    <div class="logo-icon">🟢</div>
-    <span>BLK</span>
-  </div>
-  <div class="profile-icon-top" onclick="switchPage('profile')">👤</div>
-</div>
-
 <!-- HOME -->
 <div id="home" class="screen active">
-  <div class="hero">
-    <h1>🟢 Marché BLK 🟢</h1>
-    <p>La plus grande plateforme de<br>mode seconde main au Congo</p>
+  <div class="nav-top">
+    <div style="font-size:13px;font-weight:600">📍 Congo</div>
+    <div style="display:flex;gap:12px">
+      <button class="icon-btn" onclick="switchPage('cart')">🛒</button>
+      <button class="icon-btn" onclick="switchPage('profile')">👤</button>
+    </div>
   </div>
 
   <div class="search-bar">
-    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Chercher...">
-    <button class="search-btn" onclick="performSearch()">🔎</button>
+    <input type="text" class="search-input" placeholder="🔍 Rechercher...">
+    <button class="filter-btn">⚙️</button>
   </div>
 
-  <div class="content">
-    <div style="margin-top: 12px; margin-bottom: 8px;">
-      <h2 style="font-family:'Archivo Black';font-size:16px">📍 Articles près de toi</h2>
+  <div class="banner">
+    <div>
+      <div class="banner-title">Réduction 50%</div>
+      <p style="font-size:12px;color:#666;margin-bottom:10px">Pour ta première transaction</p>
+      <button style="background:var(--primary);color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">SHOP NOW</button>
+    </div>
+    <div style="font-size:100px;opacity:0.2">👗</div>
+  </div>
+
+  <div class="categories-section">
+    <h3 style="font-family:'Archivo Black';font-size:16px;margin-bottom:16px">Catégories</h3>
+    <div class="categories-grid">
+      <div style="text-align:center">
+        <div class="category-icon">👕</div>
+        <span style="font-size:11px;font-weight:700">T-Shirt</span>
+      </div>
+      <div style="text-align:center">
+        <div class="category-icon">👖</div>
+        <span style="font-size:11px;font-weight:700">Pantalon</span>
+      </div>
+      <div style="text-align:center">
+        <div class="category-icon">👗</div>
+        <span style="font-size:11px;font-weight:700">Robe</span>
+      </div>
+      <div style="text-align:center">
+        <div class="category-icon">🧥</div>
+        <span style="font-size:11px;font-weight:700">Veste</span>
+      </div>
     </div>
   </div>
 
-  <div class="articles-grid" id="articlesContainer"></div>
+  <div class="categories-section">
+    <h3 style="font-family:'Archivo Black';font-size:16px;margin-bottom:16px">Flash Sale</h3>
+    <div class="products-grid">
+      <div class="product-card" onclick="addToCart({name:'Robe Wax', price:5000})">
+        <div class="product-image">👗<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
+        <div class="product-info">
+          <div class="product-title">Robe Wax Premium</div>
+          <div class="product-price">5,000 FCFA</div>
+        </div>
+      </div>
+
+  <div class="product-card" onclick="addToCart({name:'Chemise Chic', price:3500})">
+    <div class="product-image">👔<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
+    <div class="product-info">
+      <div class="product-title">Chemise Chic</div>
+      <div class="product-price">3,500 FCFA</div>
+    </div>
+  </div>
+
+  <div class="product-card" onclick="addToCart({name:'Chaussures', price:4200})">
+    <div class="product-image">👠<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
+    <div class="product-info">
+      <div class="product-title">Chaussures Mode</div>
+      <div class="product-price">4,200 FCFA</div>
+    </div>
+  </div>
+
+  <div class="product-card" onclick="addToCart({name:'Sac Luxe', price:6000})">
+    <div class="product-image">👜<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
+    <div class="product-info">
+      <div class="product-title">Sac à Main Luxe</div>
+      <div class="product-price">6,000 FCFA</div>
+    </div>
+  </div>
 </div>
-
-<!-- MAP -->
-<div id="map" class="screen">
-  <div class="content" style="padding: 0;">
-    <div style="padding: 16px 20px 0;">
-      <h2 style="font-family:'Archivo Black';font-size:16px">🗺️ Vendeurs près de toi</h2>
-    </div>
-    <div class="map-container" id="mapContainer"></div>
-    <div style="padding: 16px 20px;" id="vendorsNearby"></div>
-  </div>
-</div>
-
-<!-- MESSAGES -->
-<div id="messages" class="screen">
-  <div style="display:flex;flex-direction:column;height:calc(100vh - 100px)">
-    <h2 style="font-family:'Archivo Black';font-size:18px;padding:16px 20px 0">💬 Messages</h2>
-    <div class="messages-list" id="messagesList"></div>
-    <div class="message-input">
-      <input type="text" id="messageInput" placeholder="Envoie un message...">
-      <button onclick="sendMessage()">📤</button>
-    </div>
   </div>
 </div>
 
 <!-- CART -->
 <div id="cart" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">🛒 Mon panier</h2>
-    <div id="cartContainer" style="margin-top:16px"></div>
+  <div class="nav-top">
+    <h2 style="flex:1;font-size:18px">🛒 Mon panier</h2>
+    <button style="background:none;border:none;cursor:pointer;font-size:20px" onclick="switchPage('home')">✕</button>
+  </div>
+
+  <div style="padding:20px">
+    <div id="cartItems"></div>
+
+<div class="cart-total" id="cartTotal" style="display:none">
+  <div class="total-row">
+    <span>Sous-total:</span>
+    <span id="subtotal">0 FCFA</span>
+  </div>
+  <div class="total-row">
+    <span>Frais (5%):</span>
+    <span id="fees">0 FCFA</span>
+  </div>
+  <div class="total-row" style="font-size:16px;border-top:1px solid rgba(255,255,255,0.3);padding-top:12px;margin-top:12px">
+    <span>TOTAL:</span>
+    <span id="total">0 FCFA</span>
+  </div>
+</div>
+
+<button class="btn-primary" id="checkoutBtn" onclick="openPaymentModal()" style="display:none">💳 Passer la commande</button>
   </div>
 </div>
 
 <!-- PROFILE -->
 <div id="profile" class="screen">
-  <div class="content">
-    <div class="profile-header">
-      <label class="profile-avatar" onclick="document.getElementById('avatarInput').click()">
-        <span id="avatarEmoji">👤</span>
-        <input type="text" id="avatarInput" placeholder="Emoji">
-      </label>
-      <div class="profile-name" id="profileName">Utilisateur</div>
-      <div class="profile-email" id="profileEmail">email@example.com</div>
-      <div class="action-buttons">
-        <button class="buy" onclick="switchPage('home')">🛍️ Acheter</button>
-        <button class="sell" onclick="switchPage('seller')">📦 Vendre</button>
+  <div class="profile-header">
+    <div class="profile-avatar">👤</div>
+    <div style="font-family:'Archivo Black';font-size:20px;font-weight:900;margin-bottom:4px" id="profileName">Utilisateur</div>
+    <div style="font-size:12px;color:#666" id="profileEmail">email@example.com</div>
+  </div>
+
+  <div class="solde-card">
+    <div style="font-size:12px;opacity:0.9;margin-bottom:8px">💰 SOLDE DISPONIBLE</div>
+    <div class="solde-amount" id="soldeAmount">0 FCFA</div>
+    <div style="margin-top:8px;font-size:11px;opacity:0.9">Total Gagné: <span id="totalEarnings">0 FCFA</span></div>
+  </div>
+
+  <h3 style="font-family:'Archivo Black';font-size:16px;padding:20px 20px 12px">👤 Informations</h3>
+  <div style="background:#f9f9f9;padding:16px;margin:0 20px;border-radius:12px">
+    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e8e8e8;font-size:12px">
+      <span style="color:var(--text-muted)">Email</span>
+      <span style="font-weight:700" id="infoEmail">-</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:12px">
+      <span style="color:var(--text-muted)">Pays</span>
+      <span style="font-weight:700">Congo 🇨🇬</span>
+    </div>
+  </div>
+
+<button class="btn-primary" onclick="logout()" style="margin:20px;background:var(--red)">Déconnexion</button>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-backdrop" id="paymentModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePaymentModal()">✕</button>
+    <h2>💳 Mode de paiement</h2>
+
+<div class="success-msg" id="successMsg"></div>
+<div class="error-msg" id="errorMsg"></div>
+
+<div class="payment-methods">
+  <div class="payment-method" id="mtnMethod" onclick="selectPaymentMethod('mtn', this)">
+    <div style="display:flex;align-items:center">
+      <span class="payment-method-icon">📱</span>
+      <div>
+        <div class="payment-method-name">MTN MoMo</div>
+        <div class="payment-method-desc">Paiement mobile instantané</div>
       </div>
     </div>
+    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
+  </div>
 
-    <div class="earnings-card">
-      <div class="earnings-label">💰 Mes revenus</div>
-      <div class="earnings-amount" id="earningsAmount">0 FCFA</div>
-    </div>
-
-    <h3 style="font-family:'Archivo Black';font-size:14px;margin:16px 0 12px">📊 Statistiques de vente</h3>
-    
-    <div class="stats-container">
-      <div class="stat-box">
-        <div class="stat-number" id="viewCount">0</div>
-        <div class="stat-label">Vues</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" id="orderCount">0</div>
-        <div class="stat-label">Commandes</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" id="conversionRate">0%</div>
-        <div class="stat-label">Conversion</div>
+  <div class="payment-method" id="airtelMethod" onclick="selectPaymentMethod('airtel', this)">
+    <div style="display:flex;align-items:center">
+      <span class="payment-method-icon">📲</span>
+      <div>
+        <div class="payment-method-name">Airtel Money</div>
+        <div class="payment-method-desc">Paiement Airtel Money</div>
       </div>
     </div>
+    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
+  </div>
 
-    <div class="chart-container">
-      <canvas id="salesChart"></canvas>
-    </div>
-
-    <div class="profile-section">
-      <div class="profile-row">
-        <span class="profile-label">Téléphone</span>
-        <span class="profile-value" id="profilePhone">N/A</span>
-      </div>
-      <div class="profile-row">
-        <span class="profile-label">Solde</span>
-        <span class="profile-value" id="profileBalance">0 FCFA</span>
+  <div class="payment-method" id="orangeMethod" onclick="selectPaymentMethod('orange', this)">
+    <div style="display:flex;align-items:center">
+      <span class="payment-method-icon">🟠</span>
+      <div>
+        <div class="payment-method-name">Orange Money</div>
+        <div class="payment-method-desc">Paiement Orange Money</div>
       </div>
     </div>
+    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
+  </div>
 
-    <button class="btn-secondary" onclick="initiateWithdrawal()" style="margin-top: 16px;">💳 Retirer les fonds</button>
+  <div class="payment-method" id="walletMethod" onclick="selectPaymentMethod('wallet', this)">
+    <div style="display:flex;align-items:center">
+      <span class="payment-method-icon">💼</span>
+      <div>
+        <div class="payment-method-name">Portefeuille BLK</div>
+        <div class="payment-method-desc">Solde disponible</div>
+      </div>
+    </div>
+    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
   </div>
 </div>
 
-<!-- SELLER -->
-<div id="seller" class="screen">
-  <div class="content">
-    <h2 style="font-family:'Archivo Black';font-size:18px;margin-top:16px">📦 Publier un article</h2>
-    <form onsubmit="addArticle(event)" style="margin-top:16px">
-      <div class="form-group">
-        <label class="form-label">Titre</label>
-        <input type="text" class="form-input" id="articleTitle" placeholder="ex: Robe Wax" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="articleDesc" placeholder="Décris..." rows="4" required></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Prix (FCFA)</label>
-        <input type="number" class="form-input" id="articlePrice" placeholder="ex: 5000" required>
-      </div>
-      <button type="submit" class="btn-primary">Publier 🚀</button>
-    </form>
+<div id="mtnForm" style="display:none;margin-top:20px">
+  <div class="form-group">
+    <label class="form-label">Numéro MTN (+242)</label>
+    <input type="tel" class="form-input" id="mtnPhone" placeholder="+242 06 XXXXXX">
+  </div>
+</div>
+
+<div id="airtelForm" style="display:none;margin-top:20px">
+  <div class="form-group">
+    <label class="form-label">Numéro Airtel (+242)</label>
+    <input type="tel" class="form-input" id="airtelPhone" placeholder="+242 05 XXXXXX">
+  </div>
+</div>
+
+<div id="orangeForm" style="display:none;margin-top:20px">
+  <div class="form-group">
+    <label class="form-label">Numéro Orange (+242)</label>
+    <input type="tel" class="form-input" id="orangePhone" placeholder="+242 04 XXXXXX">
+  </div>
+</div>
+
+<button class="btn-primary" id="payBtn" onclick="processPayment()" disabled>Payer maintenant</button>
+<button onclick="closePaymentModal()" style="width:100%;padding:12px;background:#f5f5f5;border:none;border-radius:8px;cursor:pointer;margin-top:8px">Annuler</button>
   </div>
 </div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="nav-btn active" onclick="switchPage('home')">
-    <span>🏠</span> Accueil
-  </button>
-  <button class="nav-btn" onclick="switchPage('map')">
-    <span>🗺️</span> Carte
-  </button>
-  <button class="nav-btn" onclick="switchPage('messages')">
-    <span>💬</span> Messages
-  </button>
-  <button class="nav-btn" onclick="switchPage('cart')">
-    <span>🛒</span> Panier
-  </button>
-  <button class="nav-btn" onclick="switchPage('profile')">
-    <span>👤</span> Profil
-  </button>
-</div>
-
-<!-- LOGIN MODAL -->
-<div class="modal-backdrop" id="loginModal">
-  <div class="modal">
-    <h2>🔓 Connexion</h2>
-    <form onsubmit="handleLogin(event)">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="loginEmail" placeholder="toi@gmail.com" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="btn-primary">Se connecter</button>
-    </form>
-    <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-muted)">
-      Pas de compte? <a onclick="switchModal('registerModal')" style="color:var(--yellow);cursor:pointer;font-weight:700">S'inscrire →</a>
-    </p>
-  </div>
-</div>
-
-<!-- REGISTER MODAL -->
-<div class="modal-backdrop" id="registerModal">
-  <div class="modal">
-    <h2>🎉 S'inscrire</h2>
-    <form onsubmit="handleRegister(event)">
-      <div class="form-group">
-        <label class="form-label">Prénom</label>
-        <input type="text" class="form-input" id="registerName" placeholder="Joëlle" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="registerEmail" placeholder="toi@gmail.com" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Téléphone MTN</label>
-        <input type="tel" class="form-input" id="registerPhone" placeholder="+242 06 XXX XXX" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input type="password" class="form-input" id="registerPassword" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="btn-primary">Créer mon compte</button>
-    </form>
-  </div>
+  <button class="nav-btn active" onclick="switchPage('home')"><span>🏠</span> Accueil</button>
+  <button class="nav-btn" onclick="switchPage('cart')"><span>❤️</span> Favoris</button>
+  <button class="nav-btn" onclick="switchPage('cart')"><span>💬</span> Messages</button>
+  <button class="nav-btn" onclick="switchPage('profile')"><span>👤</span> Profil</button>
 </div>
 
 <script>
@@ -892,506 +688,318 @@ const FIREBASE_CONFIG = {
   appId: "1:701093221836:web:809a62273256fbabce3969"
 };
 
-const MTN_CONFIG = {
-  API_KEY: '20a3746253a646a19f803a2b46eb5c58',
-  BUSINESS_ID: 'e21820a3-320d-400a-b28e-8a2b53589ddc',
-  API_URL: 'https://api.mtn.cm/momo/v1_0'
+// ⭐⭐⭐ REMPLACE CES CLÉS AVEC LES TIENNES! ⭐⭐⭐
+const PAYMENT_PROVIDERS = {
+  MTN: {
+    API_KEY: '20a3746253a646a19f803a2b46eb5c58',           // ⭐ CHANGE!
+    SUBSCRIBER_ID: 'e21820a3-320d-400a-b28e-8a2b53589ddc', // ⭐ CHANGE!
+    PIN: '1234',                                            // ⭐ CHANGE!
+    API_URL: 'https://api.mtn.cm/momo/v1_0'
+  },
+  AIRTEL: {
+    API_KEY: 'abc123xyz456def789',                         // ⭐ CHANGE!
+    API_SECRET: 'secret456key789abc',                      // ⭐ CHANGE!
+    MERCHANT_ID: 'AIRTEL_MERCHANT_001',                    // ⭐ CHANGE!
+    API_URL: 'https://api.airtel.cm/api'
+  },
+  ORANGE: {
+    API_KEY: 'orange_key_123456789',                       // ⭐ CHANGE!
+    MERCHANT_CODE: 'OMD_MERCHANT_BLK',                     // ⭐ CHANGE!
+    API_URL: 'https://api.orangemoney.com/api'
+  }
 };
 
-let db, auth, storage;
-
-try {
-  firebase.initializeApp(FIREBASE_CONFIG);
-  db = firebase.firestore();
-  auth = firebase.auth();
-  storage = firebase.storage();
-  console.log("✅ Firebase connecté!");
-} catch (error) {
-  console.error("Firebase Error:", error);
-}
+let db, auth;
+firebase.initializeApp(FIREBASE_CONFIG);
+db = firebase.firestore();
+auth = firebase.auth();
 
 let currentUser = null;
-let userLocation = null;
 let cart = [];
-let articles = [];
-let map = null;
-let userBalance = 0;
-let userAvatar = '👤';
-let messages = [];
-let salesChart = null;
-let stats = {
-  views: 0,
-  orders: 0,
-  earnings: 0
-};
+let selectedPaymentMethod = null;
+let totalAmount = 0;
+let creatorId = 'DIVIN_AMBETO';
 
 function init() {
   checkUserSession();
-  getCurrentLocation();
-  loadArticles();
-  loadMessages();
-  loadStats();
 }
 
 function checkUserSession() {
-  const user = localStorage.getItem('blk_user');
-  if (user) {
-    currentUser = JSON.parse(user);
-    userBalance = parseFloat(localStorage.getItem('blk_balance') || '0');
-    userAvatar = localStorage.getItem('blk_avatar') || '👤';
-    displayUserUI();
-  } else {
-    document.getElementById('loginModal').classList.add('active');
-  }
-}
-
-function getCurrentLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        userLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        console.log("✅ GPS actif");
-      },
-      () => {
-        userLocation = { lat: -4.2619, lng: 15.2429 };
-      }
-    );
-  }
-}
-
-function loadArticles() {
-  if (db) {
-    db.collection('articles').onSnapshot((snapshot) => {
-      articles = [];
-      snapshot.forEach((doc) => {
-        articles.push({id: doc.id, ...doc.data()});
-      });
-      displayArticles();
-    });
-  }
-}
-
-function loadMessages() {
-  if (db && currentUser) {
-    db.collection('messages')
-      .where('userId', '==', currentUser.id)
-      .orderBy('timestamp', 'asc')
-      .onSnapshot((snapshot) => {
-        messages = [];
-        snapshot.forEach((doc) => {
-          messages.push({id: doc.id, ...doc.data()});
-        });
-        displayMessages();
-      });
-  }
-}
-
-function loadStats() {
-  if (db && currentUser) {
-    db.collection('users').doc(currentUser.id).onSnapshot((doc) => {
-      if (doc.exists) {
-        stats = doc.data().stats || {views: 0, orders: 0, earnings: 0};
-        updateStatsDisplay();
-      }
-    });
-  }
-}
-
-function displayArticles() {
-  if (!userLocation) {
-    setTimeout(displayArticles, 500);
-    return;
-  }
-
-  const container = document.getElementById('articlesContainer');
-  container.innerHTML = '';
-
-  const sorted = articles
-    .map(a => ({
-      ...a,
-      distance: calculateDistance(
-        userLocation.lat, userLocation.lng,
-        a.lat || -4.2619, a.lng || 15.2429
-      )
-    }))
-    .sort((a, b) => a.distance - b.distance);
-
-  sorted.forEach(article => {
-    const html = `
-      <div class="article-card" onclick="viewArticle('${article.id}')">
-        <div class="card-image">
-          ${article.image || '👗'}
-          <div class="card-distance">📍 ${article.distance}km</div>
-        </div>
-        <div class="card-info">
-          <div class="card-title">${article.name}</div>
-          <div class="card-price">${article.price} FCFA</div>
-          <div class="card-seller">👤 ${article.seller}</div>
-        </div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-}
-
-function displayMessages() {
-  const container = document.getElementById('messagesList');
-  container.innerHTML = '';
-
-  messages.forEach(msg => {
-    const isOwn = msg.senderId === currentUser.id;
-    const date = new Date(msg.timestamp?.toDate?.() || msg.timestamp).toLocaleTimeString('fr-FR', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    
-    const html = `
-      <div class="message ${isOwn ? 'sent' : ''}">
-        <div class="message-content">${msg.text}</div>
-        <div class="message-time">${date}</div>
-      </div>
-    `;
-    container.innerHTML += html;
-  });
-
-  container.scrollTop = container.scrollHeight;
-}
-
-function sendMessage() {
-  const input = document.getElementById('messageInput');
-  const text = input.value.trim();
-
-  if (!text) return;
-
-  if (db && currentUser) {
-    db.collection('messages').add({
-      userId: currentUser.id,
-      senderId: currentUser.id,
-      text: text,
-      timestamp: new Date(),
-      senderName: currentUser.name
-    }).then(() => {
-      input.value = '';
-      loadMessages();
-    });
-  }
-}
-
-function updateStatsDisplay() {
-  document.getElementById('viewCount').textContent = stats.views || 0;
-  document.getElementById('orderCount').textContent = stats.orders || 0;
-  document.getElementById('conversionRate').textContent = 
-    stats.views > 0 ? Math.round((stats.orders / stats.views) * 100) + '%' : '0%';
-  document.getElementById('earningsAmount').textContent = (stats.earnings || 0) + ' FCFA';
-
-  // Graphique
-  if (!salesChart) {
-    const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if (ctx) {
-      salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jour 1', 'Jour 2', 'Jour 3', 'Jour 4', 'Jour 5'],
-          datasets: [{
-            label: 'Commandes',
-            data: [1, 2, 2, 4, 3],
-            borderColor: '#E6A01E',
-            backgroundColor: 'rgba(230,160,30,0.1)',
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: '#FFF' } }
-          },
-          scales: {
-            y: { ticks: { color: '#777' }, grid: { color: '#2a2a2a' } },
-            x: { ticks: { color: '#777' }, grid: { color: '#2a2a2a' } }
-          }
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      currentUser = { id: user.uid, email: user.email };
+      if (db) {
+        const docSnap = await db.collection('users').doc(user.uid).get();
+        if (docSnap.exists) {
+          const userData = docSnap.data();
+          document.getElementById('profileName').textContent = userData.name || 'Utilisateur';
+          document.getElementById('profileEmail').textContent = userData.email || '-';
+          document.getElementById('infoEmail').textContent = userData.email || '-';
+          document.getElementById('soldeAmount').textContent = (userData.balance || 0).toLocaleString() + ' FCFA';
+          document.getElementById('totalEarnings').textContent = (userData.totalEarnings || 0).toLocaleString() + ' FCFA';
         }
-      });
+      }
     }
-  }
-}
-
-function calculateDistance(lat1, lng1, lat2, lng2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLng/2) * Math.sin(dLng/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return Math.round(R * c * 10) / 10;
-}
-
-function switchPage(page) {
-  if (!currentUser && ['seller', 'profile', 'cart', 'messages'].includes(page)) {
-    document.getElementById('loginModal').classList.add('active');
-    return;
-  }
-
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  event.target?.classList.add('active');
-
-  if (page === 'map') setTimeout(initMap, 100);
-  if (page === 'cart') displayCart();
-  if (page === 'profile') {
-    displayProfile();
-    setTimeout(() => updateStatsDisplay(), 100);
-  }
-  if (page === 'messages') {
-    setTimeout(() => {
-      document.getElementById('messageInput').focus();
-    }, 100);
-  }
-}
-
-function switchModal(modal) {
-  document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('active'));
-  document.getElementById(modal).classList.add('active');
-}
-
-function handleLogin(e) {
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-
-  if (auth) {
-    auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        currentUser = {
-          id: userCredential.user.uid,
-          email: email,
-          name: email.split('@')[0]
-        };
-        saveUserData();
-        document.getElementById('loginModal').classList.remove('active');
-        displayUserUI();
-        loadArticles();
-        loadMessages();
-        loadStats();
-      })
-      .catch((error) => {
-        alert('❌ ' + error.message);
-      });
-  }
-}
-
-function handleRegister(e) {
-  e.preventDefault();
-  const name = document.getElementById('registerName').value;
-  const email = document.getElementById('registerEmail').value;
-  const phone = document.getElementById('registerPhone').value;
-  const password = document.getElementById('registerPassword').value;
-
-  if (auth) {
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        currentUser = {
-          id: userCredential.user.uid,
-          email: email,
-          name: name,
-          phone: phone
-        };
-        userBalance = 0;
-        userAvatar = '👤';
-        saveUserData();
-
-        if (db) {
-          db.collection('users').doc(userCredential.user.uid).set({
-            name: name,
-            email: email,
-            phone: phone,
-            balance: 0,
-            avatar: '👤',
-            stats: { views: 0, orders: 0, earnings: 0 },
-            createdAt: new Date()
-          });
-        }
-
-        document.getElementById('registerModal').classList.remove('active');
-        displayUserUI();
-      })
-      .catch((error) => {
-        alert('❌ ' + error.message);
-      });
-  }
-}
-
-function saveUserData() {
-  if (currentUser) {
-    localStorage.setItem('blk_user', JSON.stringify(currentUser));
-    localStorage.setItem('blk_balance', userBalance.toString());
-    localStorage.setItem('blk_avatar', userAvatar);
-  }
-}
-
-function displayUserUI() {}
-
-function displayProfile() {
-  document.getElementById('profileName').textContent = currentUser?.name || 'Utilisateur';
-  document.getElementById('profileEmail').textContent = currentUser?.email || 'email@example.com';
-  document.getElementById('profilePhone').textContent = currentUser?.phone || 'N/A';
-  document.getElementById('profileBalance').textContent = userBalance + ' FCFA';
-  document.getElementById('avatarEmoji').textContent = userAvatar;
-
-  document.getElementById('avatarInput').value = userAvatar;
-  document.getElementById('avatarInput').onchange = (e) => {
-    userAvatar = e.target.value || '👤';
-    document.getElementById('avatarEmoji').textContent = userAvatar;
-    saveUserData();
-  };
-}
-
-function addArticle(e) {
-  e.preventDefault();
-  
-  const article = {
-    name: document.getElementById('articleTitle').value,
-    desc: document.getElementById('articleDesc').value,
-    price: parseInt(document.getElementById('articlePrice').value),
-    seller: currentUser.name,
-    lat: userLocation?.lat || -4.2619,
-    lng: userLocation?.lng || 15.2429,
-    image: '📦',
-    createdAt: new Date()
-  };
-
-  if (db) {
-    db.collection('articles').add(article)
-      .then(() => {
-        alert('✅ Article publié!');
-        e.target.reset();
-        loadArticles();
-        switchPage('home');
-      })
-      .catch(err => alert('❌ ' + err.message));
-  }
-}
-
-function addToCart(articleId) {
-  const article = articles.find(a => a.id === articleId);
-  if (article) {
-    cart.push(article);
-    alert('✅ Ajouté!');
-  }
-}
-
-function displayCart() {
-  const container = document.getElementById('cartContainer');
-  
-  if (cart.length === 0) {
-    container.innerHTML = '<p style="text-align:center;padding:40px;color:var(--text-muted)">Panier vide</p>';
-    return;
-  }
-
-  let total = 0;
-  let html = '';
-
-  cart.forEach((item, i) => {
-    total += item.price;
-    html += `
-      <div style="background:var(--gray);padding:12px;border-radius:10px;margin-bottom:10px;border:1px solid var(--gray2)">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-weight:700">${item.name}</div>
-            <div style="font-size:12px;color:var(--text-muted)">${item.price} FCFA</div>
-          </div>
-          <button onclick="cart.splice(${i},1);displayCart()" style="background:var(--red);color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer">❌</button>
-        </div>
-      </div>
-    `;
   });
-
-  const fee = Math.round(total * 0.05);
-  const finalTotal = total + fee;
-
-  html += `
-    <div style="background:linear-gradient(135deg,var(--yellow),#c8880a);color:var(--black);padding:16px;border-radius:12px;margin-top:16px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-        <span>Sous-total:</span>
-        <strong>${total} FCFA</strong>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <span>Frais:</span>
-        <strong>+${fee} FCFA</strong>
-      </div>
-      <div style="border-top:2px solid rgba(0,0,0,0.2);padding-top:12px;display:flex;justify-content:space-between;font-weight:900;font-size:16px">
-        <span>TOTAL:</span>
-        <span>${finalTotal} FCFA</span>
-      </div>
-      <button onclick="initiatePayment(${finalTotal})" style="width:100%;margin-top:12px;background:var(--black);color:var(--yellow);border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer">💳 PAYER</button>
-    </div>
-  `;
-
-  container.innerHTML = html;
 }
 
-function initiatePayment(amount) {
-  alert(`📱 Paiement MTN initié!\n${amount} FCFA`);
-  userBalance += Math.round(amount * 0.92);
-  saveUserData();
-  cart = [];
+function addToCart(product) {
+  cart.push(product);
   displayCart();
 }
 
-function initMap() {
-  if (map) return;
-  if (!userLocation) return;
-
-  const container = document.getElementById('mapContainer');
-  map = L.map(container).setView([userLocation.lat, userLocation.lng], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-
-  L.circleMarker([userLocation.lat, userLocation.lng], {
-    color: '#E6A01E',
-    radius: 8,
-    weight: 3
-  }).addTo(map).bindPopup('📍 Toi');
-
-  articles.forEach(article => {
-    L.marker([article.lat || -4.2619, article.lng || 15.2429])
-      .addTo(map)
-      .bindPopup(`<b>${article.name}</b><br>${article.price} FCFA`);
-  });
-}
-
-function performSearch() {
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  articles.filter(a => a.name.toLowerCase().includes(query));
-}
-
-function viewArticle(articleId) {
-  const article = articles.find(a => a.id === articleId);
-  if (article) addToCart(articleId);
-}
-
-function initiateWithdrawal() {
-  if (userBalance < 1000) {
-    alert('❌ Minimum 1000 FCFA');
+function displayCart() {
+  const container = document.getElementById('cartItems');
+  
+  if (cart.length = 0) {
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px">Panier vide</p>';
+    document.getElementById('cartTotal').style.display = 'none';
+    document.getElementById('checkoutBtn').style.display = 'none';
     return;
   }
-  alert(`✅ Retrait de ${userBalance} FCFA!\n\nVirement vers: ${currentUser.phone}`);
-  userBalance = 0;
-  saveUserData();
-  displayProfile();
+
+  let html = '';
+  let subtotal = 0;
+
+  cart.forEach((item, i) => {
+    subtotal += item.price;
+    html += `
+      <div class="cart-item">
+        <div>
+          <div style="font-weight:700;font-size:12px;margin-bottom:2px">${item.name}</div>
+          <div style="color:var(--primary);font-weight:700">${item.price.toLocaleString()} FCFA</div>
+        </div>
+        <button style="background:var(--red);color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer" onclick="removeFromCart(${i})">❌</button>
+      </div>
+    `;
+  });
+
+  const fees = Math.round(subtotal * 0.05);
+  totalAmount = subtotal + fees;
+
+  container.innerHTML = html;
+  document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' FCFA';
+  document.getElementById('fees').textContent = fees.toLocaleString() + ' FCFA';
+  document.getElementById('total').textContent = totalAmount.toLocaleString() + ' FCFA';
+
+  document.getElementById('cartTotal').style.display = 'block';
+  document.getElementById('checkoutBtn').style.display = 'block';
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  displayCart();
+}
+
+function toggleLike(e) {
+  e.stopPropagation();
+  e.target.classList.toggle('liked');
+  e.target.textContent = e.target.classList.contains('liked') ? '❤️' : '🤍';
+}
+
+function switchPage(page) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+}
+
+function openPaymentModal() {
+  if (cart.length = 0) {
+    alert('❌ Panier vide!');
+    return;
+  }
+  document.getElementById('paymentModal').classList.add('active');
+}
+
+function closePaymentModal() {
+  document.getElementById('paymentModal').classList.remove('active');
+}
+
+function selectPaymentMethod(method, element) {
+  document.querySelectorAll('.payment-method').forEach(m => {
+    m.classList.remove('selected');
+    m.querySelector('div:last-child').style.display = 'none';
+  });
+  element.classList.add('selected');
+  element.querySelector('div:last-child').style.display = 'block';
+  
+  selectedPaymentMethod = method;
+  document.getElementById('payBtn').disabled = false;
+
+  document.getElementById('mtnForm').style.display = method = 'mtn' ? 'block' : 'none';
+  document.getElementById('airtelForm').style.display = method = 'airtel' ? 'block' : 'none';
+  document.getElementById('orangeForm').style.display = method = 'orange' ? 'block' : 'none';
+}
+
+async function processPayment() {
+  if (!selectedPaymentMethod) return;
+
+  const payBtn = document.getElementById('payBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+
+  errorMsg.classList.remove('show');
+  successMsg.classList.remove('show');
+
+  payBtn.disabled = true;
+  payBtn.textContent = '⏳ Traitement...';
+
+  try {
+    let result = false;
+
+    if (selectedPaymentMethod = 'mtn') result = await processMTN();
+    else if (selectedPaymentMethod = 'airtel') result = await processAirtel();
+    else if (selectedPaymentMethod = 'orange') result = await processOrange();
+    else if (selectedPaymentMethod === 'wallet') result = await processWallet();
+
+    if (result) {
+      await addCommission();
+      
+      successMsg.textContent = '✅ Paiement réussi!';
+      successMsg.classList.add('show');
+      
+      if (db && currentUser) {
+        await db.collection('orders').add({
+          buyerId: currentUser.id,
+          items: cart,
+          amount: totalAmount,
+          paymentMethod: selectedPaymentMethod,
+          status: 'confirmed',
+          createdAt: new Date()
+        });
+      }
+
+      setTimeout(() => {
+        cart = [];
+        displayCart();
+        closePaymentModal();
+        switchPage('home');
+      }, 1500);
+    } else {
+      errorMsg.textContent = '❌ Paiement échoué';
+      errorMsg.classList.add('show');
+    }
+  } catch (error) {
+    errorMsg.textContent = '❌ Erreur: ' + error.message;
+    errorMsg.classList.add('show');
+  }
+
+  payBtn.disabled = false;
+  payBtn.textContent = 'Payer maintenant';
+}
+
+async function processMTN() {
+  const phone = document.getElementById('mtnPhone').value;
+  if (!phone) { alert('Entrez votre numéro MTN'); return false; }
+
+  try {
+    const response = await fetch(`${PAYMENT_PROVIDERS.MTN.API_URL}/requesttopay`, {
+      method: 'POST',
+      headers: {
+        'X-Reference-Id': 'BLK-' + Date.now(),
+        'X-Target-Environment': 'mtncongo',
+        'Ocp-Apim-Subscription-Key': PAYMENT_PROVIDERS.MTN.API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: totalAmount.toString(),
+        currency: 'XAF',
+        externalId: 'BLK-' + Date.now(),
+        payer: { partyIdType: 'MSISDN', partyId: phone }
+      })
+    });
+    return response.ok;
+  } catch (e) { console.error(e); return false; }
+}
+
+async function processAirtel() {
+  const phone = document.getElementById('airtelPhone').value;
+  if (!phone) { alert('Entrez votre numéro Airtel'); return false; }
+
+  try {
+    const response = await fetch(`${PAYMENT_PROVIDERS.AIRTEL.API_URL}/merchant/payment`, {
+      method: 'POST',
+      headers: { 'X-API-Key': PAYMENT_PROVIDERS.AIRTEL.API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        merchantId: PAYMENT_PROVIDERS.AIRTEL.MERCHANT_ID,
+        amount: totalAmount,
+        currency: 'XAF',
+        phone: phone
+      })
+    });
+    const data = await response.json();
+    return data.success || response.ok;
+  } catch (e) { return false; }
+}
+
+async function processOrange() {
+  const phone = document.getElementById('orangePhone').value;
+  if (!phone) { alert('Entrez votre numéro Orange'); return false; }
+
+  try {
+    const response = await fetch(`${PAYMENT_PROVIDERS.ORANGE.API_URL}/payment/request`, {
+      method: 'POST',
+      headers: { 'X-API-Key': PAYMENT_PROVIDERS.ORANGE.API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        merchantCode: PAYMENT_PROVIDERS.ORANGE.MERCHANT_CODE,
+        amount: totalAmount,
+        currency: 'XAF',
+        phone: phone
+      })
+    });
+    const data = await response.json();
+    return data.success;
+  } catch (e) { return false; }
+}
+
+async function processWallet() {
+  if (!currentUser || !db) return false;
+
+  const docSnap = await db.collection('users').doc(currentUser.id).get();
+  const balance = docSnap.data().balance || 0;
+
+  if (balance < totalAmount) {
+    alert('❌ Solde insuffisant');
+    return false;
+  }
+
+  await db.collection('users').doc(currentUser.id).update({
+    balance: balance - totalAmount
+  });
+
+  return true;
+}
+
+async function addCommission() {
+  if (!db) return;
+
+  const commission = Math.round(totalAmount * 0.03);
+  const creatorRef = db.collection('users').doc(creatorId);
+
+  const docSnap = await creatorRef.get();
+  if (docSnap.exists) {
+    const currentBalance = docSnap.data().balance || 0;
+    const currentEarnings = docSnap.data().totalEarnings || 0;
+
+    await creatorRef.update({
+      balance: currentBalance + commission,
+      totalEarnings: currentEarnings + commission
+    });
+  } else {
+    await creatorRef.set({
+      balance: commission,
+      totalEarnings: commission
+    });
+  }
+}
+
+function logout() {
+  auth.signOut();
+  window.location.reload();
 }
 
 init();
 </script>
+
 
 </body>
 </html>
