@@ -3,1001 +3,982 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BLK — Mode Seconde Main Congo</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage.js"></script>
-
+<title>BLK — Marketplace Fashion Congo 🇨🇬</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap');
 
-:root {
-  --primary: #4A7C59;
-  --yellow: #E6A01E;
-  --red: #C82828;
-  --black: #0D0D0D;
-  --white: #F5F0E8;
-  --gray: #1C1C1C;
-  --gray2: #2A2A2A;
-  --text-muted: #777;
+:root { 
+--primary: #4A7C59; 
+--yellow: #E6A01E; 
+--red: #C82828; 
+--black: #0D0D0D; 
+--white: #F5F0E8; 
+--gray: #1C1C1C; 
+--gray2: #2A2A2A; 
+--text-muted: #777; 
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	•	{ 
+	•	margin: 0; 
+	•	padding: 0; 
+	•	box-sizing: border-box; 
+	•	-webkit-tap-highlight-color: transparent; 
+	•	}
+
+html, body { 
+width: 100%; 
+height: 100%; 
 }
 
-body {
-  background: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  color: var(--black);
-  max-width: 390px;
-  margin: 0 auto;
-  min-height: 100vh;
+body { 
+background: var(--black); 
+font-family: 'DM Sans', sans-serif; 
+color: var(--white); 
+display: flex; 
+justify-content: center; 
+align-items: center; 
+min-height: 100vh; 
+padding: 0; 
+margin: 0; 
 }
 
-.kente-accent {
-  height: 3px;
-  background: var(--primary);
+.app-container { 
+width: 100%; 
+max-width: 390px; 
+height: 100vh; 
+background: var(--black); 
+overflow: hidden; 
+display: flex; 
+flex-direction: column; 
+position: relative; 
 }
 
-.screen {
-  display: none;
-  min-height: 100vh;
-  padding-bottom: 70px;
+.kente-accent { 
+height: 3px; 
+background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 20px, var(--yellow) 20px, var(--yellow) 40px, var(--primary) 40px, var(--primary) 60px, var(--black) 60px, var(--black) 80px); 
+z-index: 1000; 
 }
 
-.screen.active {
-  display: block;
+.carousel-container { 
+position: absolute; 
+top: 0; 
+left: 0; 
+right: 0; 
+bottom: 0; 
+width: 100%; 
+height: 100%; 
+overflow: hidden; 
 }
 
-.nav-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  background: var(--white);
-  border-bottom: 1px solid #f0f0f0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.carousel-slide { 
+position: absolute; 
+width: 100%; 
+height: 100%; 
+opacity: 0; 
+transition: opacity 0.8s ease-in-out; 
+background-size: cover; 
+background-position: center; 
 }
 
-.icon-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #f5f5f5;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
+.carousel-slide.active { 
+opacity: 1; 
 }
 
-.search-bar {
-  display: flex;
-  gap: 10px;
-  padding: 16px 20px;
+.glass-overlay { 
+position: absolute; 
+top: 0; 
+left: 0; 
+right: 0; 
+bottom: 0; 
+background: rgba(13, 13, 13, 0.75); 
+backdrop-filter: blur(12px); 
+-webkit-backdrop-filter: blur(12px); 
+z-index: 2; 
 }
 
-.search-input {
-  flex: 1;
-  background: #f5f5f5;
-  border: none;
-  border-radius: 25px;
-  padding: 12px 16px;
-  color: var(--black);
+.status-bar { 
+display: flex; 
+justify-content: space-between; 
+align-items: center; 
+padding: 14px 20px 0; 
+font-size: 12px; 
+font-weight: 600; 
+color: var(--white); 
+position: relative; 
+z-index: 10; 
 }
 
-.filter-btn {
-  width: 44px;
-  height: 44px;
-  background: var(--primary);
-  border: none;
-  border-radius: 50%;
-  color: var(--white);
-  cursor: pointer;
-  font-size: 18px;
+.screens { 
+position: relative; 
+z-index: 5; 
+width: 100%; 
+flex: 1; 
+overflow: hidden; 
 }
 
-.banner {
-  background: linear-gradient(135deg, #f5deb3 0%, #ffe4b5 100%);
-  border-radius: 16px;
-  padding: 20px;
-  margin: 16px 20px;
-  display: flex;
-  justify-content: space-between;
-  height: 150px;
+.screen { 
+position: absolute; 
+width: 100%; 
+height: 100%; 
+opacity: 0; 
+visibility: hidden; 
+transition: opacity 0.3s ease; 
+display: flex; 
+flex-direction: column; 
 }
 
-.banner-title {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 18px;
-  font-weight: 900;
-  margin-bottom: 8px;
+.screen.active { 
+opacity: 1; 
+visibility: visible; 
 }
 
-.categories-section {
-  padding: 20px;
+.auth-screen { 
+background: linear-gradient(135deg, rgba(13,13,13,0.9) 0%, rgba(28,28,28,0.9) 100%); 
 }
 
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+.auth-content { 
+position: relative; 
+z-index: 3; 
+flex: 1; 
+overflow-y: auto; 
+display: flex; 
+flex-direction: column; 
+padding: 20px; 
 }
 
-.category-icon {
-  width: 56px;
-  height: 56px;
-  background: #f5f5f5;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
+.bg-decor { 
+position: absolute; 
+top: 0; 
+left: 0; 
+right: 0; 
+height: 300px; 
+pointer-events: none; 
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 20px;
+.bg-circle { 
+position: absolute; 
+border-radius: 50%; 
 }
 
-.product-card {
-  background: #f9f9f9;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
+.bg-circle-1 { 
+width: 200px; 
+height: 200px; 
+background: radial-gradient(circle, rgba(230,160,30,0.15) 0%, transparent 70%); 
+top: -50px; 
+left: -50px; 
 }
 
-.product-image {
-  width: 100%;
-  height: 150px;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  position: relative;
+.bg-circle-2 { 
+width: 150px; 
+height: 150px; 
+background: radial-gradient(circle, rgba(200,40,40,0.12) 0%, transparent 70%); 
+top: 30px; 
+right: -30px; 
 }
 
-.product-like-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
+.logo-area { 
+position: relative; 
+z-index: 3; 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+text-align: center; 
+margin-bottom: 20px; 
 }
 
-.product-info {
-  padding: 12px;
+.logo-icon { 
+width: 60px; 
+height: 60px; 
+border-radius: 16px; 
+background: var(--gray); 
+border: 1.5px solid #333; 
+display: flex; 
+align-items: center; 
+justify-content: center; 
+margin-bottom: 12px; 
+position: relative; 
+overflow: hidden; 
+box-shadow: 0 8px 24px rgba(230,160,30,0.2); 
 }
 
-.product-title {
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 4px;
+.logo-icon::before { 
+content: ''; 
+position: absolute; 
+bottom: 0; 
+left: 0; 
+right: 0; 
+height: 2px; 
+background: linear-gradient(90deg, var(--red), var(--yellow), var(--primary)); 
 }
 
-.product-price {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 14px;
-  color: var(--primary);
+.logo-icon span { 
+font-family: 'Archivo Black', sans-serif; 
+font-size: 20px; 
+background: linear-gradient(135deg, var(--white) 0%, var(--yellow) 100%); 
+-webkit-background-clip: text; 
+-webkit-text-fill-color: transparent; 
 }
 
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-width: 390px;
-  margin: 0 auto;
-  background: var(--white);
-  border-top: 1px solid #f0f0f0;
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 0;
-  z-index: 1000;
+.logo-area h1 { 
+font-family: 'Archivo Black', sans-serif; 
+font-size: 22px; 
+margin-bottom: 4px; 
 }
 
-.nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 0;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 700;
+.logo-area p { 
+font-size: 12px; 
+color: var(--text-muted); 
+line-height: 1.4; 
 }
 
-.nav-btn.active {
-  color: var(--primary);
+.tabs { 
+position: relative; 
+z-index: 3; 
+display: flex; 
+background: var(--gray); 
+border-radius: 12px; 
+padding: 3px; 
+gap: 3px; 
+margin-bottom: 20px; 
 }
 
-.cart-item {
-  background: #f9f9f9;
-  padding: 12px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
+.tab { 
+flex: 1; 
+padding: 10px; 
+border-radius: 9px; 
+text-align: center; 
+font-size: 13px; 
+font-weight: 700; 
+cursor: pointer; 
+transition: all 0.3s; 
+color: var(--text-muted); 
+user-select: none; 
+border: none; 
+background: none; 
 }
 
-.cart-total {
-  background: var(--primary);
-  color: var(--white);
-  padding: 16px;
-  border-radius: 12px;
-  margin: 20px;
+.tab.active { 
+background: var(--yellow); 
+color: var(--black); 
 }
 
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 13px;
+.form-area { 
+position: relative; 
+z-index: 3; 
+display: flex; 
+flex-direction: column; 
+gap: 12px; 
 }
 
-.modal-backdrop {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.7);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow-y: auto;
+.input-group { 
+display: flex; 
+flex-direction: column; 
+gap: 5px; 
 }
 
-.modal-backdrop.active {
-  display: flex;
+.input-label { 
+font-size: 10px; 
+font-weight: 700; 
+letter-spacing: 1px; 
+text-transform: uppercase; 
+color: var(--text-muted); 
 }
 
-.modal {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 24px;
-  width: 100%;
-  max-width: 360px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
+.input-wrap { 
+background: var(--gray); 
+border-radius: 12px; 
+display: flex; 
+align-items: center; 
+padding: 12px 14px; 
+gap: 10px; 
+border: 1.5px solid transparent; 
+transition: border-color 0.2s; 
 }
 
-.modal h2 {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 20px;
-  margin-bottom: 20px;
+.input-wrap:focus-within { 
+border-color: var(--yellow); 
+background: #1f1f1f; 
 }
 
-.modal-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+.input-wrap .icon { 
+font-size: 16px; 
+flex-shrink: 0; 
 }
 
-.payment-methods {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+.input-wrap input, 
+.input-wrap select { 
+background: none; 
+border: none; 
+outline: none; 
+color: var(--white); 
+font-family: 'DM Sans', sans-serif; 
+font-size: 13px; 
+flex: 1; 
+-webkit-appearance: none; 
 }
 
-.payment-method {
-  background: #f9f9f9;
-  padding: 16px;
-  border-radius: 12px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.input-wrap input::placeholder { 
+color: var(--text-muted); 
 }
 
-.payment-method.selected {
-  border-color: var(--primary);
-  background: rgba(74,124,89,0.1);
+.input-wrap select option { 
+background: #1c1c1c; 
+color: var(--white); 
 }
 
-.payment-method-icon {
-  font-size: 24px;
-  margin-right: 12px;
+.main-btn { 
+width: 100%; 
+padding: 14px; 
+border-radius: 14px; 
+border: none; 
+background: linear-gradient(135deg, var(--yellow), #c8880a); 
+color: var(--black); 
+font-family: 'Archivo Black', sans-serif; 
+font-size: 14px; 
+letter-spacing: 0.5px; 
+cursor: pointer; 
+transition: transform 0.2s, box-shadow 0.2s; 
+box-shadow: 0 8px 20px rgba(230,160,30,0.3); 
+font-weight: 700; 
 }
 
-.payment-method-name {
-  font-weight: 700;
-  font-size: 13px;
+.main-btn:hover { 
+transform: translateY(-2px); 
 }
 
-.payment-method-desc {
-  font-size: 11px;
-  color: var(--text-muted);
+.main-btn:active { 
+transform: scale(0.98); 
 }
 
-.form-group {
-  margin-bottom: 14px;
+.error-msg, .success-msg { 
+padding: 10px; 
+border-radius: 8px; 
+font-size: 11px; 
+text-align: center; 
+display: none; 
 }
 
-.form-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  display: block;
-  margin-bottom: 6px;
-  text-transform: uppercase;
+.error-msg { 
+background: rgba(200, 40, 40, 0.2); 
+border: 1px solid var(--red); 
+color: #ff6b6b; 
 }
 
-.form-input {
-  width: 100%;
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 12px;
-  color: var(--black);
-  font-size: 13px;
+.error-msg.show { 
+display: block; 
 }
 
-.btn-primary {
-  width: 100%;
-  padding: 14px;
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 20px;
+.success-msg { 
+background: rgba(74, 124, 89, 0.2); 
+border: 1px solid var(--primary); 
+color: #51cf66; 
 }
 
-.btn-primary:disabled {
-  opacity: 0.5;
+.success-msg.show { 
+display: block; 
 }
 
-.profile-header {
-  background: linear-gradient(135deg, #f5deb3 0%, #ffe4b5 100%);
-  padding: 24px 20px;
-  text-align: center;
+.home-screen { 
+background: var(--black); 
+padding-bottom: 80px; 
 }
 
-.profile-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 48px;
-  margin: 0 auto 16px;
+.home-content { 
+flex: 1; 
+overflow-y: auto; 
+display: flex; 
+flex-direction: column; 
 }
 
-.solde-card {
-  background: var(--primary);
-  color: var(--white);
-  padding: 20px;
-  margin: 20px;
-  border-radius: 12px;
+.home-header { 
+display: flex; 
+justify-content: space-between; 
+align-items: center; 
+padding: 16px; 
+gap: 10px; 
 }
 
-.solde-amount {
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 32px;
+.home-logo { 
+font-family: 'Archivo Black', sans-serif; 
+font-size: 16px; 
+background: linear-gradient(135deg, var(--white) 0%, var(--yellow) 100%); 
+-webkit-background-clip: text; 
+-webkit-text-fill-color: transparent; 
 }
 
-.success-msg {
-  background: rgba(26,107,42,0.1);
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 12px;
-  display: none;
+.home-icons { 
+display: flex; 
+gap: 10px; 
 }
 
-.success-msg.show {
-  display: block;
+.icon-btn { 
+width: 36px; 
+height: 36px; 
+background: var(--gray); 
+border: none; 
+border-radius: 10px; 
+cursor: pointer; 
+display: flex; 
+align-items: center; 
+justify-content: center; 
+font-size: 16px; 
+position: relative; 
 }
 
-.error-msg {
-  background: rgba(200,40,40,0.1);
-  border: 1px solid var(--red);
-  color: var(--red);
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 12px;
-  display: none;
+.icon-btn.active { 
+background: var(--yellow); 
+color: var(--black); 
 }
 
-.error-msg.show {
-  display: block;
+.badge { 
+position: absolute; 
+top: -8px; 
+right: -8px; 
+background: var(--red); 
+color: white; 
+border-radius: 50%; 
+width: 18px; 
+height: 18px; 
+display: flex; 
+align-items: center; 
+justify-content: center; 
+font-size: 9px; 
+font-weight: 700; 
 }
+
+.search-bar { 
+padding: 0 16px; 
+margin-bottom: 16px; 
+}
+
+.search-input { 
+width: 100%; 
+padding: 10px 14px; 
+background: var(--gray); 
+border: 1.5px solid #333; 
+border-radius: 12px; 
+color: var(--white); 
+font-family: 'DM Sans', sans-serif; 
+font-size: 13px; 
+}
+
+.search-input::placeholder { 
+color: var(--text-muted); 
+}
+
+.section-title { 
+font-size: 13px; 
+font-weight: 700; 
+margin: 16px 16px 10px; 
+}
+
+.carousel-products { 
+padding: 0 16px; 
+margin-bottom: 16px; 
+overflow-x: auto; 
+display: flex; 
+gap: 10px; 
+scroll-behavior: smooth; 
+}
+
+.carousel-products::-webkit-scrollbar { 
+display: none; 
+}
+
+.product-card { 
+min-width: 120px; 
+background: var(--gray); 
+border-radius: 14px; 
+overflow: hidden; 
+cursor: pointer; 
+transition: transform 0.2s; 
+}
+
+.product-card:active { 
+transform: scale(0.95); 
+}
+
+.product-image { 
+width: 100%; 
+height: 120px; 
+background: linear-gradient(135deg, #2a2a2a, #3a3a3a); 
+display: flex; 
+align-items: center; 
+justify-content: center; 
+font-size: 40px; 
+}
+
+.product-info { 
+padding: 8px; 
+}
+
+.product-name { 
+font-size: 11px; 
+font-weight: 700; 
+white-space: nowrap; 
+overflow: hidden; 
+text-overflow: ellipsis; 
+}
+
+.product-price { 
+font-size: 12px; 
+color: var(--yellow); 
+font-weight: 700; 
+margin-top: 3px; 
+}
+
+.products-section { 
+padding: 0 16px; 
+flex: 1; 
+}
+
+.products-grid { 
+display: grid; 
+grid-template-columns: 1fr 1fr; 
+gap: 10px; 
+margin-bottom: 20px; 
+}
+
+.product-card-large { 
+background: var(--gray); 
+border-radius: 14px; 
+overflow: hidden; 
+cursor: pointer; 
+transition: transform 0.2s; 
+}
+
+.product-card-large:active { 
+transform: scale(0.95); 
+}
+
+.product-card-large .product-image { 
+height: 110px; 
+}
+
+.bottom-nav { 
+position: fixed; 
+bottom: 0; 
+left: 50%; 
+transform: translateX(-50%); 
+width: 100%; 
+max-width: 390px; 
+height: 70px; 
+background: var(--black); 
+border-top: 1px solid #2a2a2a; 
+display: flex; 
+justify-content: space-around; 
+align-items: center; 
+z-index: 50; 
+}
+
+.nav-item { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+gap: 2px; 
+cursor: pointer; 
+font-size: 10px; 
+color: var(--text-muted); 
+flex: 1; 
+text-align: center; 
+transition: color 0.2s; 
+}
+
+.nav-item.active { 
+color: var(--yellow); 
+}
+
+.nav-item-icon { 
+font-size: 18px; 
+}
+
+@media (max-width: 390px) { 
+.app-container { 
+max-width: 100%; 
+} 
+} 
 </style>
-
 </head>
 <body>
 
-<div class="kente-accent"></div>
+<div class="app-container">
+  <div class="kente-accent"></div>
 
-<!-- HOME -->
-<div id="home" class="screen active">
-  <div class="nav-top">
-    <div style="font-size:13px;font-weight:600">📍 Congo</div>
-    <div style="display:flex;gap:12px">
-      <button class="icon-btn" onclick="switchPage('cart')">🛒</button>
-      <button class="icon-btn" onclick="switchPage('profile')">👤</button>
+  <div class="carousel-container" id="carouselContainer"></div>
+  <div class="glass-overlay" id="glassOverlay"></div>
+
+  <div class="status-bar">
+    <span id="timeDisplay">9:41</span>
+    <div>📶 🔋</div>
+  </div>
+
+  <div class="screens" id="screens">
+
+<!-- AUTH SCREEN -->
+<div class="screen auth-screen active" id="authScreen">
+  <div class="carousel-container" id="authCarouselContainer"></div>
+  <div class="glass-overlay"></div>
+
+  <div class="auth-content">
+    <div class="bg-decor">
+      <div class="bg-circle bg-circle-1"></div>
+      <div class="bg-circle bg-circle-2"></div>
     </div>
-  </div>
 
-  <div class="search-bar">
-    <input type="text" class="search-input" placeholder="🔍 Rechercher...">
-    <button class="filter-btn">⚙️</button>
-  </div>
-
-  <div class="banner">
-    <div>
-      <div class="banner-title">Réduction 50%</div>
-      <p style="font-size:12px;color:#666;margin-bottom:10px">Pour ta première transaction</p>
-      <button style="background:var(--primary);color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">SHOP NOW</button>
+    <div class="logo-area">
+      <div class="logo-icon"><span>BLK</span></div>
+      <h1 id="authTitle">Bon retour 👋</h1>
+      <p id="authSubtitle">Connecte-toi pour acheter<br>et vendre au Congo</p>
     </div>
-    <div style="font-size:100px;opacity:0.2">👗</div>
-  </div>
 
-  <div class="categories-section">
-    <h3 style="font-family:'Archivo Black';font-size:16px;margin-bottom:16px">Catégories</h3>
-    <div class="categories-grid">
-      <div style="text-align:center">
-        <div class="category-icon">👕</div>
-        <span style="font-size:11px;font-weight:700">T-Shirt</span>
-      </div>
-      <div style="text-align:center">
-        <div class="category-icon">👖</div>
-        <span style="font-size:11px;font-weight:700">Pantalon</span>
-      </div>
-      <div style="text-align:center">
-        <div class="category-icon">👗</div>
-        <span style="font-size:11px;font-weight:700">Robe</span>
-      </div>
-      <div style="text-align:center">
-        <div class="category-icon">🧥</div>
-        <span style="font-size:11px;font-weight:700">Veste</span>
-      </div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchAuthTab('login')">Connexion</button>
+      <button class="tab" onclick="switchAuthTab('signup')">Inscription</button>
     </div>
-  </div>
 
-  <div class="categories-section">
-    <h3 style="font-family:'Archivo Black';font-size:16px;margin-bottom:16px">Flash Sale</h3>
-    <div class="products-grid">
-      <div class="product-card" onclick="addToCart({name:'Robe Wax', price:5000})">
-        <div class="product-image">👗<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
-        <div class="product-info">
-          <div class="product-title">Robe Wax Premium</div>
-          <div class="product-price">5,000 FCFA</div>
+    <div class="form-area">
+      <div class="error-msg" id="authError"></div>
+      <div class="success-msg" id="authSuccess"></div>
+
+      <div id="loginForm">
+        <div class="input-group">
+          <div class="input-label">Email</div>
+          <div class="input-wrap">
+            <span class="icon">📧</span>
+            <input type="email" id="loginEmail" placeholder="toi@gmail.com">
+          </div>
         </div>
+
+        <div class="input-group">
+          <div class="input-label">Mot de passe</div>
+          <div class="input-wrap">
+            <span class="icon">🔒</span>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+          </div>
+        </div>
+
+        <button class="main-btn" onclick="handleLogin()">Se connecter 🚀</button>
       </div>
 
-  <div class="product-card" onclick="addToCart({name:'Chemise Chic', price:3500})">
-    <div class="product-image">👔<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
-    <div class="product-info">
-      <div class="product-title">Chemise Chic</div>
-      <div class="product-price">3,500 FCFA</div>
-    </div>
-  </div>
+      <div id="signupForm" style="display: none;">
+        <div class="input-group">
+          <div class="input-label">Prénom</div>
+          <div class="input-wrap">
+            <span class="icon">👤</span>
+            <input type="text" id="signupName" placeholder="Joëlle">
+          </div>
+        </div>
 
-  <div class="product-card" onclick="addToCart({name:'Chaussures', price:4200})">
-    <div class="product-image">👠<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
-    <div class="product-info">
-      <div class="product-title">Chaussures Mode</div>
-      <div class="product-price">4,200 FCFA</div>
-    </div>
-  </div>
+        <div class="input-group">
+          <div class="input-label">Email</div>
+          <div class="input-wrap">
+            <span class="icon">📧</span>
+            <input type="email" id="signupEmail" placeholder="toi@gmail.com">
+          </div>
+        </div>
 
-  <div class="product-card" onclick="addToCart({name:'Sac Luxe', price:6000})">
-    <div class="product-image">👜<button class="product-like-btn" onclick="toggleLike(event)">🤍</button></div>
-    <div class="product-info">
-      <div class="product-title">Sac à Main Luxe</div>
-      <div class="product-price">6,000 FCFA</div>
-    </div>
-  </div>
-</div>
-  </div>
-</div>
+        <div class="input-group">
+          <div class="input-label">WhatsApp</div>
+          <div class="input-wrap">
+            <span class="icon">📱</span>
+            <input type="tel" id="signupPhone" placeholder="+242 06 XXX XXX">
+          </div>
+        </div>
 
-<!-- CART -->
-<div id="cart" class="screen">
-  <div class="nav-top">
-    <h2 style="flex:1;font-size:18px">🛒 Mon panier</h2>
-    <button style="background:none;border:none;cursor:pointer;font-size:20px" onclick="switchPage('home')">✕</button>
-  </div>
+        <div class="input-group">
+          <div class="input-label">Ville</div>
+          <div class="input-wrap">
+            <span class="icon">📍</span>
+            <select id="signupCity">
+              <option>Brazzaville</option>
+              <option>Pointe-Noire</option>
+              <option>Dolisie</option>
+              <option>Nkayi</option>
+            </select>
+          </div>
+        </div>
 
-  <div style="padding:20px">
-    <div id="cartItems"></div>
+        <div class="input-group">
+          <div class="input-label">Mot de passe</div>
+          <div class="input-wrap">
+            <span class="icon">🔒</span>
+            <input type="password" id="signupPassword" placeholder="Min. 6 caractères">
+          </div>
+        </div>
 
-<div class="cart-total" id="cartTotal" style="display:none">
-  <div class="total-row">
-    <span>Sous-total:</span>
-    <span id="subtotal">0 FCFA</span>
-  </div>
-  <div class="total-row">
-    <span>Frais (5%):</span>
-    <span id="fees">0 FCFA</span>
-  </div>
-  <div class="total-row" style="font-size:16px;border-top:1px solid rgba(255,255,255,0.3);padding-top:12px;margin-top:12px">
-    <span>TOTAL:</span>
-    <span id="total">0 FCFA</span>
-  </div>
-</div>
-
-<button class="btn-primary" id="checkoutBtn" onclick="openPaymentModal()" style="display:none">💳 Passer la commande</button>
-  </div>
-</div>
-
-<!-- PROFILE -->
-<div id="profile" class="screen">
-  <div class="profile-header">
-    <div class="profile-avatar">👤</div>
-    <div style="font-family:'Archivo Black';font-size:20px;font-weight:900;margin-bottom:4px" id="profileName">Utilisateur</div>
-    <div style="font-size:12px;color:#666" id="profileEmail">email@example.com</div>
-  </div>
-
-  <div class="solde-card">
-    <div style="font-size:12px;opacity:0.9;margin-bottom:8px">💰 SOLDE DISPONIBLE</div>
-    <div class="solde-amount" id="soldeAmount">0 FCFA</div>
-    <div style="margin-top:8px;font-size:11px;opacity:0.9">Total Gagné: <span id="totalEarnings">0 FCFA</span></div>
-  </div>
-
-  <h3 style="font-family:'Archivo Black';font-size:16px;padding:20px 20px 12px">👤 Informations</h3>
-  <div style="background:#f9f9f9;padding:16px;margin:0 20px;border-radius:12px">
-    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e8e8e8;font-size:12px">
-      <span style="color:var(--text-muted)">Email</span>
-      <span style="font-weight:700" id="infoEmail">-</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:12px">
-      <span style="color:var(--text-muted)">Pays</span>
-      <span style="font-weight:700">Congo 🇨🇬</span>
-    </div>
-  </div>
-
-<button class="btn-primary" onclick="logout()" style="margin:20px;background:var(--red)">Déconnexion</button>
-</div>
-
-<!-- PAYMENT MODAL -->
-<div class="modal-backdrop" id="paymentModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closePaymentModal()">✕</button>
-    <h2>💳 Mode de paiement</h2>
-
-<div class="success-msg" id="successMsg"></div>
-<div class="error-msg" id="errorMsg"></div>
-
-<div class="payment-methods">
-  <div class="payment-method" id="mtnMethod" onclick="selectPaymentMethod('mtn', this)">
-    <div style="display:flex;align-items:center">
-      <span class="payment-method-icon">📱</span>
-      <div>
-        <div class="payment-method-name">MTN MoMo</div>
-        <div class="payment-method-desc">Paiement mobile instantané</div>
+        <button class="main-btn" onclick="handleSignup()">Créer mon compte 🎉</button>
       </div>
     </div>
-    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
   </div>
+</div>
 
-  <div class="payment-method" id="airtelMethod" onclick="selectPaymentMethod('airtel', this)">
-    <div style="display:flex;align-items:center">
-      <span class="payment-method-icon">📲</span>
-      <div>
-        <div class="payment-method-name">Airtel Money</div>
-        <div class="payment-method-desc">Paiement Airtel Money</div>
+<!-- HOME SCREEN -->
+<div class="screen home-screen" id="homeScreen">
+  <div class="home-content">
+    <div class="home-header">
+      <div class="home-logo">🛍️ BLK</div>
+      <div class="home-icons">
+        <button class="icon-btn" onclick="showCart()">
+          🛒
+          <span class="badge" id="cartBadge" style="display:none;">0</span>
+        </button>
+        <button class="icon-btn" onclick="showProfile()">👤</button>
       </div>
     </div>
-    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
-  </div>
 
-  <div class="payment-method" id="orangeMethod" onclick="selectPaymentMethod('orange', this)">
-    <div style="display:flex;align-items:center">
-      <span class="payment-method-icon">🟠</span>
-      <div>
-        <div class="payment-method-name">Orange Money</div>
-        <div class="payment-method-desc">Paiement Orange Money</div>
-      </div>
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Recherche articles..." id="searchInput">
     </div>
-    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
-  </div>
 
-  <div class="payment-method" id="walletMethod" onclick="selectPaymentMethod('wallet', this)">
-    <div style="display:flex;align-items:center">
-      <span class="payment-method-icon">💼</span>
-      <div>
-        <div class="payment-method-name">Portefeuille BLK</div>
-        <div class="payment-method-desc">Solde disponible</div>
-      </div>
+    <div class="section-title">⚡ Flash Sale</div>
+    <div class="carousel-products" id="flashSaleCarousel"></div>
+
+    <div class="section-title">Catégories</div>
+    <div style="padding: 0 16px; margin-bottom: 16px; display: flex; gap: 8px; overflow-x: auto;">
+      <button class="icon-btn" onclick="filterCategory('tous')">👕</button>
+      <button class="icon-btn" onclick="filterCategory('shoes')">👟</button>
+      <button class="icon-btn" onclick="filterCategory('bags')">👜</button>
+      <button class="icon-btn" onclick="filterCategory('watch')">⌚</button>
     </div>
-    <div style="font-size:20px;color:var(--primary);display:none">✓</div>
+
+    <div class="section-title">Découvrir</div>
+    <div class="products-section">
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </div>
+</div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchScreen('home')">
+      <div class="nav-item-icon">🏠</div>
+      <span>Accueil</span>
+    </div>
+    <div class="nav-item" onclick="showFavorites()">
+      <div class="nav-item-icon">❤️</div>
+      <span>Favoris</span>
+    </div>
+    <div class="nav-item" onclick="showMessages()">
+      <div class="nav-item-icon">💬</div>
+      <span>Messages</span>
+    </div>
+    <div class="nav-item" onclick="showTimers()">
+      <div class="nav-item-icon">⏱️</div>
+      <span>Minuteur</span>
+    </div>
+    <div class="nav-item" onclick="showProfile()">
+      <div class="nav-item-icon">👤</div>
+      <span>Profil</span>
+    </div>
   </div>
 </div>
 
-<div id="mtnForm" style="display:none;margin-top:20px">
-  <div class="form-group">
-    <label class="form-label">Numéro MTN (+242)</label>
-    <input type="tel" class="form-input" id="mtnPhone" placeholder="+242 06 XXXXXX">
-  </div>
-</div>
-
-<div id="airtelForm" style="display:none;margin-top:20px">
-  <div class="form-group">
-    <label class="form-label">Numéro Airtel (+242)</label>
-    <input type="tel" class="form-input" id="airtelPhone" placeholder="+242 05 XXXXXX">
-  </div>
-</div>
-
-<div id="orangeForm" style="display:none;margin-top:20px">
-  <div class="form-group">
-    <label class="form-label">Numéro Orange (+242)</label>
-    <input type="tel" class="form-input" id="orangePhone" placeholder="+242 04 XXXXXX">
-  </div>
-</div>
-
-<button class="btn-primary" id="payBtn" onclick="processPayment()" disabled>Payer maintenant</button>
-<button onclick="closePaymentModal()" style="width:100%;padding:12px;background:#f5f5f5;border:none;border-radius:8px;cursor:pointer;margin-top:8px">Annuler</button>
-  </div>
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <button class="nav-btn active" onclick="switchPage('home')"><span>🏠</span> Accueil</button>
-  <button class="nav-btn" onclick="switchPage('cart')"><span>❤️</span> Favoris</button>
-  <button class="nav-btn" onclick="switchPage('cart')"><span>💬</span> Messages</button>
-  <button class="nav-btn" onclick="switchPage('profile')"><span>👤</span> Profil</button>
-</div>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
 
 <script>
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyB7NwcT-nYQ1jSFxh_m4uOD7YLCdAWSdm8",
-  authDomain: "blk-congo-29463.firebaseapp.com",
-  projectId: "blk-congo-29463",
-  storageBucket: "blk-congo-29463.firebasestorage.app",
-  messagingSenderId: "701093221836",
-  appId: "1:701093221836:web:809a62273256fbabce3969"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdxKjF1hU_REMPLACE_ICI",
+    authDomain: "blk-congo-29463.firebaseapp.com",
+    projectId: "blk-congo-29463",
+    storageBucket: "blk-congo-29463.appspot.com",
+    messagingSenderId: "REMPLACE_ICI",
+    appId: "REMPLACE_ICI"
+  };
 
-// ⭐⭐⭐ REMPLACE CES CLÉS AVEC LES TIENNES! ⭐⭐⭐
-const PAYMENT_PROVIDERS = {
-  MTN: {
-    API_KEY: '20a3746253a646a19f803a2b46eb5c58',           // ⭐ CHANGE!
-    SUBSCRIBER_ID: 'e21820a3-320d-400a-b28e-8a2b53589ddc', // ⭐ CHANGE!
-    PIN: '1234',                                            // ⭐ CHANGE!
-    API_URL: 'https://api.mtn.cm/momo/v1_0'
-  },
-  AIRTEL: {
-    API_KEY: 'abc123xyz456def789',                         // ⭐ CHANGE!
-    API_SECRET: 'secret456key789abc',                      // ⭐ CHANGE!
-    MERCHANT_ID: 'AIRTEL_MERCHANT_001',                    // ⭐ CHANGE!
-    API_URL: 'https://api.airtel.cm/api'
-  },
-  ORANGE: {
-    API_KEY: 'orange_key_123456789',                       // ⭐ CHANGE!
-    MERCHANT_CODE: 'OMD_MERCHANT_BLK',                     // ⭐ CHANGE!
-    API_URL: 'https://api.orangemoney.com/api'
-  }
-};
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-let db, auth;
-firebase.initializeApp(FIREBASE_CONFIG);
-db = firebase.firestore();
-auth = firebase.auth();
+  let currentUser = null;
+  let products = [];
 
-let currentUser = null;
-let cart = [];
-let selectedPaymentMethod = null;
-let totalAmount = 0;
-let creatorId = 'DIVIN_AMBETO';
+  const carouselImages = [
+    'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1595557707802-21b287e3f862?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1509315811437-12e1ac439ec8?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1598808503676-c446ef69f3e0?w=500&h=844&fit=crop',
+    'https://images.unsplash.com/photo-1539533057440-7814baea1002?w=500&h=844&fit=crop',
+  ];
 
-function init() {
-  checkUserSession();
-}
+  let currentSlide = 0;
 
-function checkUserSession() {
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      currentUser = { id: user.uid, email: user.email };
-      if (db) {
-        const docSnap = await db.collection('users').doc(user.uid).get();
-        if (docSnap.exists) {
-          const userData = docSnap.data();
-          document.getElementById('profileName').textContent = userData.name || 'Utilisateur';
-          document.getElementById('profileEmail').textContent = userData.email || '-';
-          document.getElementById('infoEmail').textContent = userData.email || '-';
-          document.getElementById('soldeAmount').textContent = (userData.balance || 0).toLocaleString() + ' FCFA';
-          document.getElementById('totalEarnings').textContent = (userData.totalEarnings || 0).toLocaleString() + ' FCFA';
-        }
-      }
-    }
-  });
-}
+  function initCarousel(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    carouselImages.forEach((img, index) => {
+      const slide = document.createElement('div');
+      slide.className = `carousel-slide ${index = 0 ? 'active' : ''}`;
+      slide.style.backgroundImage = `url('${img}')`;
+      container.appendChild(slide);
+    });
 
-function addToCart(product) {
-  cart.push(product);
-  displayCart();
-}
-
-function displayCart() {
-  const container = document.getElementById('cartItems');
-  
-  if (cart.length = 0) {
-    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px">Panier vide</p>';
-    document.getElementById('cartTotal').style.display = 'none';
-    document.getElementById('checkoutBtn').style.display = 'none';
-    return;
+    setInterval(() => {
+      const slides = container.querySelectorAll('.carousel-slide');
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, 5000);
   }
 
-  let html = '';
-  let subtotal = 0;
-
-  cart.forEach((item, i) => {
-    subtotal += item.price;
-    html += `
-      <div class="cart-item">
-        <div>
-          <div style="font-weight:700;font-size:12px;margin-bottom:2px">${item.name}</div>
-          <div style="color:var(--primary);font-weight:700">${item.price.toLocaleString()} FCFA</div>
-        </div>
-        <button style="background:var(--red);color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer" onclick="removeFromCart(${i})">❌</button>
-      </div>
-    `;
-  });
-
-  const fees = Math.round(subtotal * 0.05);
-  totalAmount = subtotal + fees;
-
-  container.innerHTML = html;
-  document.getElementById('subtotal').textContent = subtotal.toLocaleString() + ' FCFA';
-  document.getElementById('fees').textContent = fees.toLocaleString() + ' FCFA';
-  document.getElementById('total').textContent = totalAmount.toLocaleString() + ' FCFA';
-
-  document.getElementById('cartTotal').style.display = 'block';
-  document.getElementById('checkoutBtn').style.display = 'block';
-}
-
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  displayCart();
-}
-
-function toggleLike(e) {
-  e.stopPropagation();
-  e.target.classList.toggle('liked');
-  e.target.textContent = e.target.classList.contains('liked') ? '❤️' : '🤍';
-}
-
-function switchPage(page) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-}
-
-function openPaymentModal() {
-  if (cart.length = 0) {
-    alert('❌ Panier vide!');
-    return;
-  }
-  document.getElementById('paymentModal').classList.add('active');
-}
-
-function closePaymentModal() {
-  document.getElementById('paymentModal').classList.remove('active');
-}
-
-function selectPaymentMethod(method, element) {
-  document.querySelectorAll('.payment-method').forEach(m => {
-    m.classList.remove('selected');
-    m.querySelector('div:last-child').style.display = 'none';
-  });
-  element.classList.add('selected');
-  element.querySelector('div:last-child').style.display = 'block';
-  
-  selectedPaymentMethod = method;
-  document.getElementById('payBtn').disabled = false;
-
-  document.getElementById('mtnForm').style.display = method = 'mtn' ? 'block' : 'none';
-  document.getElementById('airtelForm').style.display = method = 'airtel' ? 'block' : 'none';
-  document.getElementById('orangeForm').style.display = method = 'orange' ? 'block' : 'none';
-}
-
-async function processPayment() {
-  if (!selectedPaymentMethod) return;
-
-  const payBtn = document.getElementById('payBtn');
-  const errorMsg = document.getElementById('errorMsg');
-  const successMsg = document.getElementById('successMsg');
-
-  errorMsg.classList.remove('show');
-  successMsg.classList.remove('show');
-
-  payBtn.disabled = true;
-  payBtn.textContent = '⏳ Traitement...';
-
-  try {
-    let result = false;
-
-    if (selectedPaymentMethod = 'mtn') result = await processMTN();
-    else if (selectedPaymentMethod = 'airtel') result = await processAirtel();
-    else if (selectedPaymentMethod = 'orange') result = await processOrange();
-    else if (selectedPaymentMethod === 'wallet') result = await processWallet();
-
-    if (result) {
-      await addCommission();
-      
-      successMsg.textContent = '✅ Paiement réussi!';
-      successMsg.classList.add('show');
-      
-      if (db && currentUser) {
-        await db.collection('orders').add({
-          buyerId: currentUser.id,
-          items: cart,
-          amount: totalAmount,
-          paymentMethod: selectedPaymentMethod,
-          status: 'confirmed',
-          createdAt: new Date()
-        });
-      }
-
-      setTimeout(() => {
-        cart = [];
-        displayCart();
-        closePaymentModal();
-        switchPage('home');
-      }, 1500);
+  function switchAuthTab(tab) {
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    if (tab = 'login') {
+      loginForm.style.display = 'block';
+      signupForm.style.display = 'none';
+      document.getElementById('authTitle').textContent = 'Bon retour 👋';
+      document.querySelector('.tab:nth-child(1)').classList.add('active');
+      document.querySelector('.tab:nth-child(2)').classList.remove('active');
     } else {
-      errorMsg.textContent = '❌ Paiement échoué';
-      errorMsg.classList.add('show');
+      loginForm.style.display = 'none';
+      signupForm.style.display = 'block';
+      document.getElementById('authTitle').textContent = 'Rejoins BLK! 🎉';
+      document.querySelector('.tab:nth-child(1)').classList.remove('active');
+      document.querySelector('.tab:nth-child(2)').classList.add('active');
     }
-  } catch (error) {
-    errorMsg.textContent = '❌ Erreur: ' + error.message;
-    errorMsg.classList.add('show');
   }
 
-  payBtn.disabled = false;
-  payBtn.textContent = 'Payer maintenant';
-}
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
 
-async function processMTN() {
-  const phone = document.getElementById('mtnPhone').value;
-  if (!phone) { alert('Entrez votre numéro MTN'); return false; }
+    if (!email || !password) {
+      showError('Remplir tous les champs');
+      return;
+    }
 
-  try {
-    const response = await fetch(`${PAYMENT_PROVIDERS.MTN.API_URL}/requesttopay`, {
-      method: 'POST',
-      headers: {
-        'X-Reference-Id': 'BLK-' + Date.now(),
-        'X-Target-Environment': 'mtncongo',
-        'Ocp-Apim-Subscription-Key': PAYMENT_PROVIDERS.MTN.API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        amount: totalAmount.toString(),
-        currency: 'XAF',
-        externalId: 'BLK-' + Date.now(),
-        payer: { partyIdType: 'MSISDN', partyId: phone }
-      })
-    });
-    return response.ok;
-  } catch (e) { console.error(e); return false; }
-}
-
-async function processAirtel() {
-  const phone = document.getElementById('airtelPhone').value;
-  if (!phone) { alert('Entrez votre numéro Airtel'); return false; }
-
-  try {
-    const response = await fetch(`${PAYMENT_PROVIDERS.AIRTEL.API_URL}/merchant/payment`, {
-      method: 'POST',
-      headers: { 'X-API-Key': PAYMENT_PROVIDERS.AIRTEL.API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        merchantId: PAYMENT_PROVIDERS.AIRTEL.MERCHANT_ID,
-        amount: totalAmount,
-        currency: 'XAF',
-        phone: phone
-      })
-    });
-    const data = await response.json();
-    return data.success || response.ok;
-  } catch (e) { return false; }
-}
-
-async function processOrange() {
-  const phone = document.getElementById('orangePhone').value;
-  if (!phone) { alert('Entrez votre numéro Orange'); return false; }
-
-  try {
-    const response = await fetch(`${PAYMENT_PROVIDERS.ORANGE.API_URL}/payment/request`, {
-      method: 'POST',
-      headers: { 'X-API-Key': PAYMENT_PROVIDERS.ORANGE.API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        merchantCode: PAYMENT_PROVIDERS.ORANGE.MERCHANT_CODE,
-        amount: totalAmount,
-        currency: 'XAF',
-        phone: phone
-      })
-    });
-    const data = await response.json();
-    return data.success;
-  } catch (e) { return false; }
-}
-
-async function processWallet() {
-  if (!currentUser || !db) return false;
-
-  const docSnap = await db.collection('users').doc(currentUser.id).get();
-  const balance = docSnap.data().balance || 0;
-
-  if (balance < totalAmount) {
-    alert('❌ Solde insuffisant');
-    return false;
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      showSuccess('Connexion réussie!');
+      setTimeout(() => switchScreen('home'), 1200);
+    } catch (error) {
+      showError(error.message);
+    }
   }
 
-  await db.collection('users').doc(currentUser.id).update({
-    balance: balance - totalAmount
+  async function handleSignup() {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const phone = document.getElementById('signupPhone').value;
+    const city = document.getElementById('signupCity').value;
+    const password = document.getElementById('signupPassword').value;
+
+    if (!name || !email || !phone || !city || !password) {
+      showError('Remplir tous les champs');
+      return;
+    }
+
+    try {
+      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+      
+      await db.collection('users').doc(userCred.user.uid).set({
+        name, email, phone, city,
+        role: 'buyer',
+        balance: 0,
+        createdAt: new Date(),
+        flames: 0
+      });
+
+      showSuccess('Compte créé!');
+      setTimeout(() => switchScreen('home'), 1200);
+    } catch (error) {
+      showError(error.message);
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('authError');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  function showSuccess(msg) {
+    const el = document.getElementById('authSuccess');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+
+  function switchScreen(screenName) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenName + 'Screen').classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    if (screenName === 'home') {
+      document.querySelector('.nav-item').classList.add('active');
+      loadProducts();
+    }
+  }
+
+  async function loadProducts() {
+    try {
+      const snapshot = await db.collection('products').limit(20).get();
+      products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      displayProducts(products);
+    } catch (error) {
+      products = [
+        { id: '1', name: 'Robe Wax', price: 12500, emoji: '👗', seller: 'Mama Léa' },
+        { id: '2', name: 'Sneakers', price: 35000, emoji: '👟', seller: 'Patrick' },
+        { id: '3', name: 'Sac Cuir', price: 28000, emoji: '👜', seller: 'Sophie' },
+        { id: '4', name: 'Montre', price: 45000, emoji: '⌚', seller: 'Jean' },
+        { id: '5', name: 'Blazer', price: 22000, emoji: '🧥', seller: 'Marie' },
+        { id: '6', name: 'Bottines', price: 18000, emoji: '👢', seller: 'Lisa' },
+      ];
+      displayProducts(products);
+    }
+  }
+
+  function displayProducts(items) {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = items.map(p => `
+      <div class="product-card-large" onclick="alert('${p.name} - ${p.price} FCFA\\nPaiement réel MTN/Airtel/Orange')">
+        <div class="product-image">${p.emoji}</div>
+        <div class="product-info">
+          <div class="product-name">${p.name}</div>
+          <div class="product-price">${p.price.toLocaleString()} F</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterCategory(cat) {
+    console.log('Filter:', cat);
+  }
+
+  function showCart() { alert('🛒 Panier'); }
+  function showFavorites() { alert('❤️ Favoris'); }
+  function showMessages() { alert('💬 Messages Temps Réel'); }
+  function showTimers() { alert('⏱️ Tracking Livraison'); }
+  function showProfile() { alert('👤 Profil Vendeur/Acheteur'); }
+
+  auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    if (user) {
+      document.getElementById('authScreen').classList.remove('active');
+      document.getElementById('homeScreen').classList.add('active');
+      loadProducts();
+    } else {
+      document.getElementById('authScreen').classList.add('active');
+      document.getElementById('homeScreen').classList.remove('active');
+    }
   });
 
-  return true;
-}
+  setInterval(() => {
+    const now = new Date();
+    document.getElementById('timeDisplay').textContent = 
+      `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  }, 1000);
 
-async function addCommission() {
-  if (!db) return;
-
-  const commission = Math.round(totalAmount * 0.03);
-  const creatorRef = db.collection('users').doc(creatorId);
-
-  const docSnap = await creatorRef.get();
-  if (docSnap.exists) {
-    const currentBalance = docSnap.data().balance || 0;
-    const currentEarnings = docSnap.data().totalEarnings || 0;
-
-    await creatorRef.update({
-      balance: currentBalance + commission,
-      totalEarnings: currentEarnings + commission
-    });
-  } else {
-    await creatorRef.set({
-      balance: commission,
-      totalEarnings: commission
-    });
-  }
-}
-
-function logout() {
-  auth.signOut();
-  window.location.reload();
-}
-
-init();
+  window.addEventListener('load', () => {
+    initCarousel('authCarouselContainer');
+  });
 </script>
 
 
