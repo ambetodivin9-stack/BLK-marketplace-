@@ -3,691 +3,445 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <title>BLK Marketplace</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>" />
-    <style>
-        /*  ROOT & RESET  */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        :root {
-            --black: #0D0D0D;
-            --dark: #1a1a1a;
-            --yellow: #E6A01E;
-            --green: #4A7C59;
-            --red: #C82828;
-            --white: #F5F0E8;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-            --radius: 16px;
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-        html,
-        body {
-            background: var(--black);
-            color: var(--white);
-            font-family: var(--font);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 0 0 20px 0;
-            margin: 0;
-        }
-        /*  PHONE CONTAINER  */
-        #app {
-            width: 100%;
-            max-width: 390px;
-            min-height: 100vh;
-            background: var(--black);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
-        }
-        /*  KENTE HEADER  */
-        .kente {
-            height: 4px;
-            flex-shrink: 0;
-            background: repeating-linear-gradient(90deg,
-                    var(--red) 0 20px,
-                    var(--yellow) 20px 40px,
-                    var(--green) 40px 60px,
-                    var(--black) 60px 80px);
-        }
-        /*  SCREENS  */
-        .screen {
-            display: none !important;
-            flex-direction: column;
-            flex: 1;
-            padding-bottom: 80px;
-            /* space for bottom nav */
-        }
-        .screen.active {
-            display: flex !important;
-        }
-        /*  SCROLL  */
-        .scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0 16px 20px;
-            scroll-behavior: smooth;
-        }
-        .scroll::-webkit-scrollbar {
-            width: 3px;
-        }
-        .scroll::-webkit-scrollbar-thumb {
-            background: var(--yellow);
-            border-radius: 10px;
-        }
-        /*  GLASS CARD  */
-        .glass {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-        }
-        /*  TOP BAR  */
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px 8px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: rgba(13, 13, 13, 0.85);
-            backdrop-filter: blur(8px);
-        }
-        .topbar .logo {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            color: var(--white);
-        }
-        .topbar .logo span {
-            color: var(--yellow);
-        }
-        .topbar-actions {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-        }
-        .topbar-actions button {
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 20px;
-            cursor: pointer;
-            position: relative;
-        }
-        .badge {
-            position: absolute;
-            top: -6px;
-            right: -8px;
-            background: var(--red);
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /*  BOTTOM NAV  */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 390px;
-            background: rgba(13, 13, 13, 0.96);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid #222;
-            display: flex;
-            justify-content: space-around;
-            padding: 6px 0 12px;
-            z-index: 100;
-            flex-shrink: 0;
-        }
-        .nav-item {
-            background: none;
-            border: none;
-            color: #666;
-            font-size: 10px;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            cursor: pointer;
-            padding: 4px 12px;
-            transition: 0.2s;
-            font-family: var(--font);
-        }
-        .nav-item .nav-icon {
-            font-size: 22px;
-            line-height: 1;
-        }
-        .nav-item.active {
-            color: var(--yellow);
-        }
-        .nav-item.active .nav-icon {
-            transform: scale(1.05);
-        }
-        /*  CAROUSEL  */
-        .carousel {
-            position: relative;
-            height: 200px;
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin: 8px 0 16px;
-        }
-        .carousel-slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .carousel-slide.active {
-            opacity: 1;
-        }
-        .carousel-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-        }
-        .carousel-overlay h2 {
-            font-size: 28px;
-            font-weight: 900;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
-        }
-        .carousel-overlay p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 6px;
-        }
-        .carousel-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-        }
-        .carousel-dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: 0.3s;
-        }
-        .carousel-dots span.active {
-            background: var(--yellow);
-            width: 24px;
-            border-radius: 4px;
-        }
-        /*  CATEGORIES  */
-        .cats-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 4px 0 12px;
-            scrollbar-width: none;
-        }
-        .cats-scroll::-webkit-scrollbar {
-            display: none;
-        }
-        .cat-chip {
-            flex-shrink: 0;
-            background: var(--glass);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 8px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--white);
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .cat-chip:hover,
-        .cat-chip.active {
-            background: var(--yellow);
-            color: var(--black);
-            border-color: var(--yellow);
-        }
-        /*  PRODUCT GRID  */
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 8px;
-        }
-        .product-card {
-            background: var(--dark);
-            border-radius: var(--radius);
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #222;
-        }
-        .product-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--yellow);
-        }
-        .product-card .p-img {
-            height: 140px;
-            background: #222;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-        }
-        .product-card .p-body {
-            padding: 10px 12px 14px;
-        }
-        .product-card .p-name {
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .product-card .p-price {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--yellow);
-            margin: 4px 0 6px;
-        }
-        .product-card .p-seller {
-            font-size: 11px;
-            color: #888;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .product-card .p-seller .flame {
-            color: #ff6b00;
-        }
-        .btn-buy-sm {
-            width: 100%;
-            padding: 8px;
-            border: none;
-            border-radius: 10px;
-            background: var(--green);
-            color: #fff;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            margin-top: 6px;
-            transition: 0.2s;
-        }
-        .btn-buy-sm:hover {
-            background: #3a9b5a;
-        }
-        /*  FORM  */
-        .form-group {
-            margin-bottom: 14px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #888;
-            margin-bottom: 4px;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1.5px solid #2a2a2a;
-            background: #111;
-            color: var(--white);
-            font-size: 14px;
-            font-family: var(--font);
-            transition: 0.2s;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: var(--yellow);
-            outline: none;
-            background: #181818;
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--yellow), #c8880a);
-            color: var(--black);
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 20px rgba(230, 160, 30, 0.3);
-        }
-        .btn-primary:hover {
-            transform: scale(1.01);
-        }
-        .btn-primary:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .btn-danger {
-            background: var(--red);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(200, 40, 40, 0.3);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--glass-border);
-            color: var(--white);
-        }
-        /*  TIMER  */
-        .timer-box {
-            background: var(--dark);
-            border-radius: var(--radius);
-            padding: 16px;
-            text-align: center;
-            border: 1px solid #2a2a2a;
-        }
-        .timer-box .time {
-            font-size: 32px;
-            font-weight: 900;
-            font-variant-numeric: tabular-nums;
-            color: var(--yellow);
-            letter-spacing: 2px;
-        }
-        .timer-box .status {
-            font-size: 12px;
-            color: #888;
-            margin-top: 4px;
-        }
-        /*  CHAT  */
-        .chat-messages {
-            max-height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 8px 4px;
-        }
-        .chat-msg {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 16px;
-            font-size: 14px;
-            word-wrap: break-word;
-        }
-        .chat-msg.me {
-            align-self: flex-end;
-            background: var(--yellow);
-            color: var(--black);
-            border-bottom-right-radius: 4px;
-        }
-        .chat-msg.other {
-            align-self: flex-start;
-            background: #222;
-            color: var(--white);
-            border-bottom-left-radius: 4px;
-        }
-        .chat-msg .time {
-            font-size: 9px;
-            opacity: 0.6;
-            margin-top: 4px;
-            display: block;
-        }
-        .chat-input-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .chat-input-row input {
-            flex: 1;
-            padding: 10px 14px;
-            border-radius: 30px;
-            border: 1.5px solid #2a2a2a;
-            background: #111;
-            color: var(--white);
-            font-size: 14px;
-        }
-        .chat-input-row button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 30px;
-            background: var(--yellow);
-            color: var(--black);
-            font-weight: 700;
-            cursor: pointer;
-        }
-        /*  MAP PLACEHOLDER  */
-        .map-placeholder {
-            height: 180px;
-            background: #111;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #555;
-            font-size: 14px;
-            border: 1px solid #2a2a2a;
-            position: relative;
-            overflow: hidden;
-        }
-        .map-placeholder .map-pin {
-            font-size: 40px;
-            position: absolute;
-        }
-        /*  FLAMES  */
-        .flames-display {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #ff6b00;
-        }
-        /*  TOAST  */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            width: 90%;
-            max-width: 360px;
-            pointer-events: none;
-        }
-        .toast {
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid #333;
-            border-radius: 14px;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: var(--shadow);
-            transform: translateY(-20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: auto;
-            margin-bottom: 8px;
-        }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast .t-icon {
-            font-size: 24px;
-        }
-        .toast .t-msg {
-            flex: 1;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        /*  MODAL  */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal-box {
-            background: #1a1a1a;
-            border-radius: 24px;
-            padding: 24px;
-            max-width: 360px;
-            width: 100%;
-            border: 1px solid #2a2a2a;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from {
-                transform: scale(0.92) translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-        .modal-box h3 {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-        .modal-box .modal-close {
-            float: right;
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        /*  RESPONSIVE  */
-        @media (max-width: 390px) {
-            .product-grid {
-                gap: 8px;
-            }
-            .product-card .p-img {
-                height: 110px;
-            }
-        }
-        @media (min-width: 391px) {
-            #app {
-                border-left: 1px solid #1a1a1a;
-                border-right: 1px solid #1a1a1a;
-            }
-        }
-        /*  UTILITIES  */
-        .flex {
-            display: flex;
-        }
-        .flex-col {
-            flex-direction: column;
-        }
-        .gap-8 {
-            gap: 8px;
-        }
-        .gap-12 {
-            gap: 12px;
-        }
-        .items-center {
-            align-items: center;
-        }
-        .justify-between {
-            justify-content: space-between;
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mt-12 {
-            margin-top: 12px;
-        }
-        .mt-16 {
-            margin-top: 16px;
-        }
-        .mb-8 {
-            margin-bottom: 8px;
-        }
-        .mb-12 {
-            margin-bottom: 12px;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-muted {
-            color: #888;
-            font-size: 13px;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .w-full {
-            width: 100%;
-        }
-        .section-title {
-            font-size: 18px;
-            font-weight: 800;
-            margin: 16px 0 8px;
-        }
-        .section-title span {
-            color: var(--yellow);
-        }
-    </style>
+    <title>BLK - La mode seconde main au Congo</title>
+
+<!-- ====== PWA (Manifest intégré) ====== -->
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkJMSyBNYXJrZXRwbGFjZSIsCiAgInNob3J0X25hbWUiOiAiQkxLIiwKICAiZGVzY3JpcHRpb24iOiAiTGEgbW9kZSBzZWNvbmRlIG1haW4gYXUgQ29uZ28iLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMEQwRDBEIiwKICAidGhlbWVfY29sb3IiOiAiI0U2QTAxRSIsCiAgImNhdGVnb3JpZXMiOiBbInNob3BwaW5nIiwgImZhc2hpb24iLCAibWFya2V0cGxhY2UiXSwKICAibGFuZyI6ICJmciIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nOTAnPvCfjpc8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==" />
+<meta name="theme-color" content="#E6A01E" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="BLK" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>" />
+
+<!-- ====== SERVICE WORKER (généré automatiquement) ====== -->
+<script>
+    // ================================================================
+    // 🔧 SERVICE WORKER INTÉGRÉ
+    // ================================================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            // Générer le Service Worker dynamiquement
+            const swCode = `
+                const CACHE_NAME = 'blk-v3.0';
+                const OFFLINE_URL = '/';
+                const urlsToCache = [
+                    '/',
+                    '/index.html',
+                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
+                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
+                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js'
+                ];
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(cache => cache.addAll(urlsToCache))
+                            .then(() => self.skipWaiting())
+                    );
+                });
+                self.addEventListener('activate', event => {
+                    event.waitUntil(
+                        caches.keys().then(cacheNames => {
+                            return Promise.all(
+                                cacheNames.map(cacheName => {
+                                    if (cacheName !== CACHE_NAME) {
+                                        return caches.delete(cacheName);
+                                    }
+                                })
+                            );
+                        })
+                    );
+                    return self.clients.claim();
+                });
+                self.addEventListener('fetch', event => {
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(response => response || fetch(event.request))
+                            .catch(() => {
+                                if (event.request.mode === 'navigate') {
+                                    return caches.match(OFFLINE_URL);
+                                }
+                                return new Response('Hors ligne', {
+                                    status: 503,
+                                    statusText: 'Service Unavailable'
+                                });
+                            })
+                    );
+                });
+                self.addEventListener('push', event => {
+                    const data = event.data ? event.data.json() : { title: 'BLK', body: 'Nouvelle notification' };
+                    const options = {
+                        body: data.body || 'BLK Marketplace',
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
+                        badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
+                        vibrate: [200, 100, 200],
+                        data: { url: data.url || '/' },
+                        actions: [
+                            { action: 'open', title: '📱 Ouvrir' },
+                            { action: 'close', title: '❌ Fermer' }
+                        ]
+                    };
+                    event.waitUntil(
+                        self.registration.showNotification(data.title || 'BLK', options)
+                    );
+                });
+                self.addEventListener('notificationclick', event => {
+                    event.notification.close();
+                    if (event.action === 'open') {
+                        event.waitUntil(
+                            clients.openWindow(event.notification.data.url || '/')
+                        );
+                    }
+                });
+                self.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'showNotification') {
+                        const { title, body, icon, orderId } = event.data;
+                        self.registration.showNotification(title, {
+                            body: body,
+                            icon: icon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
+                            badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
+                            vibrate: [200, 100, 200],
+                            data: { orderId, url: '/' },
+                            actions: [
+                                { action: 'open', title: '📱 Voir' },
+                                { action: 'close', title: '❌ Fermer' }
+                            ]
+                        });
+                    }
+                });
+            `;
+
+            // Créer un blob et enregistrer le Service Worker
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swUrl)
+                .then(reg => {
+                    console.log('✅ Service Worker enregistré');
+                    // Nettoyer l'URL blob après enregistrement
+                    setTimeout(() => URL.revokeObjectURL(swUrl), 1000);
+                })
+                .catch(err => {
+                    console.log('❌ SW erreur:', err);
+                    // Fallback: essayer avec un fichier sw.js classique
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(reg => console.log('✅ SW avec fichier classique'))
+                        .catch(err => console.log('❌ SW fallback échoué:', err));
+                });
+        });
+    }
+</script>
+
+<!-- ====== STYLES ====== -->
+<style>
+    /* ====== ROOT ====== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+        --black: #0D0D0D; --dark: #1a1a1a; --yellow: #E6A01E;
+        --green: #4A7C59; --red: #C82828; --white: #F5F0E8;
+        --glass: rgba(255,255,255,0.08); --glass-border: rgba(255,255,255,0.12);
+        --shadow: 0 8px 32px rgba(0,0,0,0.6); --radius: 16px;
+        --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    .theme-clair { --bg: #f5f0e8; --text: #0D0D0D; --card: #ffffff; --input: #e8e4dc; }
+    .theme-sombre { --bg: #0D0D0D; --text: #F5F0E8; --card: #1a1a1a; --input: #2a2a2a; }
+    html, body {
+        background: var(--bg, #0D0D0D); color: var(--text, #F5F0E8);
+        font-family: var(--font); min-height: 100vh;
+        display: flex; justify-content: center; padding: 0; margin: 0;
+        transition: background 0.3s, color 0.3s;
+    }
+    #app {
+        width: 100%; max-width: 390px; min-height: 100vh;
+        background: var(--bg, #0D0D0D); position: relative;
+        display: flex; flex-direction: column;
+        box-shadow: 0 0 60px rgba(0,0,0,0.9); transition: background 0.3s;
+    }
+    .kente {
+        height: 4px; flex-shrink: 0;
+        background: repeating-linear-gradient(90deg,
+            var(--red) 0 20px, var(--yellow) 20px 40px,
+            var(--green) 40px 60px, var(--black) 60px 80px);
+    }
+    .screen { display: none !important; flex-direction: column; flex: 1; padding-bottom: 80px; }
+    .screen.active { display: flex !important; }
+    .scroll { flex: 1; overflow-y: auto; padding: 0 16px 20px; scroll-behavior: smooth; }
+    .scroll::-webkit-scrollbar { width: 3px; }
+    .scroll::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 10px; }
+    .glass {
+        background: var(--glass); backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border); border-radius: var(--radius);
+        padding: 16px; box-shadow: var(--shadow);
+    }
+    .topbar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 16px 8px; flex-shrink: 0; position: sticky; top: 0; z-index: 10;
+        background: rgba(13,13,13,0.85); backdrop-filter: blur(8px);
+    }
+    .topbar .logo {
+        font-size: 22px; font-weight: 900; letter-spacing: 1px;
+        color: var(--text, #fff); display: flex; align-items: center; gap: 6px;
+    }
+    .topbar .logo .logo-icon { font-size: 24px; }
+    .topbar .logo span { color: var(--yellow); }
+    .topbar-actions { display: flex; gap: 14px; align-items: center; }
+    .topbar-actions button {
+        background: none; border: none; color: var(--text, #fff);
+        font-size: 20px; cursor: pointer; position: relative;
+    }
+    .badge {
+        position: absolute; top: -6px; right: -8px; background: var(--red);
+        color: #fff; font-size: 9px; font-weight: 700; border-radius: 50%;
+        width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+    }
+    .bottom-nav {
+        position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+        width: 100%; max-width: 390px; background: rgba(13,13,13,0.96);
+        backdrop-filter: blur(12px); border-top: 1px solid #222;
+        display: flex; justify-content: space-around; padding: 6px 0 12px; z-index: 100;
+    }
+    .nav-item {
+        background: none; border: none; color: #666; font-size: 10px;
+        font-weight: 600; display: flex; flex-direction: column;
+        align-items: center; gap: 2px; cursor: pointer; padding: 4px 12px;
+        transition: 0.2s; font-family: var(--font);
+    }
+    .nav-item .nav-icon { font-size: 22px; line-height: 1; }
+    .nav-item.active { color: var(--yellow); }
+    .carousel {
+        position: relative; height: 200px; border-radius: var(--radius);
+        overflow: hidden; margin: 8px 0 16px;
+    }
+    .carousel-slide {
+        position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease;
+        background-size: cover; background-position: center;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .carousel-slide.active { opacity: 1; }
+    .carousel-overlay {
+        position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; text-align: center; padding: 20px;
+    }
+    .carousel-overlay h2 { font-size: 28px; font-weight: 900; text-shadow: 0 2px 20px rgba(0,0,0,0.8); color: #fff; }
+    .carousel-overlay p { font-size: 14px; opacity: 0.9; margin-top: 6px; color: #fff; }
+    .carousel-dots {
+        position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+        display: flex; gap: 8px;
+    }
+    .carousel-dots span {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: rgba(255,255,255,0.3); transition: 0.3s; cursor: pointer;
+    }
+    .carousel-dots span.active { background: var(--yellow); width: 24px; border-radius: 4px; }
+    .cats-scroll {
+        display: flex; gap: 10px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none;
+    }
+    .cats-scroll::-webkit-scrollbar { display: none; }
+    .cat-chip {
+        flex-shrink: 0; background: var(--glass); backdrop-filter: blur(4px);
+        border: 1px solid var(--glass-border); border-radius: 30px;
+        padding: 8px 18px; font-size: 13px; font-weight: 600;
+        color: var(--text, #fff); cursor: pointer; transition: 0.2s;
+        display: flex; align-items: center; gap: 6px;
+    }
+    .cat-chip:hover, .cat-chip.active { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+    .product-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
+    }
+    .product-card {
+        background: var(--card, #1a1a1a); border-radius: var(--radius);
+        overflow: hidden; cursor: pointer; transition: 0.2s; border: 1px solid #222;
+    }
+    .product-card:hover { transform: translateY(-2px); border-color: var(--yellow); }
+    .product-card .p-img {
+        height: 140px; background: #222; display: flex;
+        align-items: center; justify-content: center; font-size: 48px;
+    }
+    .product-card .p-body { padding: 10px 12px 14px; }
+    .product-card .p-name {
+        font-size: 13px; font-weight: 600; color: var(--text, #fff);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .product-card .p-price { font-size: 16px; font-weight: 800; color: var(--yellow); margin: 4px 0 6px; }
+    .product-card .p-seller { font-size: 11px; color: #888; display: flex; align-items: center; gap: 4px; }
+    .product-card .p-seller .flame { color: #ff6b00; }
+    .product-card .p-rating { font-size: 12px; color: #888; margin-top: 2px; }
+    .btn-buy-sm {
+        width: 100%; padding: 8px; border: none; border-radius: 10px;
+        background: var(--green); color: #fff; font-weight: 700; font-size: 13px;
+        cursor: pointer; margin-top: 6px; transition: 0.2s;
+    }
+    .btn-buy-sm:hover { background: #3a9b5a; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+        display: block; font-size: 11px; font-weight: 700;
+        letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 4px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%; padding: 12px 14px; border-radius: 12px;
+        border: 1.5px solid #2a2a2a; background: var(--input, #111);
+        color: var(--text, #fff); font-size: 14px; font-family: var(--font);
+        transition: 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        border-color: var(--yellow); outline: none; background: var(--input, #181818);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .btn-primary {
+        width: 100%; padding: 14px; border: none; border-radius: 14px;
+        background: linear-gradient(135deg, var(--yellow), #c8880a);
+        color: var(--black); font-weight: 800; font-size: 16px;
+        cursor: pointer; transition: 0.2s;
+        box-shadow: 0 4px 20px rgba(230,160,30,0.3);
+    }
+    .btn-primary:hover { transform: scale(1.01); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-danger { background: var(--red); color: #fff; box-shadow: 0 4px 20px rgba(200,40,40,0.3); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--glass-border); color: var(--text, #fff); }
+    .btn-success { background: var(--green); color: #fff; box-shadow: 0 4px 20px rgba(74,124,89,0.3); }
+    .timer-box {
+        background: var(--card, #1a1a1a); border-radius: var(--radius);
+        padding: 16px; text-align: center; border: 1px solid #2a2a2a;
+    }
+    .timer-box .time { font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--yellow); letter-spacing: 2px; }
+    .timer-box .status { font-size: 12px; color: #888; margin-top: 4px; }
+    .chat-messages { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 8px 4px; }
+    .chat-msg {
+        max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 14px; word-wrap: break-word;
+    }
+    .chat-msg.me { align-self: flex-end; background: var(--yellow); color: var(--black); border-bottom-right-radius: 4px; }
+    .chat-msg.other { align-self: flex-start; background: #222; color: var(--text, #fff); border-bottom-left-radius: 4px; }
+    .chat-msg .time { font-size: 9px; opacity: 0.6; margin-top: 4px; display: block; }
+    .chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
+    .chat-input-row input {
+        flex: 1; padding: 10px 14px; border-radius: 30px;
+        border: 1.5px solid #2a2a2a; background: var(--input, #111);
+        color: var(--text, #fff); font-size: 14px;
+    }
+    .chat-input-row button { padding: 10px 18px; border: none; border-radius: 30px; background: var(--yellow); color: var(--black); font-weight: 700; cursor: pointer; }
+    .map-placeholder {
+        height: 180px; background: #111; border-radius: var(--radius);
+        display: flex; align-items: center; justify-content: center;
+        color: #555; font-size: 14px; border: 1px solid #2a2a2a;
+        position: relative; overflow: hidden;
+    }
+    .map-placeholder .map-pin { font-size: 40px; position: absolute; }
+    .map-placeholder .map-label {
+        position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+        background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px;
+        font-size: 11px; color: #fff; white-space: nowrap;
+    }
+    .flames-display { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: #ff6b00; }
+    .toast-container {
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        z-index: 9999; width: 90%; max-width: 360px; pointer-events: none;
+    }
+    .toast {
+        background: rgba(20,20,20,0.95); backdrop-filter: blur(12px);
+        border: 1px solid #333; border-radius: 14px; padding: 14px 18px;
+        display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
+        transform: translateY(-20px); opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        pointer-events: auto; margin-bottom: 8px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast .t-icon { font-size: 24px; }
+    .toast .t-msg { flex: 1; font-size: 13px; font-weight: 500; color: #fff; }
+    .modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(4px); z-index: 500; display: none;
+        align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+        background: var(--card, #1a1a1a); border-radius: 24px; padding: 24px;
+        max-width: 360px; width: 100%; border: 1px solid #2a2a2a;
+        max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+        from { transform: scale(0.92) translateY(20px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .modal-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--text, #fff); }
+    .modal-box .modal-close { float: right; background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
+    .modal-box p { color: #aaa; line-height: 1.6; }
+    .floating-bg {
+        position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+    }
+    .floating-bg .obj {
+        position: absolute; font-size: 30px; opacity: 0.15;
+        animation: floatObj 20s infinite ease-in-out;
+    }
+    @keyframes floatObj {
+        0%,100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-30px) rotate(5deg); }
+        50% { transform: translateY(15px) rotate(-5deg); }
+        75% { transform: translateY(-15px) rotate(3deg); }
+    }
+    .pin-input { letter-spacing: 12px; font-size: 24px; text-align: center; font-weight: 700; }
+    .checkbox-label {
+        display: flex; align-items: center; gap: 10px; cursor: pointer;
+        font-size: 14px; color: var(--text, #fff);
+    }
+    .checkbox-label input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--green); cursor: pointer; }
+    .stat-grid {
+        display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    }
+    .stat-card {
+        background: var(--card, #1a1a1a); padding: 12px; border-radius: 12px;
+        text-align: center; border: 1px solid #2a2a2a;
+    }
+    .stat-card .stat-number { font-size: 22px; font-weight: 800; color: var(--yellow); }
+    .stat-card .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+    .badge-yellow { background: var(--yellow); color: var(--black); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .notification-badge {
+        position: absolute; top: -4px; right: -6px; background: var(--red);
+        color: #fff; font-size: 9px; font-weight: 700; border-radius: 50%;
+        width: 18px; height: 18px; display: none; align-items: center; justify-content: center;
+    }
+    .notification-item {
+        padding: 12px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s;
+    }
+    .notification-item:hover { background: rgba(230,160,30,0.05); }
+    .notification-item.unread { background: rgba(230,160,30,0.08); }
+    .notification-item .title { font-weight: 600; color: var(--text, #fff); }
+    .notification-item .body { font-size: 13px; color: #aaa; margin-top: 4px; }
+    .notification-item .time { font-size: 10px; color: #666; float: right; }
+    @media (max-width: 390px) {
+        .product-grid { gap: 8px; }
+        .product-card .p-img { height: 110px; }
+    }
+    @media (min-width: 391px) {
+        #app { border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; }
+    }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .gap-8 { gap: 8px; }
+    .gap-12 { gap: 12px; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .mt-8 { margin-top: 8px; }
+    .mt-12 { margin-top: 12px; }
+    .mt-16 { margin-top: 16px; }
+    .mb-8 { margin-bottom: 8px; }
+    .mb-12 { margin-bottom: 12px; }
+    .text-center { text-align: center; }
+    .text-muted { color: #888; font-size: 13px; }
+    .hidden { display: none !important; }
+    .w-full { width: 100%; }
+    .section-title { font-size: 18px; font-weight: 800; margin: 16px 0 8px; color: var(--text, #fff); }
+    .section-title span { color: var(--yellow); }
+</style>
 </head>
 <body>
 
-<!-- ==================== TOAST ==================== -->
+<!-- ====== TOAST ====== -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ==================== MODAL ==================== -->
+<!-- ====== MODAL ====== -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-box" id="modalBox">
         <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -695,8 +449,8 @@
     </div>
 </div>
 
-<!-- ==================== APP ==================== -->
-<div id="app">
+<!-- ====== APP ====== -->
+<div id="app" class="theme-sombre">
 
     <!-- KENTE -->
     <div class="kente"></div>
@@ -705,12 +459,22 @@
     <!-- SCREEN: LOGIN -->
     <!-- ============================================================ -->
     <div class="screen active" id="screen-login">
-        <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;">
-            <div style="text-align:center;margin-bottom:24px;">
-                <div style="font-size:48px;font-weight:900;letter-spacing:2px;color:var(--white);">BLK<span style="color:var(--yellow);">.</span></div>
-                <div style="font-size:14px;color:#888;margin-top:4px;">mode seconde main au Congo</div>
+        <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;position:relative;">
+            <div class="floating-bg">
+                <span class="obj" style="top:10%;left:5%;animation-delay:0s;">👗</span>
+                <span class="obj" style="top:20%;right:8%;animation-delay:3s;">👠</span>
+                <span class="obj" style="bottom:30%;left:10%;animation-delay:6s;">👜</span>
+                <span class="obj" style="top:50%;right:5%;animation-delay:9s;">👔</span>
+                <span class="obj" style="bottom:10%;right:15%;animation-delay:12s;">💍</span>
+                <span class="obj" style="top:70%;left:20%;animation-delay:15s;">🧥</span>
             </div>
-            <div class="glass" style="padding:20px;">
+            <div style="text-align:center;margin-bottom:24px;position:relative;z-index:1;">
+                <div style="font-size:48px;font-weight:900;letter-spacing:2px;color:var(--text,#fff);">
+                    <span style="font-size:36px;">👗</span> BLK<span style="color:var(--yellow);">.</span>
+                </div>
+                <div style="font-size:14px;color:#888;margin-top:4px;">La mode seconde main au Congo</div>
+            </div>
+            <div class="glass" style="padding:20px;position:relative;z-index:1;">
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Email</label>
@@ -724,6 +488,9 @@
                     <div style="text-align:center;margin-top:12px;font-size:13px;color:#888;">
                         Pas de compte ? <span style="color:var(--yellow);cursor:pointer;font-weight:600;" onclick="showScreen('screen-register')">S'inscrire</span>
                     </div>
+                    <div style="text-align:center;margin-top:8px;font-size:12px;color:#555;">
+                        <span onclick="toggleTheme()" style="cursor:pointer;">🌓 Changer de thème</span>
+                    </div>
                 </form>
             </div>
         </div>
@@ -733,12 +500,24 @@
     <!-- SCREEN: REGISTER -->
     <!-- ============================================================ -->
     <div class="screen" id="screen-register">
-        <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;">
-            <div style="text-align:center;margin-bottom:24px;">
-                <div style="font-size:48px;font-weight:900;letter-spacing:2px;color:var(--white);">BLK<span style="color:var(--yellow);">.</span></div>
+        <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;position:relative;">
+            <div class="floating-bg">
+                <span class="obj" style="top:5%;left:10%;animation-delay:0s;">👗</span>
+                <span class="obj" style="top:15%;right:12%;animation-delay:2s;">👠</span>
+                <span class="obj" style="bottom:25%;left:8%;animation-delay:4s;">👜</span>
+                <span class="obj" style="top:45%;right:8%;animation-delay:6s;">👔</span>
+                <span class="obj" style="bottom:15%;right:20%;animation-delay:8s;">💍</span>
+                <span class="obj" style="top:65%;left:25%;animation-delay:10s;">🧥</span>
+                <span class="obj" style="top:30%;left:45%;animation-delay:12s;">👟</span>
+                <span class="obj" style="bottom:5%;left:30%;animation-delay:14s;">🧣</span>
+            </div>
+            <div style="text-align:center;margin-bottom:24px;position:relative;z-index:1;">
+                <div style="font-size:48px;font-weight:900;letter-spacing:2px;color:var(--text,#fff);">
+                    <span style="font-size:36px;">👗</span> BLK<span style="color:var(--yellow);">.</span>
+                </div>
                 <div style="font-size:14px;color:#888;margin-top:4px;">Rejoins la communauté</div>
             </div>
-            <div class="glass" style="padding:20px;">
+            <div class="glass" style="padding:20px;position:relative;z-index:1;">
                 <form id="registerForm" onsubmit="handleRegister(event)">
                     <div class="form-group">
                         <label>Nom complet</label>
@@ -779,20 +558,24 @@
     <!-- SCREEN: HOME -->
     <!-- ============================================================ -->
     <div class="screen" id="screen-home">
-        <!-- Top Bar -->
         <div class="topbar">
-            <div class="logo">BLK<span>.</span></div>
+            <div class="logo">
+                <span class="logo-icon">👗</span> BLK<span>.</span>
+            </div>
             <div class="topbar-actions">
+                <button onclick="showScreen('screen-notifications')" title="Notifications">
+                    🔔
+                    <span class="notification-badge" id="notifBadge">0</span>
+                </button>
                 <button onclick="showScreen('screen-cart')" title="Panier">
                     🛒
                     <span class="badge" id="cartBadge" style="display:none;">0</span>
                 </button>
-                <button onclick="showScreen('screen-profile')" title="Profil">👤</button>
+                <button onclick="toggleTheme()" title="Thème">🌓</button>
             </div>
         </div>
 
         <div class="scroll" id="homeScroll">
-            <!-- Carousel -->
             <div class="carousel" id="carousel">
                 <div class="carousel-slide active" style="background-image:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600');">
                     <div class="carousel-overlay">
@@ -819,7 +602,6 @@
                 </div>
             </div>
 
-            <!-- Catégories -->
             <div style="margin:6px 0 4px;">
                 <div class="cats-scroll" id="categoryList">
                     <span class="cat-chip active" data-cat="all">🔥 Tous</span>
@@ -832,10 +614,9 @@
                 </div>
             </div>
 
-            <!-- Produits -->
             <div class="section-title">🔥 Nouveautés <span>BLK</span></div>
             <div class="product-grid" id="productGrid">
-                <!-- Rempli par JS -->
+                <div style="grid-column:span 2;text-align:center;color:#888;padding:40px 0;">Chargement...</div>
             </div>
             <div style="height:20px;"></div>
         </div>
@@ -846,13 +627,11 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-product">
         <div class="topbar">
-            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">←</button>
+            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
             <div class="logo" style="font-size:18px;">Détail</div>
             <div style="width:40px;"></div>
         </div>
-        <div class="scroll" id="productDetailContainer">
-            <!-- Rempli par JS -->
-        </div>
+        <div class="scroll" id="productDetailContainer"></div>
     </div>
 
     <!-- ============================================================ -->
@@ -860,13 +639,11 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-cart">
         <div class="topbar">
-            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">←</button>
+            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
             <div class="logo" style="font-size:18px;">🛒 Panier</div>
             <div style="width:40px;"></div>
         </div>
-        <div class="scroll" id="cartContainer">
-            <!-- Rempli par JS -->
-        </div>
+        <div class="scroll" id="cartContainer"></div>
     </div>
 
     <!-- ============================================================ -->
@@ -874,13 +651,11 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-checkout">
         <div class="topbar">
-            <button onclick="showScreen('screen-cart')" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">←</button>
+            <button onclick="showScreen('screen-cart')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
             <div class="logo" style="font-size:18px;">💳 Paiement</div>
             <div style="width:40px;"></div>
         </div>
-        <div class="scroll" id="checkoutContainer">
-            <!-- Rempli par JS -->
-        </div>
+        <div class="scroll" id="checkoutContainer"></div>
     </div>
 
     <!-- ============================================================ -->
@@ -888,13 +663,11 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-tracking">
         <div class="topbar">
-            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">←</button>
-            <div class="logo" style="font-size:18px;">📍 Suivi</div>
+            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
+            <div class="logo" style="font-size:18px;">📦 Mes Commandes</div>
             <div style="width:40px;"></div>
         </div>
-        <div class="scroll" id="trackingContainer">
-            <!-- Rempli par JS -->
-        </div>
+        <div class="scroll" id="trackingContainer"></div>
     </div>
 
     <!-- ============================================================ -->
@@ -902,13 +675,13 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-chat">
         <div class="topbar">
-            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">←</button>
-            <div class="logo" style="font-size:18px;">💬 Chat</div>
+            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
+            <div class="logo" style="font-size:18px;">💬 Messages</div>
             <div style="width:40px;"></div>
         </div>
         <div class="scroll" style="flex:1;display:flex;flex-direction:column;height:100%;">
             <div class="chat-messages" id="chatMessages">
-                <!-- Rempli par JS -->
+                <div style="text-align:center;color:#888;padding:20px;">Connecte-toi pour chatter</div>
             </div>
             <div class="chat-input-row">
                 <input type="text" id="chatInput" placeholder="Écris un message..." />
@@ -918,7 +691,46 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- SCREEN: PROFILE -->
+    <!-- SCREEN: MON MAGASIN -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-shop">
+        <div class="topbar">
+            <div class="logo"><span class="logo-icon">🏪</span> Mon Magasin</div>
+            <div class="topbar-actions">
+                <button onclick="showScreen('screen-profile')" title="Profil">👤</button>
+            </div>
+        </div>
+        <div class="scroll" id="shopContainer"></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN: PUBLIER -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-publish">
+        <div class="topbar">
+            <button onclick="showScreen('screen-shop')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
+            <div class="logo" style="font-size:18px;">➕ Publier</div>
+            <div style="width:40px;"></div>
+        </div>
+        <div class="scroll" id="publishContainer"></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN: NOTIFICATIONS -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-notifications">
+        <div class="topbar">
+            <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
+            <div class="logo" style="font-size:18px;">🔔 Notifications</div>
+            <div style="width:40px;"></div>
+        </div>
+        <div class="scroll" id="notificationContainer">
+            <div style="text-align:center;color:#888;padding:40px 0;">📭 Aucune notification</div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN: PROFIL -->
     <!-- ============================================================ -->
     <div class="screen" id="screen-profile">
         <div class="topbar">
@@ -927,23 +739,22 @@
                 <button onclick="handleLogout()" style="font-size:14px;color:#888;">Déconnexion</button>
             </div>
         </div>
-        <div class="scroll" id="profileContainer">
-            <!-- Rempli par JS -->
-        </div>
+        <div class="scroll" id="profileContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- BOTTOM NAV -->
-    <!-- ============================================================ -->
+    <!-- ====== BOTTOM NAV ====== -->
     <div class="bottom-nav" id="bottomNav">
         <button class="nav-item active" data-screen="screen-home" onclick="navigateTo('screen-home')">
             <span class="nav-icon">🏠</span> Accueil
+        </button>
+        <button class="nav-item" data-screen="screen-shop" onclick="navigateTo('screen-shop')">
+            <span class="nav-icon">🏪</span> Magasin
         </button>
         <button class="nav-item" data-screen="screen-chat" onclick="navigateTo('screen-chat')">
             <span class="nav-icon">💬</span> Messages
         </button>
         <button class="nav-item" data-screen="screen-tracking" onclick="navigateTo('screen-tracking')">
-            <span class="nav-icon">⏱️</span> Suivi
+            <span class="nav-icon">📦</span> Commandes
         </button>
         <button class="nav-item" data-screen="screen-profile" onclick="navigateTo('screen-profile')">
             <span class="nav-icon">👤</span> Profil
@@ -955,7 +766,6 @@
 <!-- ============================================================ -->
 <!-- FIREBASE + APP JS -->
 <!-- ============================================================ -->
-<!-- Firebase App (compat) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">
@@ -967,16 +777,30 @@
 
 <script>
     // ================================================================
-    // 🔥 FIREBASE CONFIG — À REMPLACER PAR TES CREDENTIALS !
+    // 🔥 FIREBASE CONFIG
     // ================================================================
     const firebaseConfig = {
-        apiKey: "TON_API_KEY",
-        authDomain: "TON_PROJECT.firebaseapp.com",
-        projectId: "TON_PROJECT_ID",
-        storageBucket: "TON_PROJECT.appspot.com",
-        messagingSenderId: "TON_SENDER_ID",
-        appId: "TON_APP_ID"
+        apiKey: "AIzaSyB7Nwct-nYQ1jSfXh_m4u0D7YLCdAWsdm8",
+        authDomain: "blk-congo-29463.firebaseapp.com",
+        projectId: "blk-congo-29463",
+        storageBucket: "blk-congo-29463.firebasestorage.app",
+        messagingSenderId: "701093221836",
+        appId: "1:701093221836:web:809a62273256fbabc3969",
+        measurementId: "G-VS62PN9E8W"
     };
+
+    // ================================================================
+    // 🔔 FCM CONFIG
+    // ================================================================
+    const FCM_CONFIG = {
+        senderId: '701093221836',
+        vapidKey: 'BK_8Xz4d6kGrNaa0Pspj5MnEABxtlycJwQ6FaLtLrC3IFg'
+    };
+
+    // ================================================================
+    // 🤖 GOOGLE VISION
+    // ================================================================
+    const GOOGLE_VISION_API_KEY = ''; // Ajoute ta clé plus tard
 
     // ================================================================
     // 🔧 INIT FIREBASE
@@ -993,23 +817,21 @@
     let currentUserData = null;
     let allProducts = [];
     let cart = [];
-    let cartListeners = [];
     let chatListeners = [];
     let carouselInterval = null;
-    let timerIntervals = {};
+    let watchId = null;
+    let currentPosition = null;
+    let currentTheme = 'sombre';
 
     // ================================================================
     // 🛠️ UTILS
     // ================================================================
-    function generateId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    }
+    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 
-    function formatPrice(amount) {
-        return Number(amount).toLocaleString('fr-FR') + ' FCFA';
-    }
+    function formatPrice(amount) { return Number(amount).toLocaleString('fr-FR') + ' FCFA'; }
 
     function timeAgo(date) {
+        if (!date) return 'maintenant';
         const diff = Date.now() - date.getTime();
         const mins = Math.floor(diff / 60000);
         if (mins < 1) return 'à l\'instant';
@@ -1045,16 +867,17 @@
         document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
         const target = document.getElementById(id);
         if (target) target.classList.add('active');
-        // Update bottom nav
         document.querySelectorAll('.nav-item').forEach(el => {
             el.classList.toggle('active', el.dataset.screen === id);
         });
-        // Refresh data on certain screens
         if (id === 'screen-home') loadProducts();
         if (id === 'screen-cart') renderCart();
         if (id === 'screen-profile') loadProfile();
         if (id === 'screen-chat') loadChat();
         if (id === 'screen-tracking') loadTracking();
+        if (id === 'screen-shop') loadShop();
+        if (id === 'screen-publish') showPublishScreen();
+        if (id === 'screen-notifications') loadNotifications();
     }
 
     function navigateTo(id) {
@@ -1064,6 +887,29 @@
             return;
         }
         showScreen(id);
+    }
+
+    function toggleTheme() {
+        const app = document.getElementById('app');
+        if (currentTheme === 'sombre') {
+            app.classList.remove('theme-sombre');
+            app.classList.add('theme-clair');
+            currentTheme = 'clair';
+            showToast('☀️', 'Thème clair activé');
+        } else {
+            app.classList.remove('theme-clair');
+            app.classList.add('theme-sombre');
+            currentTheme = 'sombre';
+            showToast('🌙', 'Thème sombre activé');
+        }
+        document.documentElement.style.setProperty('--bg', app.classList.contains('theme-clair') ? '#f5f0e8' :
+            '#0D0D0D');
+        document.documentElement.style.setProperty('--text', app.classList.contains('theme-clair') ? '#0D0D0D' :
+            '#F5F0E8');
+        document.documentElement.style.setProperty('--card', app.classList.contains('theme-clair') ? '#ffffff' :
+            '#1a1a1a');
+        document.documentElement.style.setProperty('--input', app.classList.contains('theme-clair') ? '#e8e4dc' :
+            '#2a2a2a');
     }
 
     // ================================================================
@@ -1084,10 +930,10 @@
                     currentUserData = doc.data();
                     currentUser = cred.user;
                     showToast('✅', 'Bienvenue ' + currentUserData.name + ' !');
+                    requestNotificationPermission();
                     showScreen('screen-home');
                     loadProducts();
                 } else {
-                    // Créer le profil si inexistant
                     await db.collection('users').doc(cred.user.uid).set({
                         name: email.split('@')[0],
                         email: email,
@@ -1102,17 +948,14 @@
                         balance: 0, flames: 0, role: 'buyer' };
                     currentUser = cred.user;
                     showToast('✅', 'Profil créé !');
+                    requestNotificationPermission();
                     showScreen('screen-home');
                     loadProducts();
                 }
             })
-            .catch(err => {
-                showToast('❌', err.message);
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.textContent = 'Se connecter';
-            });
+            .catch(err => { showToast('❌', err.message); })
+            .finally(() => { btn.disabled = false;
+                btn.textContent = 'Se connecter'; });
     }
 
     function handleRegister(e) {
@@ -1141,16 +984,13 @@
                 currentUser = cred.user;
                 currentUserData = { name, email, phone, city, balance: 0, flames: 0, role: 'buyer' };
                 showToast('🎉', 'Compte créé avec succès !');
+                requestNotificationPermission();
                 showScreen('screen-home');
                 loadProducts();
             })
-            .catch(err => {
-                showToast('❌', err.message);
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.textContent = 'Créer mon compte';
-            });
+            .catch(err => { showToast('❌', err.message); })
+            .finally(() => { btn.disabled = false;
+                btn.textContent = 'Créer mon compte'; });
     }
 
     function handleLogout() {
@@ -1163,14 +1003,11 @@
         });
     }
 
-    // Auth state listener
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             currentUser = user;
             const doc = await db.collection('users').doc(user.uid).get();
-            if (doc.exists) {
-                currentUserData = doc.data();
-            }
+            if (doc.exists) { currentUserData = doc.data(); }
             if (document.querySelector('.screen.active')?.id === 'screen-login' ||
                 document.querySelector('.screen.active')?.id === 'screen-register') {
                 showScreen('screen-home');
@@ -1186,18 +1023,223 @@
     });
 
     // ================================================================
+    // 🔔 NOTIFICATIONS PUSH
+    // ================================================================
+    function requestNotificationPermission() {
+        if (!('Notification' in window)) return;
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('🔔 Notifications activées');
+                subscribeToPush();
+            }
+        });
+    }
+
+    async function subscribeToPush() {
+        if (!('serviceWorker' in navigator)) return;
+        try {
+            const reg = await navigator.serviceWorker.ready;
+            const subscription = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(FCM_CONFIG.vapidKey)
+            });
+            if (currentUser) {
+                await db.collection('users').doc(currentUser.uid).update({
+                    pushSubscription: subscription.toJSON(),
+                    notificationsEnabled: true
+                });
+            }
+            console.log('✅ Abonnement push réussi');
+        } catch (err) { console.log('❌ Erreur abonnement:', err); }
+    }
+
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    async function sendNotification(userId, title, body, data = {}) {
+        try {
+            await db.collection('notifications').add({
+                userId,
+                title,
+                body,
+                data,
+                read: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (error) { console.error('❌ Erreur notification:', error); }
+    }
+
+    function loadNotifications() {
+        if (!currentUser) return;
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+        db.collection('notifications')
+            .where('userId', '==', currentUser.uid)
+            .orderBy('createdAt', 'desc')
+            .limit(20)
+            .onSnapshot(snapshot => {
+                if (snapshot.empty) {
+                    container.innerHTML =
+                        '<div style="text-align:center;color:#888;padding:40px 0;">📭 Aucune notification</div>';
+                    return;
+                }
+                let html = '';
+                let unreadCount = 0;
+                snapshot.forEach(doc => {
+                    const notif = doc.data();
+                    if (!notif.read) unreadCount++;
+                    html += `
+                        <div class="notification-item ${!notif.read ? 'unread' : ''}" onclick="markNotificationRead('${doc.id}')">
+                            <span class="time">${timeAgo(notif.createdAt?.toDate?.() || new Date())}</span>
+                            <div class="title">${notif.title}</div>
+                            <div class="body">${notif.body}</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                const badge = document.getElementById('notifBadge');
+                if (badge) {
+                    badge.textContent = unreadCount;
+                    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+                }
+            });
+    }
+
+    function markNotificationRead(notifId) {
+        db.collection('notifications').doc(notifId).update({ read: true });
+    }
+
+    // ================================================================
+    // 🤖 IA PHOTO (Google Vision)
+    // ================================================================
+    async function analyzeImage(imageFile) {
+        if (!GOOGLE_VISION_API_KEY) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({ isClothing: true, labels: ['robe', 'vêtement', 'mode'], confidence: 0.85,
+                        isSimulation: true });
+                }, 1500);
+            });
+        }
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(imageFile);
+            reader.onload = async () => {
+                const base64Image = reader.result.split(',')[1];
+                try {
+                    const response = await fetch(
+                        `https://vision.googleapis.com/v1/images:annotate?key=${GOOGLE_VISION_API_KEY}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                requests: [{
+                                    image: { content: base64Image },
+                                    features: [{ type: 'LABEL_DETECTION', maxResults: 10 }]
+                                }]
+                            })
+                        });
+                    const data = await response.json();
+                    const labels = data.responses[0]?.labelAnnotations || [];
+                    const clothingLabels = ['clothing', 'dress', 'shirt', 'pants', 'shoes', 'bag', 'jewelry',
+                        'fashion', 'apparel', 'robe', 'jean'
+                    ];
+                    const isClothing = labels.some(label =>
+                        clothingLabels.some(cl => label.description.toLowerCase().includes(cl))
+                    );
+                    resolve({ isClothing, labels: labels.map(l => l.description), confidence: labels[0]?.score ||
+                            0, isSimulation: false });
+                } catch (error) { reject(error); }
+            };
+            reader.onerror = reject;
+        });
+    }
+
+    // ================================================================
+    // 📍 GPS RÉEL
+    // ================================================================
+    function startGPSTracking(orderId) {
+        if (!navigator.geolocation) { showToast('⚠️', 'GPS non supporté'); return; }
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+                showToast('📍', 'GPS activé');
+                updateOrderPosition(orderId, currentPosition);
+                startWatching(orderId);
+            },
+            (error) => { showToast('⚠️', 'Erreur GPS: ' + error.message); }, { enableHighAccuracy: true,
+                timeout: 10000 }
+        );
+    }
+
+    function startWatching(orderId) {
+        if (watchId) navigator.geolocation.clearWatch(watchId);
+        watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                currentPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+                updateOrderPosition(orderId, currentPosition);
+                updateMapDisplay(currentPosition);
+            },
+            (error) => console.error('Erreur suivi:', error), { enableHighAccuracy: true, timeout: 5000 }
+        );
+    }
+
+    async function updateOrderPosition(orderId, position) {
+        try {
+            await db.collection('orders').doc(orderId).update({
+                tracking: { lat: position.lat, lng: position.lng,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp() }
+            });
+        } catch (error) { console.error('Erreur mise à jour GPS:', error); }
+    }
+
+    function stopGPSTracking() {
+        if (watchId) { navigator.geolocation.clearWatch(watchId);
+            watchId = null; }
+        showToast('🛑', 'Suivi GPS arrêté');
+    }
+
+    function updateMapDisplay(position) {
+        const label = document.querySelector('.map-label');
+        if (label) { label.textContent = `🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}`; }
+    }
+
+    function showRealMap(position) {
+        showModal(`
+            <h3>📍 Position en temps réel</h3>
+            <div class="map-placeholder" style="height:300px;position:relative;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:60px;">📍</div>
+                <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:6px 16px;border-radius:20px;font-size:12px;color:#fff;">
+                    🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}
+                </div>
+                <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);padding:4px 10px;border-radius:12px;font-size:10px;color:#4CAF50;">
+                    ● Position réelle GPS
+                </div>
+            </div>
+            <button class="btn-primary" style="margin-top:12px;background:var(--red);" onclick="stopGPSTracking();closeModal();">
+                🛑 Arrêter le suivi
+            </button>
+        `);
+    }
+
+    // ================================================================
     // 🛍️ PRODUITS
     // ================================================================
     function loadProducts(category = 'all') {
         const grid = document.getElementById('productGrid');
         grid.innerHTML =
-        '<div style="grid-column:span 2;text-align:center;color:#888;padding:40px 0;">Chargement...</div>';
-
+            '<div style="grid-column:span 2;text-align:center;color:#888;padding:40px 0;">Chargement...</div>';
         let query = db.collection('products').orderBy('createdAt', 'desc').limit(50);
         if (category !== 'all') {
             query = db.collection('products').where('category', '==', category).orderBy('createdAt', 'desc').limit(50);
         }
-
         query.get().then(snapshot => {
             allProducts = [];
             grid.innerHTML = '';
@@ -1213,12 +1255,15 @@
             });
         }).catch(err => {
             grid.innerHTML =
-            `<div style="grid-column:span 2;text-align:center;color:#888;padding:20px 0;">❌ ${err.message}</div>`;
+                `<div style="grid-column:span 2;text-align:center;color:#888;padding:20px 0;">❌ ${err.message}</div>`;
         });
     }
 
     function createProductCard(p) {
         const img = p.imageUrl || getCategoryEmoji(p.category);
+        const avgRating = p.ratings && p.ratings.length > 0 ?
+            (p.ratings.reduce((a, b) => a + b, 0) / p.ratings.length).toFixed(1) :
+            'N/A';
         return `
             <div class="product-card" onclick="viewProduct('${p.id}')">
                 <div class="p-img">${img}</div>
@@ -1227,8 +1272,9 @@
                     <div class="p-price">${formatPrice(p.price || 0)}</div>
                     <div class="p-seller">
                         <span>👤 ${p.sellerName || 'Vendeur'}</span>
-                        <span class="flame">🔥 ${p.flames || 0}</span>
+                        <span class="flame">🔥 ${p.sellerFlames || 0}</span>
                     </div>
+                    <div class="p-rating">⭐ ${avgRating} ${p.ratings ? '(' + p.ratings.length + ' avis)' : ''}</div>
                     <button class="btn-buy-sm" onclick="event.stopPropagation();addToCart('${p.id}')">🛒 Ajouter</button>
                 </div>
             </div>
@@ -1236,18 +1282,11 @@
     }
 
     function getCategoryEmoji(cat) {
-        const map = {
-            'robes': '👗',
-            'hauts': '👕',
-            'bas': '👖',
-            'chaussures': '👟',
-            'accessoires': '👜',
-            'bijoux': '💍'
-        };
+        const map = { 'robes': '👗', 'hauts': '👕', 'bas': '👖', 'chaussures': '👟', 'accessoires': '👜',
+            'bijoux': '💍' };
         return map[cat] || '👕';
     }
 
-    // Catégorie filter
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.cat-chip').forEach(chip => {
             chip.addEventListener('click', function() {
@@ -1256,6 +1295,8 @@
                 loadProducts(this.dataset.cat);
             });
         });
+        loadProducts();
+        initCarousel();
     });
 
     // ================================================================
@@ -1263,49 +1304,87 @@
     // ================================================================
     function viewProduct(productId) {
         const p = allProducts.find(x => x.id === productId);
-        if (!p) {
-            showToast('❌', 'Article introuvable');
-            return;
-        }
+        if (!p) { showToast('❌', 'Article introuvable'); return; }
         const container = document.getElementById('productDetailContainer');
         const img = p.imageUrl || getCategoryEmoji(p.category);
+        const avgRating = p.ratings && p.ratings.length > 0 ?
+            (p.ratings.reduce((a, b) => a + b, 0) / p.ratings.length).toFixed(1) :
+            'Pas encore d\'avis';
+        const reviewsHtml = p.reviews && p.reviews.length > 0 ?
+            p.reviews.slice(0, 5).map(r =>
+                `<div style="padding:8px 0;border-bottom:1px solid #2a2a2a;">
+                    <div style="display:flex;justify-content:space-between;">
+                        <span style="font-weight:600;color:var(--text,#fff);">${r.userName || 'Anonyme'}</span>
+                        <span>⭐ ${r.rating}/5</span>
+                    </div>
+                    <div style="font-size:13px;color:#aaa;">${r.comment || ''}</div>
+                    <div style="font-size:10px;color:#666;">${r.createdAt ? timeAgo(r.createdAt.toDate()) : ''}</div>
+                </div>`
+            ).join('') :
+            '<div style="color:#888;font-size:13px;">Aucun avis pour le moment</div>';
         container.innerHTML = `
-            <div style="background:#1a1a1a;border-radius:16px;overflow:hidden;margin-bottom:16px;">
+            <div style="background:var(--card,#1a1a1a);border-radius:16px;overflow:hidden;margin-bottom:16px;">
                 <div style="height:280px;display:flex;align-items:center;justify-content:center;font-size:80px;background:#222;">${img}</div>
             </div>
-            <h2 style="font-size:22px;font-weight:800;">${p.name}</h2>
+            <h2 style="font-size:22px;font-weight:800;color:var(--text,#fff);">${p.name}</h2>
             <div style="font-size:28px;font-weight:900;color:var(--yellow);margin:8px 0;">${formatPrice(p.price)}</div>
-            <div style="display:flex;gap:12px;margin:8px 0 16px;">
-                <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;">${p.category || 'Mode'}</span>
-                <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;">🔥 ${p.flames || 0} flames</span>
+            <div style="display:flex;gap:12px;margin:8px 0 16px;flex-wrap:wrap;">
+                <span class="badge-yellow">${p.category || 'Mode'}</span>
+                <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;color:var(--text,#fff);">📏 ${p.size || 'Taille non spécifiée'}</span>
+                <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;color:var(--text,#fff);">📦 ${p.condition || 'État non spécifié'}</span>
+                <span class="flames-display">🔥 ${p.sellerFlames || 0} flammes</span>
             </div>
+            <div style="font-size:14px;color:#aaa;margin-bottom:16px;">${p.description || 'Aucune description disponible.'}</div>
             <div class="glass" style="margin-bottom:16px;">
-                <div style="font-weight:600;margin-bottom:4px;">👤 Vendeur</div>
+                <div style="font-weight:600;margin-bottom:4px;color:var(--text,#fff);">👤 Vendeur</div>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <span>${p.sellerName || 'Vendeur BLK'}</span>
+                    <span style="color:var(--text,#fff);">${p.sellerName || 'Vendeur BLK'} 🔥 ${p.sellerFlames || 0}</span>
                     <button class="btn-primary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="viewSellerProfile('${p.sellerId || ''}')">Voir profil</button>
                 </div>
             </div>
-            <div style="font-size:14px;color:#aaa;margin-bottom:16px;">${p.description || 'Aucune description disponible.'}</div>
-            <div style="display:flex;gap:8px;position:sticky;bottom:0;background:rgba(13,13,13,0.9);padding:12px 0;backdrop-filter:blur(8px);">
-                <button class="btn-primary" style="flex:1;" onclick="addToCart('${p.id}')">🛒 Ajouter au panier</button>
-                <button class="btn-primary" style="flex:1;background:var(--green);box-shadow:0 4px 20px rgba(74,124,89,0.3);" onclick="buyNow('${p.id}')">💳 ACHETER</button>
+            <div style="margin-bottom:16px;">
+                <div style="font-weight:700;margin-bottom:8px;color:var(--text,#fff);">⭐ Avis (${p.ratings ? p.ratings.length : 0})</div>
+                ${reviewsHtml}
+            </div>
+            <div style="display:flex;gap:8px;position:sticky;bottom:0;background:var(--bg, rgba(13,13,13,0.9));padding:12px 0;backdrop-filter:blur(8px);">
+                <button class="btn-primary" style="flex:1;" onclick="addToCart('${p.id}')">🛒 Ajouter</button>
+                <button class="btn-primary btn-success" style="flex:1;" onclick="buyNow('${p.id}')">💳 ACHETER</button>
             </div>
         `;
         showScreen('screen-product');
     }
 
+    function viewSellerProfile(sellerId) {
+        if (!sellerId) { showToast('⚠️', 'Vendeur inconnu'); return; }
+        showToast('👤', 'Chargement du profil vendeur...');
+        db.collection('users').doc(sellerId).get().then(doc => {
+            if (!doc.exists) { showToast('❌', 'Vendeur introuvable'); return; }
+            const seller = doc.data();
+            showModal(`
+                <h3>👤 ${seller.name || 'Vendeur'}</h3>
+                <div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;">
+                    <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;color:var(--text,#fff);">🔥 ${seller.flames || 0} flammes</span>
+                    <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;color:var(--text,#fff);">📍 ${seller.city || 'Congo'}</span>
+                    <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;color:var(--text,#fff);">📱 ${seller.phone || 'Non renseigné'}</span>
+                </div>
+                <p style="color:#aaa;font-size:13px;">📧 ${seller.email || ''}</p>
+                <div style="margin-top:12px;display:flex;gap:8px;">
+                    <button class="btn-primary" style="flex:1;background:var(--yellow);color:#000;" onclick="closeModal();showScreen('screen-chat')">
+                        💬 Contacter
+                    </button>
+                    <button class="btn-primary" style="flex:1;background:transparent;border:1px solid #333;" onclick="closeModal()">Fermer</button>
+                </div>
+            `);
+        });
+    }
+
     // ================================================================
-    // 🛒 PANIER (Firestore)
+    // 🛒 PANIER
     // ================================================================
     function addToCart(productId) {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const p = allProducts.find(x => x.id === productId);
         if (!p) return;
-
         const cartRef = db.collection('carts').doc(currentUser.uid);
         cartRef.get().then(doc => {
             let items = doc.exists ? doc.data().items || [] : [];
@@ -1314,16 +1393,14 @@
                 existing.quantity = (existing.quantity || 1) + 1;
             } else {
                 items.push({ productId, quantity: 1, price: p.price, name: p.name, image: p.imageUrl ||
-                        getCategoryEmoji(p.category) });
+                        getCategoryEmoji(p.category), sellerId: p.sellerId, sellerName: p.sellerName });
             }
             return cartRef.set({ items, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
         }).then(() => {
             showToast('✅', 'Ajouté au panier');
             updateCartBadge();
             renderCart();
-        }).catch(err => {
-            showToast('❌', err.message);
-        });
+        }).catch(err => { showToast('❌', err.message); });
     }
 
     function updateCartBadge() {
@@ -1332,12 +1409,8 @@
             const items = doc.exists ? doc.data().items || [] : [];
             const total = items.reduce((sum, i) => sum + (i.quantity || 1), 0);
             const badge = document.getElementById('cartBadge');
-            if (total > 0) {
-                badge.textContent = total;
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
-            }
+            if (total > 0) { badge.textContent = total;
+                badge.style.display = 'flex'; } else { badge.style.display = 'none'; }
         });
     }
 
@@ -1345,14 +1418,13 @@
         const container = document.getElementById('cartContainer');
         if (!currentUser) {
             container.innerHTML =
-            '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir ton panier</div>';
+                '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir ton panier</div>';
             return;
         }
         db.collection('carts').doc(currentUser.uid).get().then(doc => {
             const items = doc.exists ? doc.data().items || [] : [];
             if (items.length === 0) {
-                container.innerHTML =
-                    '<div style="text-align:center;color:#888;padding:40px 0;">🛒 Panier vide</div>';
+                container.innerHTML = '<div style="text-align:center;color:#888;padding:40px 0;">🛒 Panier vide</div>';
                 return;
             }
             let html = '';
@@ -1365,11 +1437,11 @@
                     <div class="glass" style="margin-bottom:10px;display:flex;gap:12px;align-items:center;">
                         <div style="font-size:32px;">${item.image || '👕'}</div>
                         <div style="flex:1;">
-                            <div style="font-weight:600;">${item.name || 'Article'}</div>
+                            <div style="font-weight:600;color:var(--text,#fff);">${item.name || 'Article'}</div>
                             <div style="font-size:14px;color:var(--yellow);">${formatPrice(price)}</div>
                             <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
                                 <button onclick="updateCartQty(${idx}, -1)" style="background:#2a2a2a;border:none;color:#fff;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;">−</button>
-                                <span style="font-weight:700;min-width:24px;text-align:center;">${qty}</span>
+                                <span style="font-weight:700;min-width:24px;text-align:center;color:var(--text,#fff);">${qty}</span>
                                 <button onclick="updateCartQty(${idx}, 1)" style="background:#2a2a2a;border:none;color:#fff;width:28px;height:28px;border-radius:50%;font-size:16px;cursor:pointer;">+</button>
                                 <button onclick="removeFromCart(${idx})" style="background:var(--red);border:none;color:#fff;padding:2px 10px;border-radius:20px;font-size:11px;cursor:pointer;">✕</button>
                             </div>
@@ -1379,11 +1451,11 @@
             });
             html += `
                 <div class="glass" style="margin-top:8px;">
-                    <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;">
+                    <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;color:var(--text,#fff);">
                         <span>Total</span>
                         <span style="color:var(--yellow);">${formatPrice(total)}</span>
                     </div>
-                    <button class="btn-primary" style="margin-top:12px;background:var(--green);box-shadow:0 4px 20px rgba(74,124,89,0.3);" onclick="goToCheckout()">
+                    <button class="btn-primary btn-success" style="margin-top:12px;" onclick="goToCheckout()">
                         💳 Passer la commande
                     </button>
                 </div>
@@ -1399,16 +1471,10 @@
             const items = doc.exists ? doc.data().items || [] : [];
             if (!items[idx]) return;
             const newQty = (items[idx].quantity || 1) + delta;
-            if (newQty <= 0) {
-                items.splice(idx, 1);
-            } else {
-                items[idx].quantity = newQty;
-            }
+            if (newQty <= 0) { items.splice(idx, 1); } else { items[idx].quantity = newQty; }
             return cartRef.set({ items, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        }).then(() => {
-            renderCart();
-            updateCartBadge();
-        });
+        }).then(() => { renderCart();
+            updateCartBadge(); });
     }
 
     function removeFromCart(idx) {
@@ -1418,169 +1484,236 @@
             const items = doc.exists ? doc.data().items || [] : [];
             items.splice(idx, 1);
             return cartRef.set({ items, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        }).then(() => {
-            renderCart();
+        }).then(() => { renderCart();
             updateCartBadge();
-            showToast('🗑️', 'Article retiré');
-        });
+            showToast('🗑️', 'Article retiré'); });
     }
 
     // ================================================================
     // 💳 CHECKOUT & PAIEMENT
     // ================================================================
     function goToCheckout() {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const container = document.getElementById('checkoutContainer');
-        container.innerHTML = `
-            <div class="glass">
-                <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;">💳 Paiement</h3>
-                <div id="checkoutSummary">Chargement...</div>
-                <div style="margin-top:16px;">
-                    <div class="form-group">
-                        <label>Méthode de paiement</label>
-                        <select id="paymentMethod" style="width:100%;padding:12px;border-radius:12px;background:#111;color:#fff;border:1px solid #2a2a2a;">
-                            <option value="mtn">MTN Mobile Money</option>
-                            <option value="airtel">Airtel Money</option>
-                            <option value="orange">Orange Money</option>
-                            <option value="wallet">Portefeuille BLK</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Numéro de téléphone</label>
-                        <input type="tel" id="paymentPhone" placeholder="+242 06 123 4567" value="${currentUserData?.phone || ''}" />
-                    </div>
-                    <div style="background:#1a1a1a;border-radius:12px;padding:12px;margin:12px 0;">
-                        <div style="display:flex;justify-content:space-between;font-size:14px;">
-                            <span>Commission BLK (3%)</span>
-                            <span style="color:var(--yellow);" id="commissionDisplay">0 FCFA</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin-top:8px;border-top:1px solid #2a2a2a;padding-top:8px;">
-                            <span>Total à payer</span>
-                            <span style="color:var(--yellow);" id="totalDisplay">0 FCFA</span>
-                        </div>
-                    </div>
-                    <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 20px rgba(74,124,89,0.3);" onclick="processPayment()">
-                        💳 Payer maintenant
-                    </button>
-                    <p style="font-size:11px;color:#666;text-align:center;margin-top:8px;">🔒 Paiement sécurisé · Commission 3% prélevée automatiquement</p>
-                </div>
-            </div>
-        `;
-        // Calculer le total du panier
         db.collection('carts').doc(currentUser.uid).get().then(doc => {
             const items = doc.exists ? doc.data().items || [] : [];
             let total = 0;
-            items.forEach(item => {
-                total += (item.price || 0) * (item.quantity || 1);
-            });
-            const commission = Math.round(total * 0.03);
-            const totalWithCommission = total + commission;
-            document.getElementById('commissionDisplay').textContent = formatPrice(commission);
-            document.getElementById('totalDisplay').textContent = formatPrice(totalWithCommission);
-            document.getElementById('checkoutSummary').innerHTML = `
-                <div style="display:flex;justify-content:space-between;font-size:14px;">
-                    <span>Articles (${items.length})</span>
-                    <span>${formatPrice(total)}</span>
+            items.forEach(item => { total += (item.price || 0) * (item.quantity || 1); });
+            const commissionAcheteur = Math.round(total * 0.03);
+            const commissionVendeur = Math.round(total * 0.04);
+            const totalAvecCommission = total + commissionAcheteur;
+            container.innerHTML = `
+                <div class="glass">
+                    <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;color:var(--text,#fff);">💳 Paiement</h3>
+                    <div style="margin-bottom:16px;">
+                        <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text,#fff);">
+                            <span>Total articles (${items.length})</span>
+                            <span>${formatPrice(total)}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;margin-top:4px;">
+                            <span>Commission BLK (3% acheteur)</span>
+                            <span>+ ${formatPrice(commissionAcheteur)}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;">
+                            <span>Commission BLK (4% vendeur)</span>
+                            <span style="color:var(--green);">- ${formatPrice(commissionVendeur)} (sur le vendeur)</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:800;margin-top:8px;border-top:1px solid #2a2a2a;padding-top:8px;color:var(--text,#fff);">
+                            <span>Total à payer</span>
+                            <span style="color:var(--yellow);">${formatPrice(totalAvecCommission)}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>📱 Solde BLK</label>
+                        <div style="background:var(--input,#111);padding:12px;border-radius:12px;font-size:16px;font-weight:700;color:var(--yellow);">
+                            ${formatPrice(currentUserData?.balance || 0)}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>🔑 Code PIN</label>
+                        <input type="password" id="paymentPin" placeholder="Entrez votre code PIN" maxlength="4" class="pin-input" />
+                    </div>
+                    <div style="display:flex;gap:8px;margin:12px 0;">
+                        <button class="btn-primary" style="flex:1;background:var(--yellow);" onclick="depositMoney()">💰 Dépôt</button>
+                        <button class="btn-primary" style="flex:1;background:var(--red);" onclick="withdrawMoney()">💸 Retrait</button>
+                    </div>
+                    <button class="btn-primary btn-success" onclick="processPayment()">💳 Confirmer le paiement</button>
+                    <p style="font-size:11px;color:#666;text-align:center;margin-top:8px;">
+                        🔒 Paiement sécurisé · Commissions: 3% acheteur + 4% vendeur
+                    </p>
                 </div>
             `;
         });
         showScreen('screen-checkout');
     }
 
-    function processPayment() {
-        const method = document.getElementById('paymentMethod').value;
-        const phone = document.getElementById('paymentPhone').value;
-        if (!phone) {
-            showToast('⚠️', 'Numéro de téléphone requis');
+    function depositMoney() {
+        showModal(`
+            <h3>💰 Dépôt</h3>
+            <p style="color:#aaa;margin:8px 0;">Ajoute de l'argent à ton portefeuille BLK</p>
+            <div class="form-group">
+                <label>Montant à déposer</label>
+                <input type="number" id="depositAmount" placeholder="1000" min="100" />
+            </div>
+            <div class="form-group">
+                <label>Numéro de téléphone</label>
+                <input type="tel" id="depositPhone" placeholder="+242 06 123 4567" />
+            </div>
+            <div class="form-group">
+                <label>Code PIN</label>
+                <input type="password" id="depositPin" placeholder="••••" maxlength="4" class="pin-input" />
+            </div>
+            <button class="btn-primary btn-success" onclick="confirmDeposit()">💳 Confirmer le dépôt</button>
+            <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
+        `);
+    }
+
+    function confirmDeposit() {
+        const amount = parseInt(document.getElementById('depositAmount').value);
+        const phone = document.getElementById('depositPhone').value;
+        const pin = document.getElementById('depositPin').value;
+        if (!amount || amount < 100) { showToast('⚠️', 'Montant minimum 100 FCFA'); return; }
+        if (!phone) { showToast('⚠️', 'Numéro requis'); return; }
+        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
+        closeModal();
+        showToast('⏳', 'Traitement du dépôt...');
+        setTimeout(() => {
+            const newBalance = (currentUserData.balance || 0) + amount;
+            db.collection('users').doc(currentUser.uid).update({ balance: newBalance }).then(() => {
+                currentUserData.balance = newBalance;
+                showToast('✅', `Dépôt de ${formatPrice(amount)} effectué !`);
+                loadProfile();
+            }).catch(err => { showToast('❌', err.message); });
+        }, 2000);
+    }
+
+    function withdrawMoney() {
+        if (!currentUserData || (currentUserData.balance || 0) < 100) {
+            showToast('⚠️', 'Solde insuffisant (minimum 100 FCFA)');
             return;
         }
+        showModal(`
+            <h3>💸 Retrait</h3>
+            <p style="color:#aaa;margin:8px 0;">Retire ton solde vers ton compte</p>
+            <div class="form-group">
+                <label>Montant</label>
+                <input type="number" id="withdrawAmount" value="${Math.min(currentUserData.balance, 50000)}" max="${currentUserData.balance}" />
+            </div>
+            <div class="form-group">
+                <label>Numéro de téléphone</label>
+                <input type="tel" id="withdrawPhone" placeholder="+242 06 123 4567" value="${currentUserData?.phone || ''}" />
+            </div>
+            <div class="form-group">
+                <label>Code PIN</label>
+                <input type="password" id="withdrawPin" placeholder="••••" maxlength="4" class="pin-input" />
+            </div>
+            <button class="btn-primary btn-danger" onclick="confirmWithdraw()">💸 Confirmer le retrait</button>
+            <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
+        `);
+    }
 
-        const btn = document.querySelector('#checkoutContainer .btn-primary');
+    function confirmWithdraw() {
+        const amount = parseInt(document.getElementById('withdrawAmount').value);
+        const phone = document.getElementById('withdrawPhone').value;
+        const pin = document.getElementById('withdrawPin').value;
+        if (!amount || amount < 100) { showToast('⚠️', 'Montant minimum 100 FCFA'); return; }
+        if (!phone) { showToast('⚠️', 'Numéro requis'); return; }
+        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
+        if (amount > (currentUserData.balance || 0)) { showToast('⚠️', 'Solde insuffisant'); return; }
+        closeModal();
+        showToast('⏳', 'Traitement du retrait...');
+        setTimeout(() => {
+            const newBalance = (currentUserData.balance || 0) - amount;
+            db.collection('users').doc(currentUser.uid).update({ balance: newBalance }).then(() => {
+                currentUserData.balance = newBalance;
+                showToast('✅', `Retrait de ${formatPrice(amount)} vers ${phone} effectué !`);
+                loadProfile();
+            }).catch(err => { showToast('❌', err.message); });
+        }, 2000);
+    }
+
+    function processPayment() {
+        const pin = document.getElementById('paymentPin').value;
+        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
+        const btn = document.querySelector('#checkoutContainer .btn-success');
         btn.disabled = true;
         btn.textContent = 'Traitement...';
-
-        // 1. Récupérer le panier
         db.collection('carts').doc(currentUser.uid).get().then(async (cartDoc) => {
             const items = cartDoc.exists ? cartDoc.data().items || [] : [];
-            if (items.length === 0) {
-                showToast('⚠️', 'Panier vide');
+            if (items.length === 0) { showToast('⚠️', 'Panier vide'); return; }
+            let total = 0;
+            items.forEach(item => { total += (item.price || 0) * (item.quantity || 1); });
+            const commissionAcheteur = Math.round(total * 0.03);
+            const commissionVendeur = Math.round(total * 0.04);
+            const totalAvecCommission = total + commissionAcheteur;
+            if ((currentUserData.balance || 0) < totalAvecCommission) {
+                showToast('⚠️', 'Solde insuffisant ! Fais un dépôt.');
+                btn.disabled = false;
+                btn.textContent = '💳 Confirmer le paiement';
                 return;
             }
-
-            let total = 0;
-            items.forEach(item => {
-                total += (item.price || 0) * (item.quantity || 1);
-            });
-            const commission = Math.round(total * 0.03);
-            const totalWithCommission = total + commission;
-
-            // 2. Créer la commande dans Firestore
             const orderData = {
                 buyerId: currentUser.uid,
                 buyerName: currentUserData?.name || 'Anonyme',
-                buyerPhone: phone,
+                buyerPhone: currentUserData?.phone || '',
                 items: items,
                 total: total,
-                commission: commission,
-                totalPaid: totalWithCommission,
-                paymentMethod: method,
-                status: 'pending', // pending, paid, shipped, delivered, completed
+                commissionAcheteur: commissionAcheteur,
+                commissionVendeur: commissionVendeur,
+                totalPaid: totalAvecCommission,
+                paymentMethod: 'simulation',
+                status: 'pending',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 deliveryDeadline: new Date(Date.now() + 24 * 60 * 60 * 1000),
-                sellerId: 'vendor_placeholder', // À remplacer par le vrai vendeur
-                tracking: { lat: null, lng: null }
+                sellerId: items[0]?.sellerId || 'unknown',
+                sellerName: items[0]?.sellerName || 'Vendeur',
+                tracking: { lat: null, lng: null },
+                pinVerified: true,
+                delivered: false,
+                comment: null,
+                flameGiven: false
             };
-
+            const newBalance = (currentUserData.balance || 0) - totalAvecCommission;
+            await db.collection('users').doc(currentUser.uid).update({ balance: newBalance });
+            currentUserData.balance = newBalance;
             const orderRef = await db.collection('orders').add(orderData);
-
-            // 3. Simuler paiement (remplacer par API réelle)
-            // Pour l'instant, on simule un paiement réussi
-            await db.collection('orders').doc(orderRef.id).update({
-                status: 'paid',
-                paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-                paymentReference: 'BLK-PAY-' + generateId()
+            await db.collection('commissions').add({
+                orderId: orderRef.id,
+                buyerId: currentUser.uid,
+                sellerId: items[0]?.sellerId || 'unknown',
+                commissionAcheteur: commissionAcheteur,
+                commissionVendeur: commissionVendeur,
+                totalCommission: commissionAcheteur + commissionVendeur,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'collected'
             });
-
-            // 4. Vider le panier
-            await db.collection('carts').doc(currentUser.uid).set({
-                items: [],
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            // 5. Mettre à jour le solde (commission)
-            const userRef = db.collection('users').doc(currentUser.uid);
-            await userRef.update({
-                balance: firebase.firestore.FieldValue.increment(commission)
-            });
-
+            await db.collection('carts').doc(currentUser.uid).set({ items: [],
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+            if (items[0]?.sellerId) {
+                await sendNotification(items[0].sellerId, '📦 Nouvelle commande !',
+                    `${currentUserData?.name || 'Un client'} a commandé ${items.length} article(s)`, { orderId: orderRef
+                        .id, type: 'new_order' }
+                );
+            }
             showToast('🎉', 'Paiement réussi ! Commande #' + orderRef.id.slice(0, 8));
             updateCartBadge();
             showScreen('screen-home');
             loadProducts();
-        }).catch(err => {
-            showToast('❌', 'Erreur: ' + err.message);
-        }).finally(() => {
-            btn.disabled = false;
-            btn.textContent = '💳 Payer maintenant';
-        });
+        }).catch(err => { showToast('❌', 'Erreur: ' + err.message); }).finally(() => { btn.disabled = false;
+            btn.textContent = '💳 Confirmer le paiement'; });
     }
 
     // ================================================================
-    // ⏱️ SUIVI & TIMER (Tracking)
+    // ⏱️ SUIVI & TIMER + GPS
     // ================================================================
     function loadTracking() {
         const container = document.getElementById('trackingContainer');
         if (!currentUser) {
             container.innerHTML =
-            '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir tes commandes</div>';
+                '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir tes commandes</div>';
             return;
         }
-
         container.innerHTML = '<div style="text-align:center;color:#888;padding:20px 0;">Chargement...</div>';
-
         db.collection('orders')
             .where('buyerId', '==', currentUser.uid)
             .orderBy('createdAt', 'desc')
@@ -1601,37 +1734,60 @@
                     const hours = Math.floor(remaining / 3600);
                     const mins = Math.floor((remaining % 3600) / 60);
                     const secs = Math.floor(remaining % 60);
-
-                    const statusMap = {
-                        'pending': '⏳ En attente',
-                        'paid': '✅ Payée',
-                        'shipped': '📦 Expédiée',
-                        'delivered': '🏠 Livrée',
-                        'completed': '🎉 Terminée'
-                    };
+                    const statusMap = { 'pending': '⏳ En attente', 'accepted': '✅ Acceptée',
+                        'shipped': '📦 Expédiée', 'delivered': '🏠 Livrée', 'completed': '🎉 Terminée' };
                     const statusLabel = statusMap[order.status] || order.status;
-
+                    const elapsed = Math.floor((Date.now() - order.createdAt?.toDate?.()?.getTime?.() || 0) /
+                    1000);
+                    const canCancel = elapsed < 12 * 3600 && order.status === 'pending';
+                    const mockLat = -4.2634 + (Math.random() - 0.5) * 0.02;
+                    const mockLng = 15.2429 + (Math.random() - 0.5) * 0.02;
                     html += `
                         <div class="glass" style="margin-bottom:12px;">
                             <div style="display:flex;justify-content:space-between;align-items:center;">
-                                <div style="font-weight:700;">#${order.id.slice(0, 8)}</div>
+                                <div style="font-weight:700;color:var(--text,#fff);">#${order.id.slice(0, 8)}</div>
                                 <span style="font-size:12px;color:${order.status === 'completed' ? 'var(--green)' : 'var(--yellow)'};">${statusLabel}</span>
                             </div>
                             <div style="font-size:13px;color:#aaa;margin:4px 0;">${order.items?.length || 0} articles · ${formatPrice(order.total || 0)}</div>
-                            <div class="timer-box" style="margin-top:8px;padding:10px;">
-                                <div class="time">${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}</div>
-                                <div class="status">⏱️ Délai de livraison</div>
+                            ${order.status !== 'completed' ? `
+                                <div class="timer-box" style="margin-top:8px;padding:10px;">
+                                    <div class="time">${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}</div>
+                                    <div class="status">⏱️ Délai de livraison (24h)</div>
+                                    ${canCancel ? '<div style="font-size:11px;color:var(--red);margin-top:4px;">⚠️ Annulation possible encore ' + Math.floor((12*3600 - elapsed)/3600) + 'h</div>' : ''}
+                                    ${elapsed >= 12*3600 ? '<div style="font-size:11px;color:var(--yellow);margin-top:4px;">🔒 Annulation impossible (délai dépassé)</div>' : ''}
+                                </div>
+                            ` : ''}
+                            <div class="map-placeholder" style="margin-top:8px;height:140px;position:relative;">
+                                <div class="map-pin" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:40px;">📍</div>
+                                <div class="map-label" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:4px 12px;border-radius:20px;font-size:11px;color:#fff;white-space:nowrap;">
+                                    🚚 Distance: ${(Math.random() * 5 + 1).toFixed(1)} km
+                                    ${order.status === 'accepted' || order.status === 'shipped' ? '· Vendeur en route 🟢' : ''}
+                                </div>
+                                <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.5);padding:2px 8px;border-radius:10px;font-size:9px;color:#4CAF50;display:flex;align-items:center;gap:4px;">
+                                    <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4CAF50;animation:pulse 1.5s infinite;"></span>
+                                    En direct
+                                </div>
                             </div>
-                            ${order.status === 'paid' ? `
-                                <button class="btn-primary" style="margin-top:8px;padding:8px;font-size:13px;background:var(--yellow);color:#000;" onclick="trackOrder('${order.id}')">
-                                    📍 Voir la position
-                                </button>
-                            ` : ''}
-                            ${order.status === 'delivered' ? `
-                                <button class="btn-primary" style="margin-top:8px;padding:8px;font-size:13px;background:var(--green);" onclick="confirmDelivery('${order.id}')">
-                                    ✅ Confirmer réception (PIN)
-                                </button>
-                            ` : ''}
+                            <style>
+                                @keyframes pulse { 0% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.3; transform: scale(0.8); } }
+                            </style>
+                            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                                ${order.status === 'accepted' || order.status === 'shipped' ? `
+                                    <button class="btn-primary" style="flex:1;padding:8px;font-size:12px;background:var(--yellow);color:#000;" onclick="trackOrder('${order.id}')">
+                                        📍 Voir position (GPS)
+                                    </button>
+                                ` : ''}
+                                ${order.status === 'delivered' ? `
+                                    <button class="btn-primary btn-success" style="flex:1;padding:8px;font-size:12px;" onclick="confirmDelivery('${order.id}')">
+                                        ✅ J'ai reçu le colis
+                                    </button>
+                                ` : ''}
+                                ${order.status === 'pending' && canCancel ? `
+                                    <button class="btn-primary btn-danger" style="flex:1;padding:8px;font-size:12px;" onclick="cancelOrder('${order.id}')">
+                                        ❌ Annuler
+                                    </button>
+                                ` : ''}
+                            </div>
                         </div>
                     `;
                 });
@@ -1639,91 +1795,128 @@
             })
             .catch(err => {
                 container.innerHTML =
-                `<div style="text-align:center;color:#888;padding:20px 0;">❌ ${err.message}</div>`;
+                    `<div style="text-align:center;color:#888;padding:20px 0;">❌ ${err.message}</div>`;
             });
     }
 
     function trackOrder(orderId) {
-        showToast('📍', 'Simulation de géolocalisation...');
-        // Récupérer la position du vendeur (simulée)
-        const mockLat = -4.2634 + (Math.random() - 0.5) * 0.02;
-        const mockLng = 15.2429 + (Math.random() - 0.5) * 0.02;
-
-        // Mettre à jour Firestore
-        db.collection('orders').doc(orderId).update({
-            tracking: { lat: mockLat, lng: mockLng, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }
-        }).then(() => {
-            showToast('📍', 'Position du vendeur mise à jour !');
-            // Afficher une carte simulée
-            showModal(`
-                <h3>📍 Position du vendeur</h3>
-                <div class="map-placeholder" style="height:200px;margin:12px 0;">
-                    <div style="text-align:center;">
-                        <div style="font-size:48px;">📍</div>
-                        <div style="font-size:12px;color:#888;">Lat: ${mockLat.toFixed(4)}</div>
-                        <div style="font-size:12px;color:#888;">Lng: ${mockLng.toFixed(4)}</div>
-                        <div style="font-size:11px;color:#555;margin-top:8px;">Position simulée (GPS réel bientôt)</div>
-                    </div>
-                </div>
-                <button class="btn-primary" onclick="closeModal()">Fermer</button>
-            `);
-        });
+        startGPSTracking(orderId);
+        setTimeout(() => {
+            if (currentPosition) { showRealMap(currentPosition); } else { showToast('📍', 'Recherche de la position...'); }
+        }, 1000);
     }
 
     function confirmDelivery(orderId) {
-        // Simuler la confirmation PIN (remplacer par vrai système)
         showModal(`
             <h3>✅ Confirmer la réception</h3>
-            <p style="color:#aaa;margin:8px 0;">Entre ton code PIN MTN/Airtel pour valider la réception</p>
-            <div class="form-group">
-                <label>Code PIN</label>
-                <input type="password" id="pinInput" placeholder="••••" maxlength="4" style="text-align:center;font-size:24px;letter-spacing:8px;" />
+            <p style="color:#aaa;margin:8px 0;">As-tu bien reçu le colis ?</p>
+            <div style="margin:12px 0;">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="deliveryCheckbox" />
+                    📦 J'ai bien reçu le colis
+                </label>
             </div>
-            <button class="btn-primary" style="background:var(--green);" onclick="verifyPin('${orderId}')">
-                🔓 Valider la réception
+            <button class="btn-primary btn-success" onclick="verifyDelivery('${orderId}')">
+                ✅ Confirmer
             </button>
             <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
         `);
     }
 
-    function verifyPin(orderId) {
-        const pin = document.getElementById('pinInput').value;
-        if (pin.length !== 4) {
-            showToast('⚠️', 'PIN doit faire 4 chiffres');
-            return;
-        }
+    function verifyDelivery(orderId) {
+        const checked = document.getElementById('deliveryCheckbox').checked;
+        if (!checked) { showToast('⚠️', 'Coche la case pour confirmer'); return; }
         closeModal();
+        db.collection('orders').doc(orderId).update({
+            status: 'completed',
+            delivered: true,
+            deliveredAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            showToast('🎉', 'Réception confirmée !');
+            showModal(`
+                <h3>📝 Donne ton avis</h3>
+                <p style="color:#aaa;margin:8px 0;">Comment s'est passée la transaction ?</p>
+                <div class="form-group">
+                    <label>Commentaire</label>
+                    <textarea id="reviewComment" placeholder="Partage ton expérience..." rows="3"></textarea>
+                </div>
+                <div style="margin:12px 0;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="flameCheckbox" checked />
+                        🔥 Donner une flamme au vendeur
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>Note (1-5)</label>
+                    <select id="reviewRating">
+                        <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                        <option value="4">⭐⭐⭐⭐ - Très bien</option>
+                        <option value="3">⭐⭐⭐ - Bien</option>
+                        <option value="2">⭐⭐ - Moyen</option>
+                        <option value="1">⭐ - Mauvais</option>
+                    </select>
+                </div>
+                <button class="btn-primary btn-success" onclick="submitReview('${orderId}')">
+                    📤 Envoyer
+                </button>
+                <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Passer</button>
+            `);
+        }).catch(err => { showToast('❌', err.message); });
+    }
 
-        // Simuler la validation du PIN
-        showToast('⏳', 'Vérification du PIN...');
-
-        setTimeout(() => {
-            // Mettre à jour la commande
+    function submitReview(orderId) {
+        const comment = document.getElementById('reviewComment').value;
+        const rating = parseInt(document.getElementById('reviewRating').value);
+        const giveFlame = document.getElementById('flameCheckbox').checked;
+        closeModal();
+        showToast('⏳', 'Enregistrement...');
+        db.collection('orders').doc(orderId).get().then(doc => {
+            const order = doc.data();
+            const sellerId = order.sellerId;
+            const productId = order.items && order.items.length > 0 ? order.items[0].productId : null;
+            if (productId) {
+                const productRef = db.collection('products').doc(productId);
+                productRef.update({
+                    ratings: firebase.firestore.FieldValue.arrayUnion(rating),
+                    reviews: firebase.firestore.FieldValue.arrayUnion({
+                        userId: currentUser.uid,
+                        userName: currentUserData?.name || 'Anonyme',
+                        rating: rating,
+                        comment: comment || 'Pas de commentaire',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                }).catch(err => console.error('Erreur avis:', err));
+            }
+            if (giveFlame && sellerId) {
+                db.collection('users').doc(sellerId).update({
+                    flames: firebase.firestore.FieldValue.increment(1)
+                }).catch(err => console.error('Erreur flamme:', err));
+            }
             db.collection('orders').doc(orderId).update({
-                status: 'completed',
-                completedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                pinVerified: true
+                comment: comment || 'Pas de commentaire',
+                rating: rating,
+                flameGiven: giveFlame
             }).then(() => {
-                showToast('🎉', 'Réception confirmée ! Transaction terminée.');
-                // Ajouter des flames au vendeur
-                // Récupérer le sellerId de la commande
-                db.collection('orders').doc(orderId).get().then(doc => {
-                    const order = doc.data();
-                    if (order.sellerId) {
-                        db.collection('users').doc(order.sellerId).update({
-                            flames: firebase.firestore.FieldValue.increment(1)
-                        });
-                    }
-                });
+                showToast('✅', 'Merci pour ton avis !');
                 loadTracking();
-            }).catch(err => {
-                showToast('❌', err.message);
+                loadProfile();
             });
-        }, 2000);
+        }).catch(err => { showToast('❌', err.message); });
+    }
+
+    function cancelOrder(orderId) {
+        if (!confirm('Annuler cette commande ?')) return;
+        db.collection('orders').doc(orderId).update({
+            status: 'cancelled',
+            cancelledAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            showToast('🗑️', 'Commande annulée');
+            loadTracking();
+        }).catch(err => { showToast('❌', err.message); });
     }
 
     // ================================================================
-    // 💬 CHAT TEMPS RÉEL (Firestore)
+    // 💬 CHAT
     // ================================================================
     function loadChat() {
         const container = document.getElementById('chatMessages');
@@ -1732,15 +1925,10 @@
                 '<div style="text-align:center;color:#888;padding:20px;">Connecte-toi pour chatter</div>';
             return;
         }
-
-        // Nettoyer les anciens listeners
         chatListeners.forEach(unsub => unsub());
         chatListeners = [];
-
         container.innerHTML =
-        '<div style="text-align:center;color:#888;padding:10px;">Chargement des messages...</div>';
-
-        // Écouter les messages en temps réel
+            '<div style="text-align:center;color:#888;padding:10px;">Chargement des messages...</div>';
         const unsub = db.collection('messages')
             .where('participants', 'array-contains', currentUser.uid)
             .orderBy('createdAt', 'desc')
@@ -1753,9 +1941,7 @@
                 }
                 let html = '';
                 const messages = [];
-                snapshot.forEach(doc => {
-                    messages.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => { messages.push({ id: doc.id, ...doc.data() }); });
                 messages.reverse();
                 messages.forEach(msg => {
                     const isMe = msg.senderId === currentUser.uid;
@@ -1770,9 +1956,8 @@
                 container.scrollTop = container.scrollHeight;
             }, err => {
                 container.innerHTML =
-                `<div style="text-align:center;color:#888;padding:20px;">❌ ${err.message}</div>`;
+                    `<div style="text-align:center;color:#888;padding:20px;">❌ ${err.message}</div>`;
             });
-
         chatListeners.push(unsub);
     }
 
@@ -1780,14 +1965,8 @@
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
         if (!text) return;
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
-
-        // Envoyer à un destinataire par défaut (admin BLK)
-        const recipientId = 'admin_blk'; // À remplacer par vrai destinataire
-
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
+        const recipientId = 'admin_blk';
         db.collection('messages').add({
             text: text,
             senderId: currentUser.uid,
@@ -1799,9 +1978,195 @@
         }).then(() => {
             input.value = '';
             showToast('✅', 'Message envoyé');
-        }).catch(err => {
-            showToast('❌', err.message);
+        }).catch(err => { showToast('❌', err.message); });
+    }
+
+    // ================================================================
+    // 🏪 MON MAGASIN
+    // ================================================================
+    function loadShop() {
+        const container = document.getElementById('shopContainer');
+        if (!currentUser) {
+            container.innerHTML =
+                '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour gérer ton magasin</div>';
+            return;
+        }
+        container.innerHTML = '<div style="text-align:center;color:#888;padding:20px 0;">Chargement...</div>';
+        db.collection('products').where('sellerId', '==', currentUser.uid).get().then(snapshot => {
+            const count = snapshot.size;
+            container.innerHTML = `
+                <div style="margin-bottom:12px;">
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <div class="stat-card" style="flex:1;min-width:100px;">
+                            <div class="stat-number">${count}</div>
+                            <div class="stat-label">Articles publiés</div>
+                        </div>
+                        <div class="stat-card" style="flex:1;min-width:100px;">
+                            <div class="stat-number">🔥 ${currentUserData?.flames || 0}</div>
+                            <div class="stat-label">Flammes reçues</div>
+                        </div>
+                        <div class="stat-card" style="flex:1;min-width:100px;">
+                            <div class="stat-number">${formatPrice(currentUserData?.balance || 0)}</div>
+                            <div class="stat-label">Solde</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary" style="margin-bottom:16px;" onclick="showScreen('screen-publish')">
+                    ➕ Publier un article
+                </button>
+                <div style="font-weight:700;margin-bottom:8px;color:var(--text,#fff);">📦 Mes articles</div>
+                <div class="product-grid" id="shopProductGrid">
+                    ${count === 0 ? '<div style="grid-column:span 2;text-align:center;color:#888;padding:20px 0;">Aucun article publié</div>' : ''}
+                </div>
+            `;
+            if (count > 0) {
+                const grid = document.getElementById('shopProductGrid');
+                snapshot.forEach(doc => {
+                    const p = { id: doc.id, ...doc.data() };
+                    grid.innerHTML += `
+                        <div class="product-card" onclick="viewProduct('${p.id}')">
+                            <div class="p-img">${p.imageUrl || getCategoryEmoji(p.category)}</div>
+                            <div class="p-body">
+                                <div class="p-name">${p.name || 'Article'}</div>
+                                <div class="p-price">${formatPrice(p.price || 0)}</div>
+                                <button class="btn-buy-sm" style="background:var(--red);" onclick="event.stopPropagation();deleteProduct('${p.id}')">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
         });
+    }
+
+    function deleteProduct(productId) {
+        if (!confirm('Supprimer cet article ?')) return;
+        db.collection('products').doc(productId).delete().then(() => {
+            showToast('🗑️', 'Article supprimé');
+            loadShop();
+        }).catch(err => { showToast('❌', err.message); });
+    }
+
+    // ================================================================
+    // ➕ PUBLIER
+    // ================================================================
+    function showPublishScreen() {
+        const container = document.getElementById('publishContainer');
+        container.innerHTML = `
+            <div class="glass">
+                <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;color:var(--text,#fff);">➕ Publier un article</h3>
+                <form id="publishForm" onsubmit="publishProduct(event)">
+                    <div class="form-group">
+                        <label>📸 Photo de l'article</label>
+                        <input type="file" id="productImage" accept="image/*" onchange="analyzeImageWithAI(this)" />
+                        <div id="imageAnalysisResult" style="margin-top:6px;font-size:12px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>🏷️ Nom de l'article</label>
+                        <input type="text" id="productName" placeholder="ex: Robe Wax" required />
+                    </div>
+                    <div class="form-group">
+                        <label>💰 Prix (FCFA)</label>
+                        <input type="number" id="productPrice" placeholder="15000" required />
+                    </div>
+                    <div class="form-group">
+                        <label>📏 Taille</label>
+                        <select id="productSize">
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M" selected>M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>📦 État</label>
+                        <select id="productCondition">
+                            <option value="Neuf">✨ Neuf (avec étiquette)</option>
+                            <option value="Bon état" selected>👌 Bon état</option>
+                            <option value="Correct">🔄 Correct</option>
+                            <option value="À rénover">🔧 À rénover</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>📂 Catégorie</label>
+                        <select id="productCategory">
+                            <option value="robes">👗 Robes</option>
+                            <option value="hauts">👕 Hauts</option>
+                            <option value="bas">👖 Bas</option>
+                            <option value="chaussures">👟 Chaussures</option>
+                            <option value="accessoires">👜 Accessoires</option>
+                            <option value="bijoux">💍 Bijoux</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Description</label>
+                        <textarea id="productDescription" placeholder="Décris ton article (tissu, couleur, occasion...)" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="publishBtn">
+                        ✅ Publier l'article
+                    </button>
+                </form>
+            </div>
+        `;
+        showScreen('screen-publish');
+    }
+
+    async function analyzeImageWithAI(input) {
+        const result = document.getElementById('imageAnalysisResult');
+        if (!input.files || input.files.length === 0) { result.innerHTML = ''; return; }
+        const file = input.files[0];
+        result.innerHTML = '🔍 Analyse IA en cours...';
+        result.style.color = 'var(--yellow)';
+        try {
+            const analysis = await analyzeImage(file);
+            if (analysis.isClothing) {
+                result.innerHTML = `✅ Vêtement détecté ! (${analysis.labels.slice(0, 3).join(', ')})`;
+                result.style.color = 'var(--green)';
+            } else {
+                result.innerHTML = '🚫 Attention : Cela ne ressemble pas à un vêtement ou accessoire.';
+                result.style.color = 'var(--red)';
+            }
+        } catch (error) {
+            result.innerHTML = '❌ Erreur d\'analyse: ' + error.message;
+            result.style.color = 'var(--red)';
+        }
+    }
+
+    function publishProduct(e) {
+        e.preventDefault();
+        const name = document.getElementById('productName').value;
+        const price = parseInt(document.getElementById('productPrice').value);
+        const size = document.getElementById('productSize').value;
+        const condition = document.getElementById('productCondition').value;
+        const category = document.getElementById('productCategory').value;
+        const description = document.getElementById('productDescription').value;
+        if (!name || !price) { showToast('⚠️', 'Remplis au moins le nom et le prix'); return; }
+        const btn = document.getElementById('publishBtn');
+        btn.disabled = true;
+        btn.textContent = 'Publication...';
+        const productData = {
+            name,
+            price,
+            size,
+            condition,
+            category,
+            description: description || 'Aucune description',
+            sellerId: currentUser.uid,
+            sellerName: currentUserData?.name || 'Vendeur',
+            sellerFlames: currentUserData?.flames || 0,
+            imageUrl: null,
+            ratings: [],
+            reviews: [],
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            available: true
+        };
+        db.collection('products').add(productData).then(() => {
+            showToast('🎉', 'Article publié avec succès !');
+            showScreen('screen-shop');
+            loadShop();
+        }).catch(err => { showToast('❌', err.message); }).finally(() => { btn.disabled = false;
+            btn.textContent = '✅ Publier l\'article'; });
     }
 
     // ================================================================
@@ -1814,186 +2179,71 @@
                 '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir ton profil</div>';
             return;
         }
-
         const data = currentUserData;
-        container.innerHTML = `
-            <div class="glass" style="text-align:center;padding:24px;">
-                <div style="font-size:64px;margin-bottom:8px;">👤</div>
-                <div style="font-size:22px;font-weight:800;">${data.name || 'Utilisateur'}</div>
-                <div style="font-size:13px;color:#888;">${data.email || ''}</div>
-                <div style="font-size:13px;color:#888;">📱 ${data.phone || 'Non renseigné'}</div>
-                <div style="margin-top:8px;display:flex;justify-content:center;gap:16px;">
-                    <span style="background:#2a2a2a;padding:4px 16px;border-radius:20px;font-size:12px;">${data.city || 'Brazzaville'}</span>
-                    <span style="background:#2a2a2a;padding:4px 16px;border-radius:20px;font-size:12px;">🔥 ${data.flames || 0} flames</span>
-                </div>
-                <div style="margin-top:12px;font-size:20px;font-weight:800;color:var(--yellow);">
-                    ${formatPrice(data.balance || 0)}
-                </div>
-                <div style="font-size:11px;color:#888;">Solde BLK</div>
-            </div>
-
-            <div style="display:flex;gap:8px;margin:12px 0;">
-                <button class="btn-primary" style="flex:1;padding:10px;font-size:13px;" onclick="showToast('💳','Fonction dépôt bientôt disponible')">
-                    💰 Dépôt
-                </button>
-                <button class="btn-primary" style="flex:1;padding:10px;font-size:13px;background:var(--red);box-shadow:0 4px 20px rgba(200,40,40,0.3);" onclick="requestWithdraw()">
-                    💸 Retrait
-                </button>
-            </div>
-
-            <div class="glass" style="margin-top:12px;">
-                <div style="font-weight:700;margin-bottom:8px;">📊 Mes stats</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                    <div style="background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:800;color:var(--yellow);" id="statsOrders">0</div>
-                        <div style="font-size:11px;color:#888;">Commandes</div>
-                    </div>
-                    <div style="background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:800;color:#ff6b00;" id="statsFlames">${data.flames || 0}</div>
-                        <div style="font-size:11px;color:#888;">Flames reçues</div>
-                    </div>
-                    <div style="background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:800;color:var(--green);" id="statsProducts">0</div>
-                        <div style="font-size:11px;color:#888;">Articles publiés</div>
-                    </div>
-                    <div style="background:#1a1a1a;padding:10px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:800;color:var(--yellow);" id="statsCommission">0</div>
-                        <div style="font-size:11px;color:#888;">Commission générée</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top:12px;">
-                <button class="btn-primary" style="background:transparent;border:1px solid #333;color:#888;" onclick="showScreen('screen-home')">
-                    🏠 Retour à l'accueil
-                </button>
-            </div>
-        `;
-
-        // Charger les stats réelles
-        loadUserStats();
-    }
-
-    function loadUserStats() {
-        if (!currentUser) return;
-        // Commandes
+        let stats = { orders: 0, sales: 0, weekSales: 0, monthSales: 0, yearSales: 0, totalSales: 0 };
         db.collection('orders').where('buyerId', '==', currentUser.uid).get().then(snapshot => {
-            document.getElementById('statsOrders').textContent = snapshot.size || 0;
-            let totalCommission = 0;
-            snapshot.forEach(doc => {
-                const order = doc.data();
-                totalCommission += order.commission || 0;
+            stats.orders = snapshot.size;
+            db.collection('orders').where('sellerId', '==', currentUser.uid).get().then(sellerSnapshot => {
+                stats.sales = sellerSnapshot.size;
+                const now = new Date();
+                const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+                sellerSnapshot.forEach(doc => {
+                    const order = doc.data();
+                    const date = order.createdAt?.toDate?.() || new Date();
+                    if (date > weekAgo) stats.weekSales++;
+                    if (date > monthAgo) stats.monthSales++;
+                    if (date > yearAgo) stats.yearSales++;
+                    stats.totalSales++;
+                });
+                container.innerHTML = `
+                    <div class="glass" style="text-align:center;padding:24px;">
+                        <div style="font-size:64px;margin-bottom:8px;">👤</div>
+                        <div style="font-size:22px;font-weight:800;color:var(--text,#fff);">${data.name || 'Utilisateur'}</div>
+                        <div style="font-size:13px;color:#888;">${data.email || ''}</div>
+                        <div style="font-size:13px;color:#888;">📱 ${data.phone || 'Non renseigné'}</div>
+                        <div style="margin-top:8px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+                            <span style="background:#2a2a2a;padding:4px 16px;border-radius:20px;font-size:12px;color:var(--text,#fff);">${data.city || 'Brazzaville'}</span>
+                            <span style="background:#2a2a2a;padding:4px 16px;border-radius:20px;font-size:12px;color:var(--text,#fff);">🔥 ${data.flames || 0} flammes</span>
+                        </div>
+                        <div style="margin-top:12px;font-size:20px;font-weight:800;color:var(--yellow);">
+                            ${formatPrice(data.balance || 0)}
+                        </div>
+                        <div style="font-size:11px;color:#888;">Solde BLK</div>
+                    </div>
+                    <div style="display:flex;gap:8px;margin:12px 0;">
+                        <button class="btn-primary" style="flex:1;padding:10px;font-size:13px;" onclick="depositMoney()">💰 Dépôt</button>
+                        <button class="btn-primary" style="flex:1;padding:10px;font-size:13px;background:var(--red);" onclick="withdrawMoney()">💸 Retrait</button>
+                    </div>
+                    <div class="glass" style="margin-top:12px;">
+                        <div style="font-weight:700;margin-bottom:8px;color:var(--text,#fff);">📊 Mes statistiques</div>
+                        <div class="stat-grid">
+                            <div class="stat-card"><div class="stat-number">${stats.orders}</div><div class="stat-label">Commandes</div></div>
+                            <div class="stat-card"><div class="stat-number">${stats.sales}</div><div class="stat-label">Ventes</div></div>
+                            <div class="stat-card"><div class="stat-number">${stats.weekSales}</div><div class="stat-label">Cette semaine</div></div>
+                            <div class="stat-card"><div class="stat-number">${stats.monthSales}</div><div class="stat-label">Ce mois</div></div>
+                            <div class="stat-card"><div class="stat-number">${stats.yearSales}</div><div class="stat-label">Cette année</div></div>
+                            <div class="stat-card"><div class="stat-number">${stats.totalSales}</div><div class="stat-label">Depuis l'ouverture</div></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:12px;">
+                        <button class="btn-primary" style="background:var(--yellow);color:#000;" onclick="showScreen('screen-shop')">
+                            🏪 Mon Magasin
+                        </button>
+                    </div>
+                `;
             });
-            document.getElementById('statsCommission').textContent = formatPrice(totalCommission);
-        });
-        // Produits publiés
-        db.collection('products').where('sellerId', '==', currentUser.uid).get().then(snapshot => {
-            document.getElementById('statsProducts').textContent = snapshot.size || 0;
-        });
-    }
-
-    function requestWithdraw() {
-        if (!currentUserData || currentUserData.balance < 100) {
-            showToast('⚠️', 'Solde insuffisant (minimum 100 FCFA)');
-            return;
-        }
-        showModal(`
-            <h3>💸 Retrait</h3>
-            <p style="color:#aaa;margin:8px 0;">Retire ton solde vers Mobile Money</p>
-            <div class="form-group">
-                <label>Montant</label>
-                <input type="number" id="withdrawAmount" value="${Math.min(currentUserData.balance, 50000)}" max="${currentUserData.balance}" />
-            </div>
-            <div class="form-group">
-                <label>Numéro Mobile Money</label>
-                <input type="tel" id="withdrawPhone" placeholder="+242 06 123 4567" value="${currentUserData?.phone || ''}" />
-            </div>
-            <button class="btn-primary" style="background:var(--red);" onclick="processWithdraw()">
-                💸 Demander le retrait
-            </button>
-            <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
-        `);
-    }
-
-    function processWithdraw() {
-        const amount = parseInt(document.getElementById('withdrawAmount').value);
-        const phone = document.getElementById('withdrawPhone').value;
-        if (!amount || amount < 100) {
-            showToast('⚠️', 'Montant minimum 100 FCFA');
-            return;
-        }
-        if (!phone) {
-            showToast('⚠️', 'Numéro de téléphone requis');
-            return;
-        }
-        if (amount > (currentUserData.balance || 0)) {
-            showToast('⚠️', 'Solde insuffisant');
-            return;
-        }
-
-        closeModal();
-        showToast('⏳', 'Traitement du retrait...');
-
-        // Simuler le retrait
-        setTimeout(() => {
-            const newBalance = (currentUserData.balance || 0) - amount;
-            db.collection('users').doc(currentUser.uid).update({
-                balance: newBalance
-            }).then(() => {
-                currentUserData.balance = newBalance;
-                showToast('✅', `Retrait de ${formatPrice(amount)} vers ${phone} effectué !`);
-                loadProfile();
-            }).catch(err => {
-                showToast('❌', err.message);
-            });
-        }, 2000);
-    }
-
-    // ================================================================
-    // 🏠 PROFIL VENDEUR
-    // ================================================================
-    function viewSellerProfile(sellerId) {
-        if (!sellerId) {
-            showToast('⚠️', 'Vendeur inconnu');
-            return;
-        }
-        showToast('👤', 'Chargement du profil vendeur...');
-        db.collection('users').doc(sellerId).get().then(doc => {
-            if (!doc.exists) {
-                showToast('❌', 'Vendeur introuvable');
-                return;
-            }
-            const seller = doc.data();
-            showModal(`
-                <h3>👤 ${seller.name || 'Vendeur'}</h3>
-                <div style="display:flex;gap:12px;margin:8px 0;">
-                    <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;">🔥 ${seller.flames || 0} flames</span>
-                    <span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:12px;">${seller.city || 'Congo'}</span>
-                </div>
-                <p style="color:#aaa;font-size:13px;">📱 ${seller.phone || 'Non renseigné'}</p>
-                <p style="color:#aaa;font-size:13px;">📧 ${seller.email || ''}</p>
-                <div style="margin-top:12px;">
-                    <button class="btn-primary" style="background:var(--yellow);color:#000;" onclick="closeModal();showScreen('screen-chat')">
-                        💬 Contacter
-                    </button>
-                </div>
-                <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Fermer</button>
-            `);
         });
     }
 
     // ================================================================
-    // 🚀 ACHAT DIRECT (Buy Now)
+    // 🚀 ACHAT DIRECT
     // ================================================================
     function buyNow(productId) {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const p = allProducts.find(x => x.id === productId);
         if (!p) return;
-
-        // Ajouter au panier et aller au checkout
         const cartRef = db.collection('carts').doc(currentUser.uid);
         cartRef.get().then(doc => {
             let items = doc.exists ? doc.data().items || [] : [];
@@ -2002,7 +2252,7 @@
                 existing.quantity = (existing.quantity || 1) + 1;
             } else {
                 items.push({ productId, quantity: 1, price: p.price, name: p.name, image: p.imageUrl ||
-                        getCategoryEmoji(p.category) });
+                        getCategoryEmoji(p.category), sellerId: p.sellerId, sellerName: p.sellerName });
             }
             return cartRef.set({ items, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
         }).then(() => {
@@ -2012,7 +2262,7 @@
     }
 
     // ================================================================
-    // 🎬 CAROUSEL AUTO
+    // 🎬 CAROUSEL
     // ================================================================
     function initCarousel() {
         const slides = document.querySelectorAll('.carousel-slide');
@@ -2030,7 +2280,6 @@
             showSlide(current);
         }, 5000);
 
-        // Click dots to navigate
         dots.forEach((dot, i) => {
             dot.addEventListener('click', () => {
                 current = i;
@@ -2044,42 +2293,9 @@
         });
     }
 
-    // ================================================================
-    // 🚀 INIT
-    // ================================================================
-    document.addEventListener('DOMContentLoaded', () => {
-        initCarousel();
-
-        // Check auth state
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                currentUser = user;
-                db.collection('users').doc(user.uid).get().then(doc => {
-                    if (doc.exists) {
-                        currentUserData = doc.data();
-                        if (!document.querySelector('.screen.active')?.id === 'screen-login') {
-                            showScreen('screen-home');
-                            loadProducts();
-                        }
-                    }
-                });
-                updateCartBadge();
-            }
-        });
-
-        // Load products on home
-        loadProducts();
-    });
-
-    // ================================================================
-    // 🛡️ ANTI-PIRATAGE : empêcher les injections XSS
-    // ================================================================
-    // Les templates sont sécurisés par l'utilisation de textContent
-    // et les innerHTML sont contrôlés (pas d'inputs utilisateur direct)
-
-    console.log('🇨🇬 BLK Marketplace v2.0 — Fièrement Congolais');
-    console.log('🔥 Toutes les fonctionnalités sont RÉELLES !');
-    console.log('📱 Prêt pour Vercel : blk-marketplace.vercel.app');
+    console.log('🇨🇬 BLK Marketplace v3.0 — Fièrement Congolais');
+    console.log('🔥 Application prête à être utilisée !');
+    console.log('📱 https://blk-marketplace.vercel.app');
 </script>
 </body>
 </html>
