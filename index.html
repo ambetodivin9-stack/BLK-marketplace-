@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>BLK - La mode seconde main au Congo</title>
 
-<!-- ====== PWA (Manifest intégré) ====== -->
+<!-- PWA -->
 <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkJMSyBNYXJrZXRwbGFjZSIsCiAgInNob3J0X25hbWUiOiAiQkxLIiwKICAiZGVzY3JpcHRpb24iOiAiTGEgbW9kZSBzZWNvbmRlIG1haW4gYXUgQ29uZ28iLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMEQwRDBEIiwKICAidGhlbWVfY29sb3IiOiAiI0U2QTAxRSIsCiAgImNhdGVnb3JpZXMiOiBbInNob3BwaW5nIiwgImZhc2hpb24iLCAibWFya2V0cGxhY2UiXSwKICAibGFuZyI6ICJmciIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nOTAnPvCfjpc8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==" />
 <meta name="theme-color" content="#E6A01E" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -14,426 +14,841 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>" />
 
-<!-- ====== SERVICE WORKER (généré automatiquement) ====== -->
-<script>
-    // ================================================================
-    // 🔧 SERVICE WORKER INTÉGRÉ
-    // ================================================================
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            // Générer le Service Worker dynamiquement
-            const swCode = `
-                const CACHE_NAME = 'blk-v3.0';
-                const OFFLINE_URL = '/';
-                const urlsToCache = [
-                    '/',
-                    '/index.html',
-                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
-                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js',
-                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js',
-                    'https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js'
-                ];
-                self.addEventListener('install', event => {
-                    event.waitUntil(
-                        caches.open(CACHE_NAME)
-                            .then(cache => cache.addAll(urlsToCache))
-                            .then(() => self.skipWaiting())
-                    );
-                });
-                self.addEventListener('activate', event => {
-                    event.waitUntil(
-                        caches.keys().then(cacheNames => {
-                            return Promise.all(
-                                cacheNames.map(cacheName => {
-                                    if (cacheName !== CACHE_NAME) {
-                                        return caches.delete(cacheName);
-                                    }
-                                })
-                            );
-                        })
-                    );
-                    return self.clients.claim();
-                });
-                self.addEventListener('fetch', event => {
-                    event.respondWith(
-                        caches.match(event.request)
-                            .then(response => response || fetch(event.request))
-                            .catch(() => {
-                                if (event.request.mode === 'navigate') {
-                                    return caches.match(OFFLINE_URL);
-                                }
-                                return new Response('Hors ligne', {
-                                    status: 503,
-                                    statusText: 'Service Unavailable'
-                                });
-                            })
-                    );
-                });
-                self.addEventListener('push', event => {
-                    const data = event.data ? event.data.json() : { title: 'BLK', body: 'Nouvelle notification' };
-                    const options = {
-                        body: data.body || 'BLK Marketplace',
-                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
-                        badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
-                        vibrate: [200, 100, 200],
-                        data: { url: data.url || '/' },
-                        actions: [
-                            { action: 'open', title: '📱 Ouvrir' },
-                            { action: 'close', title: '❌ Fermer' }
-                        ]
-                    };
-                    event.waitUntil(
-                        self.registration.showNotification(data.title || 'BLK', options)
-                    );
-                });
-                self.addEventListener('notificationclick', event => {
-                    event.notification.close();
-                    if (event.action === 'open') {
-                        event.waitUntil(
-                            clients.openWindow(event.notification.data.url || '/')
-                        );
-                    }
-                });
-                self.addEventListener('message', event => {
-                    if (event.data && event.data.type === 'showNotification') {
-                        const { title, body, icon, orderId } = event.data;
-                        self.registration.showNotification(title, {
-                            body: body,
-                            icon: icon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
-                            badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">👗</text></svg>',
-                            vibrate: [200, 100, 200],
-                            data: { orderId, url: '/' },
-                            actions: [
-                                { action: 'open', title: '📱 Voir' },
-                                { action: 'close', title: '❌ Fermer' }
-                            ]
-                        });
-                    }
-                });
-            `;
-
-            // Créer un blob et enregistrer le Service Worker
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-            
-            navigator.serviceWorker.register(swUrl)
-                .then(reg => {
-                    console.log('✅ Service Worker enregistré');
-                    // Nettoyer l'URL blob après enregistrement
-                    setTimeout(() => URL.revokeObjectURL(swUrl), 1000);
-                })
-                .catch(err => {
-                    console.log('❌ SW erreur:', err);
-                    // Fallback: essayer avec un fichier sw.js classique
-                    navigator.serviceWorker.register('/sw.js')
-                        .then(reg => console.log('✅ SW avec fichier classique'))
-                        .catch(err => console.log('❌ SW fallback échoué:', err));
-                });
-        });
-    }
-</script>
-
-<!-- ====== STYLES ====== -->
 <style>
     /* ====== ROOT ====== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
     :root {
-        --black: #0D0D0D; --dark: #1a1a1a; --yellow: #E6A01E;
-        --green: #4A7C59; --red: #C82828; --white: #F5F0E8;
-        --glass: rgba(255,255,255,0.08); --glass-border: rgba(255,255,255,0.12);
-        --shadow: 0 8px 32px rgba(0,0,0,0.6); --radius: 16px;
+        --black: #0D0D0D;
+        --dark: #1a1a1a;
+        --yellow: #E6A01E;
+        --green: #4A7C59;
+        --red: #C82828;
+        --white: #F5F0E8;
+        --glass: rgba(255, 255, 255, 0.08);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        --radius: 16px;
         --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    .theme-clair { --bg: #f5f0e8; --text: #0D0D0D; --card: #ffffff; --input: #e8e4dc; }
-    .theme-sombre { --bg: #0D0D0D; --text: #F5F0E8; --card: #1a1a1a; --input: #2a2a2a; }
-    html, body {
-        background: var(--bg, #0D0D0D); color: var(--text, #F5F0E8);
-        font-family: var(--font); min-height: 100vh;
-        display: flex; justify-content: center; padding: 0; margin: 0;
+    .theme-clair {
+        --bg: #f5f0e8;
+        --text: #0D0D0D;
+        --card: #ffffff;
+        --input: #e8e4dc;
+    }
+    .theme-sombre {
+        --bg: #0D0D0D;
+        --text: #F5F0E8;
+        --card: #1a1a1a;
+        --input: #2a2a2a;
+    }
+    html,
+    body {
+        background: var(--bg, #0D0D0D);
+        color: var(--text, #F5F0E8);
+        font-family: var(--font);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
         transition: background 0.3s, color 0.3s;
     }
     #app {
-        width: 100%; max-width: 390px; min-height: 100vh;
-        background: var(--bg, #0D0D0D); position: relative;
-        display: flex; flex-direction: column;
-        box-shadow: 0 0 60px rgba(0,0,0,0.9); transition: background 0.3s;
+        width: 100%;
+        max-width: 390px;
+        min-height: 100vh;
+        background: var(--bg, #0D0D0D);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+        transition: background 0.3s;
     }
+    /* ====== KENTE ====== */
     .kente {
-        height: 4px; flex-shrink: 0;
+        height: 4px;
+        flex-shrink: 0;
         background: repeating-linear-gradient(90deg,
-            var(--red) 0 20px, var(--yellow) 20px 40px,
-            var(--green) 40px 60px, var(--black) 60px 80px);
+                var(--red) 0 20px,
+                var(--yellow) 20px 40px,
+                var(--green) 40px 60px,
+                var(--black) 60px 80px);
     }
-    .screen { display: none !important; flex-direction: column; flex: 1; padding-bottom: 80px; }
-    .screen.active { display: flex !important; }
-    .scroll { flex: 1; overflow-y: auto; padding: 0 16px 20px; scroll-behavior: smooth; }
-    .scroll::-webkit-scrollbar { width: 3px; }
-    .scroll::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 10px; }
+    /* ====== SCREENS ====== */
+    .screen {
+        display: none !important;
+        flex-direction: column;
+        flex: 1;
+        padding-bottom: 80px;
+    }
+    .screen.active {
+        display: flex !important;
+    }
+    .scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 16px 20px;
+        scroll-behavior: smooth;
+    }
+    .scroll::-webkit-scrollbar {
+        width: 3px;
+    }
+    .scroll::-webkit-scrollbar-thumb {
+        background: var(--yellow);
+        border-radius: 10px;
+    }
+    /* ====== GLASS ====== */
     .glass {
-        background: var(--glass); backdrop-filter: blur(12px);
+        background: var(--glass);
+        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--glass-border); border-radius: var(--radius);
-        padding: 16px; box-shadow: var(--shadow);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius);
+        padding: 16px;
+        box-shadow: var(--shadow);
     }
+    /* ====== TOPBAR ====== */
     .topbar {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 12px 16px 8px; flex-shrink: 0; position: sticky; top: 0; z-index: 10;
-        background: rgba(13,13,13,0.85); backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px 8px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(13, 13, 13, 0.85);
+        backdrop-filter: blur(8px);
     }
     .topbar .logo {
-        font-size: 22px; font-weight: 900; letter-spacing: 1px;
-        color: var(--text, #fff); display: flex; align-items: center; gap: 6px;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: var(--text, #fff);
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
-    .topbar .logo .logo-icon { font-size: 24px; }
-    .topbar .logo span { color: var(--yellow); }
-    .topbar-actions { display: flex; gap: 14px; align-items: center; }
+    .topbar .logo .logo-icon {
+        font-size: 24px;
+    }
+    .topbar .logo span {
+        color: var(--yellow);
+    }
+    .topbar-actions {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
     .topbar-actions button {
-        background: none; border: none; color: var(--text, #fff);
-        font-size: 20px; cursor: pointer; position: relative;
+        background: none;
+        border: none;
+        color: var(--text, #fff);
+        font-size: 20px;
+        cursor: pointer;
+        position: relative;
     }
     .badge {
-        position: absolute; top: -6px; right: -8px; background: var(--red);
-        color: #fff; font-size: 9px; font-weight: 700; border-radius: 50%;
-        width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+        position: absolute;
+        top: -6px;
+        right: -8px;
+        background: var(--red);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+    /* ====== BOTTOM NAV ====== */
     .bottom-nav {
-        position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-        width: 100%; max-width: 390px; background: rgba(13,13,13,0.96);
-        backdrop-filter: blur(12px); border-top: 1px solid #222;
-        display: flex; justify-content: space-around; padding: 6px 0 12px; z-index: 100;
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 390px;
+        background: rgba(13, 13, 13, 0.96);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid #222;
+        display: flex;
+        justify-content: space-around;
+        padding: 6px 0 12px;
+        z-index: 100;
     }
     .nav-item {
-        background: none; border: none; color: #666; font-size: 10px;
-        font-weight: 600; display: flex; flex-direction: column;
-        align-items: center; gap: 2px; cursor: pointer; padding: 4px 12px;
-        transition: 0.2s; font-family: var(--font);
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 10px;
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        cursor: pointer;
+        padding: 4px 12px;
+        transition: 0.2s;
+        font-family: var(--font);
     }
-    .nav-item .nav-icon { font-size: 22px; line-height: 1; }
-    .nav-item.active { color: var(--yellow); }
+    .nav-item .nav-icon {
+        font-size: 22px;
+        line-height: 1;
+    }
+    .nav-item.active {
+        color: var(--yellow);
+    }
+    /* ====== CAROUSEL ====== */
     .carousel {
-        position: relative; height: 200px; border-radius: var(--radius);
-        overflow: hidden; margin: 8px 0 16px;
+        position: relative;
+        height: 200px;
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin: 8px 0 16px;
     }
     .carousel-slide {
-        position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease;
-        background-size: cover; background-position: center;
-        display: flex; align-items: center; justify-content: center;
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .carousel-slide.active { opacity: 1; }
+    .carousel-slide.active {
+        opacity: 1;
+    }
     .carousel-overlay {
-        position: absolute; inset: 0; background: rgba(0,0,0,0.4);
-        display: flex; flex-direction: column; align-items: center;
-        justify-content: center; text-align: center; padding: 20px;
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
     }
-    .carousel-overlay h2 { font-size: 28px; font-weight: 900; text-shadow: 0 2px 20px rgba(0,0,0,0.8); color: #fff; }
-    .carousel-overlay p { font-size: 14px; opacity: 0.9; margin-top: 6px; color: #fff; }
+    .carousel-overlay h2 {
+        font-size: 28px;
+        font-weight: 900;
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        color: #fff;
+    }
+    .carousel-overlay p {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-top: 6px;
+        color: #fff;
+    }
     .carousel-dots {
-        position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-        display: flex; gap: 8px;
+        position: absolute;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
     }
     .carousel-dots span {
-        width: 8px; height: 8px; border-radius: 50%;
-        background: rgba(255,255,255,0.3); transition: 0.3s; cursor: pointer;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: 0.3s;
+        cursor: pointer;
     }
-    .carousel-dots span.active { background: var(--yellow); width: 24px; border-radius: 4px; }
+    .carousel-dots span.active {
+        background: var(--yellow);
+        width: 24px;
+        border-radius: 4px;
+    }
+    /* ====== CATÉGORIES ====== */
     .cats-scroll {
-        display: flex; gap: 10px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 4px 0 12px;
+        scrollbar-width: none;
     }
-    .cats-scroll::-webkit-scrollbar { display: none; }
+    .cats-scroll::-webkit-scrollbar {
+        display: none;
+    }
     .cat-chip {
-        flex-shrink: 0; background: var(--glass); backdrop-filter: blur(4px);
-        border: 1px solid var(--glass-border); border-radius: 30px;
-        padding: 8px 18px; font-size: 13px; font-weight: 600;
-        color: var(--text, #fff); cursor: pointer; transition: 0.2s;
-        display: flex; align-items: center; gap: 6px;
+        flex-shrink: 0;
+        background: var(--glass);
+        backdrop-filter: blur(4px);
+        border: 1px solid var(--glass-border);
+        border-radius: 30px;
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text, #fff);
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
-    .cat-chip:hover, .cat-chip.active { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+    .cat-chip:hover,
+    .cat-chip.active {
+        background: var(--yellow);
+        color: var(--black);
+        border-color: var(--yellow);
+    }
+    /* ====== PRODUCT GRID ====== */
     .product-grid {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 8px;
     }
     .product-card {
-        background: var(--card, #1a1a1a); border-radius: var(--radius);
-        overflow: hidden; cursor: pointer; transition: 0.2s; border: 1px solid #222;
+        background: var(--card, #1a1a1a);
+        border-radius: var(--radius);
+        overflow: hidden;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 1px solid #222;
     }
-    .product-card:hover { transform: translateY(-2px); border-color: var(--yellow); }
+    .product-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--yellow);
+    }
     .product-card .p-img {
-        height: 140px; background: #222; display: flex;
-        align-items: center; justify-content: center; font-size: 48px;
+        height: 140px;
+        background: #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
     }
-    .product-card .p-body { padding: 10px 12px 14px; }
+    .product-card .p-body {
+        padding: 10px 12px 14px;
+    }
     .product-card .p-name {
-        font-size: 13px; font-weight: 600; color: var(--text, #fff);
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text, #fff);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    .product-card .p-price { font-size: 16px; font-weight: 800; color: var(--yellow); margin: 4px 0 6px; }
-    .product-card .p-seller { font-size: 11px; color: #888; display: flex; align-items: center; gap: 4px; }
-    .product-card .p-seller .flame { color: #ff6b00; }
-    .product-card .p-rating { font-size: 12px; color: #888; margin-top: 2px; }
+    .product-card .p-price {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--yellow);
+        margin: 4px 0 6px;
+    }
+    .product-card .p-seller {
+        font-size: 11px;
+        color: #888;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .product-card .p-seller .flame {
+        color: #ff6b00;
+    }
+    .product-card .p-rating {
+        font-size: 12px;
+        color: #888;
+        margin-top: 2px;
+    }
     .btn-buy-sm {
-        width: 100%; padding: 8px; border: none; border-radius: 10px;
-        background: var(--green); color: #fff; font-weight: 700; font-size: 13px;
-        cursor: pointer; margin-top: 6px; transition: 0.2s;
-    }
-    .btn-buy-sm:hover { background: #3a9b5a; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label {
-        display: block; font-size: 11px; font-weight: 700;
-        letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 4px;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-        width: 100%; padding: 12px 14px; border-radius: 12px;
-        border: 1.5px solid #2a2a2a; background: var(--input, #111);
-        color: var(--text, #fff); font-size: 14px; font-family: var(--font);
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 10px;
+        background: var(--green);
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        margin-top: 6px;
         transition: 0.2s;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-        border-color: var(--yellow); outline: none; background: var(--input, #181818);
+    .btn-buy-sm:hover {
+        background: #3a9b5a;
     }
-    .form-group textarea { resize: vertical; min-height: 80px; }
+    /* ====== FORM ====== */
+    .form-group {
+        margin-bottom: 14px;
+    }
+    .form-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 4px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1.5px solid #2a2a2a;
+        background: var(--input, #111);
+        color: var(--text, #fff);
+        font-size: 14px;
+        font-family: var(--font);
+        transition: 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--yellow);
+        outline: none;
+        background: var(--input, #181818);
+    }
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
     .btn-primary {
-        width: 100%; padding: 14px; border: none; border-radius: 14px;
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 14px;
         background: linear-gradient(135deg, var(--yellow), #c8880a);
-        color: var(--black); font-weight: 800; font-size: 16px;
-        cursor: pointer; transition: 0.2s;
-        box-shadow: 0 4px 20px rgba(230,160,30,0.3);
+        color: var(--black);
+        font-weight: 800;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 4px 20px rgba(230, 160, 30, 0.3);
     }
-    .btn-primary:hover { transform: scale(1.01); }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-    .btn-danger { background: var(--red); color: #fff; box-shadow: 0 4px 20px rgba(200,40,40,0.3); }
-    .btn-outline { background: transparent; border: 1.5px solid var(--glass-border); color: var(--text, #fff); }
-    .btn-success { background: var(--green); color: #fff; box-shadow: 0 4px 20px rgba(74,124,89,0.3); }
+    .btn-primary:hover {
+        transform: scale(1.01);
+    }
+    .btn-primary:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+    }
+    .btn-danger {
+        background: var(--red);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(200, 40, 40, 0.3);
+    }
+    .btn-outline {
+        background: transparent;
+        border: 1.5px solid var(--glass-border);
+        color: var(--text, #fff);
+    }
+    .btn-success {
+        background: var(--green);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(74, 124, 89, 0.3);
+    }
+    /* ====== TIMER ====== */
     .timer-box {
-        background: var(--card, #1a1a1a); border-radius: var(--radius);
-        padding: 16px; text-align: center; border: 1px solid #2a2a2a;
+        background: var(--card, #1a1a1a);
+        border-radius: var(--radius);
+        padding: 16px;
+        text-align: center;
+        border: 1px solid #2a2a2a;
     }
-    .timer-box .time { font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--yellow); letter-spacing: 2px; }
-    .timer-box .status { font-size: 12px; color: #888; margin-top: 4px; }
-    .chat-messages { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 8px 4px; }
+    .timer-box .time {
+        font-size: 32px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+        color: var(--yellow);
+        letter-spacing: 2px;
+    }
+    .timer-box .status {
+        font-size: 12px;
+        color: #888;
+        margin-top: 4px;
+    }
+    /* ====== CHAT ====== */
+    .chat-messages {
+        max-height: 400px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 4px;
+    }
     .chat-msg {
-        max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 14px; word-wrap: break-word;
+        max-width: 80%;
+        padding: 10px 14px;
+        border-radius: 16px;
+        font-size: 14px;
+        word-wrap: break-word;
     }
-    .chat-msg.me { align-self: flex-end; background: var(--yellow); color: var(--black); border-bottom-right-radius: 4px; }
-    .chat-msg.other { align-self: flex-start; background: #222; color: var(--text, #fff); border-bottom-left-radius: 4px; }
-    .chat-msg .time { font-size: 9px; opacity: 0.6; margin-top: 4px; display: block; }
-    .chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
+    .chat-msg.me {
+        align-self: flex-end;
+        background: var(--yellow);
+        color: var(--black);
+        border-bottom-right-radius: 4px;
+    }
+    .chat-msg.other {
+        align-self: flex-start;
+        background: #222;
+        color: var(--text, #fff);
+        border-bottom-left-radius: 4px;
+    }
+    .chat-msg .time {
+        font-size: 9px;
+        opacity: 0.6;
+        margin-top: 4px;
+        display: block;
+    }
+    .chat-input-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+    }
     .chat-input-row input {
-        flex: 1; padding: 10px 14px; border-radius: 30px;
-        border: 1.5px solid #2a2a2a; background: var(--input, #111);
-        color: var(--text, #fff); font-size: 14px;
+        flex: 1;
+        padding: 10px 14px;
+        border-radius: 30px;
+        border: 1.5px solid #2a2a2a;
+        background: var(--input, #111);
+        color: var(--text, #fff);
+        font-size: 14px;
     }
-    .chat-input-row button { padding: 10px 18px; border: none; border-radius: 30px; background: var(--yellow); color: var(--black); font-weight: 700; cursor: pointer; }
+    .chat-input-row button {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 30px;
+        background: var(--yellow);
+        color: var(--black);
+        font-weight: 700;
+        cursor: pointer;
+    }
+    /* ====== MAP ====== */
     .map-placeholder {
-        height: 180px; background: #111; border-radius: var(--radius);
-        display: flex; align-items: center; justify-content: center;
-        color: #555; font-size: 14px; border: 1px solid #2a2a2a;
-        position: relative; overflow: hidden;
+        height: 180px;
+        background: #111;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        font-size: 14px;
+        border: 1px solid #2a2a2a;
+        position: relative;
+        overflow: hidden;
     }
-    .map-placeholder .map-pin { font-size: 40px; position: absolute; }
+    .map-placeholder .map-pin {
+        font-size: 40px;
+        position: absolute;
+    }
     .map-placeholder .map-label {
-        position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-        background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px;
-        font-size: 11px; color: #fff; white-space: nowrap;
+        position: absolute;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        color: #fff;
+        white-space: nowrap;
     }
-    .flames-display { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: #ff6b00; }
+    .flames-display {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #ff6b00;
+    }
     .toast-container {
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        z-index: 9999; width: 90%; max-width: 360px; pointer-events: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        width: 90%;
+        max-width: 360px;
+        pointer-events: none;
     }
     .toast {
-        background: rgba(20,20,20,0.95); backdrop-filter: blur(12px);
-        border: 1px solid #333; border-radius: 14px; padding: 14px 18px;
-        display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
-        transform: translateY(-20px); opacity: 0;
-        transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-        pointer-events: auto; margin-bottom: 8px;
+        background: rgba(20, 20, 20, 0.95);
+        backdrop-filter: blur(12px);
+        border: 1px solid #333;
+        border-radius: 14px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: var(--shadow);
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        pointer-events: auto;
+        margin-bottom: 8px;
     }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast .t-icon { font-size: 24px; }
-    .toast .t-msg { flex: 1; font-size: 13px; font-weight: 500; color: #fff; }
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .toast .t-icon {
+        font-size: 24px;
+    }
+    .toast .t-msg {
+        flex: 1;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fff;
+    }
     .modal-overlay {
-        position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-        backdrop-filter: blur(4px); z-index: 500; display: none;
-        align-items: center; justify-content: center; padding: 20px;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 500;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
     }
-    .modal-overlay.show { display: flex; }
+    .modal-overlay.show {
+        display: flex;
+    }
     .modal-box {
-        background: var(--card, #1a1a1a); border-radius: 24px; padding: 24px;
-        max-width: 360px; width: 100%; border: 1px solid #2a2a2a;
-        max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease;
+        background: var(--card, #1a1a1a);
+        border-radius: 24px;
+        padding: 24px;
+        max-width: 360px;
+        width: 100%;
+        border: 1px solid #2a2a2a;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalIn 0.3s ease;
     }
     @keyframes modalIn {
-        from { transform: scale(0.92) translateY(20px); opacity: 0; }
-        to { transform: scale(1) translateY(0); opacity: 1; }
+        from {
+            transform: scale(0.92) translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
     }
-    .modal-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--text, #fff); }
-    .modal-box .modal-close { float: right; background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
-    .modal-box p { color: #aaa; line-height: 1.6; }
+    .modal-box h3 {
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        color: var(--text, #fff);
+    }
+    .modal-box .modal-close {
+        float: right;
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .modal-box p {
+        color: #aaa;
+        line-height: 1.6;
+    }
+    /* ====== FLOATING OBJECTS ====== */
     .floating-bg {
-        position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
     }
     .floating-bg .obj {
-        position: absolute; font-size: 30px; opacity: 0.15;
+        position: absolute;
+        font-size: 30px;
+        opacity: 0.15;
         animation: floatObj 20s infinite ease-in-out;
     }
     @keyframes floatObj {
-        0%,100% { transform: translateY(0px) rotate(0deg); }
-        25% { transform: translateY(-30px) rotate(5deg); }
-        50% { transform: translateY(15px) rotate(-5deg); }
-        75% { transform: translateY(-15px) rotate(3deg); }
+        0%,
+        100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-30px) rotate(5deg);
+        }
+        50% {
+            transform: translateY(15px) rotate(-5deg);
+        }
+        75% {
+            transform: translateY(-15px) rotate(3deg);
+        }
     }
-    .pin-input { letter-spacing: 12px; font-size: 24px; text-align: center; font-weight: 700; }
+    .pin-input {
+        letter-spacing: 12px;
+        font-size: 24px;
+        text-align: center;
+        font-weight: 700;
+    }
     .checkbox-label {
-        display: flex; align-items: center; gap: 10px; cursor: pointer;
-        font-size: 14px; color: var(--text, #fff);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--text, #fff);
     }
-    .checkbox-label input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--green); cursor: pointer; }
+    .checkbox-label input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--green);
+        cursor: pointer;
+    }
     .stat-grid {
-        display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
     .stat-card {
-        background: var(--card, #1a1a1a); padding: 12px; border-radius: 12px;
-        text-align: center; border: 1px solid #2a2a2a;
+        background: var(--card, #1a1a1a);
+        padding: 12px;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid #2a2a2a;
     }
-    .stat-card .stat-number { font-size: 22px; font-weight: 800; color: var(--yellow); }
-    .stat-card .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
-    .badge-yellow { background: var(--yellow); color: var(--black); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .stat-card .stat-number {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--yellow);
+    }
+    .stat-card .stat-label {
+        font-size: 11px;
+        color: #888;
+        margin-top: 2px;
+    }
+    .badge-yellow {
+        background: var(--yellow);
+        color: var(--black);
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
     .notification-badge {
-        position: absolute; top: -4px; right: -6px; background: var(--red);
-        color: #fff; font-size: 9px; font-weight: 700; border-radius: 50%;
-        width: 18px; height: 18px; display: none; align-items: center; justify-content: center;
+        position: absolute;
+        top: -4px;
+        right: -6px;
+        background: var(--red);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: none;
+        align-items: center;
+        justify-content: center;
     }
     .notification-item {
-        padding: 12px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s;
+        padding: 12px;
+        border-bottom: 1px solid #2a2a2a;
+        cursor: pointer;
+        transition: 0.2s;
     }
-    .notification-item:hover { background: rgba(230,160,30,0.05); }
-    .notification-item.unread { background: rgba(230,160,30,0.08); }
-    .notification-item .title { font-weight: 600; color: var(--text, #fff); }
-    .notification-item .body { font-size: 13px; color: #aaa; margin-top: 4px; }
-    .notification-item .time { font-size: 10px; color: #666; float: right; }
+    .notification-item:hover {
+        background: rgba(230, 160, 30, 0.05);
+    }
+    .notification-item.unread {
+        background: rgba(230, 160, 30, 0.08);
+    }
+    .notification-item .title {
+        font-weight: 600;
+        color: var(--text, #fff);
+    }
+    .notification-item .body {
+        font-size: 13px;
+        color: #aaa;
+        margin-top: 4px;
+    }
+    .notification-item .time {
+        font-size: 10px;
+        color: #666;
+        float: right;
+    }
     @media (max-width: 390px) {
-        .product-grid { gap: 8px; }
-        .product-card .p-img { height: 110px; }
+        .product-grid {
+            gap: 8px;
+        }
+        .product-card .p-img {
+            height: 110px;
+        }
     }
     @media (min-width: 391px) {
-        #app { border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; }
+        #app {
+            border-left: 1px solid #1a1a1a;
+            border-right: 1px solid #1a1a1a;
+        }
     }
-    .flex { display: flex; }
-    .flex-col { flex-direction: column; }
-    .gap-8 { gap: 8px; }
-    .gap-12 { gap: 12px; }
-    .items-center { align-items: center; }
-    .justify-between { justify-content: space-between; }
-    .mt-8 { margin-top: 8px; }
-    .mt-12 { margin-top: 12px; }
-    .mt-16 { margin-top: 16px; }
-    .mb-8 { margin-bottom: 8px; }
-    .mb-12 { margin-bottom: 12px; }
-    .text-center { text-align: center; }
-    .text-muted { color: #888; font-size: 13px; }
-    .hidden { display: none !important; }
-    .w-full { width: 100%; }
-    .section-title { font-size: 18px; font-weight: 800; margin: 16px 0 8px; color: var(--text, #fff); }
-    .section-title span { color: var(--yellow); }
+    .flex {
+        display: flex;
+    }
+    .flex-col {
+        flex-direction: column;
+    }
+    .gap-8 {
+        gap: 8px;
+    }
+    .gap-12 {
+        gap: 12px;
+    }
+    .items-center {
+        align-items: center;
+    }
+    .justify-between {
+        justify-content: space-between;
+    }
+    .mt-8 {
+        margin-top: 8px;
+    }
+    .mt-12 {
+        margin-top: 12px;
+    }
+    .mt-16 {
+        margin-top: 16px;
+    }
+    .mb-8 {
+        margin-bottom: 8px;
+    }
+    .mb-12 {
+        margin-bottom: 12px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .text-muted {
+        color: #888;
+        font-size: 13px;
+    }
+    .hidden {
+        display: none !important;
+    }
+    .w-full {
+        width: 100%;
+    }
+    .section-title {
+        font-size: 18px;
+        font-weight: 800;
+        margin: 16px 0 8px;
+        color: var(--text, #fff);
+    }
+    .section-title span {
+        color: var(--yellow);
+    }
 </style>
 </head>
 <body>
@@ -460,6 +875,7 @@
     <!-- ============================================================ -->
     <div class="screen active" id="screen-login">
         <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;position:relative;">
+            <!-- Objets flottants -->
             <div class="floating-bg">
                 <span class="obj" style="top:10%;left:5%;animation-delay:0s;">👗</span>
                 <span class="obj" style="top:20%;right:8%;animation-delay:3s;">👠</span>
@@ -501,6 +917,7 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-register">
         <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;position:relative;">
+            <!-- Objets flottants -->
             <div class="floating-bg">
                 <span class="obj" style="top:5%;left:10%;animation-delay:0s;">👗</span>
                 <span class="obj" style="top:15%;right:12%;animation-delay:2s;">👠</span>
@@ -576,6 +993,7 @@
         </div>
 
         <div class="scroll" id="homeScroll">
+            <!-- Carousel -->
             <div class="carousel" id="carousel">
                 <div class="carousel-slide active" style="background-image:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600');">
                     <div class="carousel-overlay">
@@ -602,18 +1020,26 @@
                 </div>
             </div>
 
+            <!-- Catégories (comme sur ta maquette) -->
             <div style="margin:6px 0 4px;">
                 <div class="cats-scroll" id="categoryList">
                     <span class="cat-chip active" data-cat="all">🔥 Tous</span>
+                    <span class="cat-chip" data-cat="femmes">👩 Femmes</span>
+                    <span class="cat-chip" data-cat="hommes">👨 Hommes</span>
                     <span class="cat-chip" data-cat="robes">👗 Robes</span>
-                    <span class="cat-chip" data-cat="hauts">👕 Hauts</span>
-                    <span class="cat-chip" data-cat="bas">👖 Bas</span>
-                    <span class="cat-chip" data-cat="chaussures">👟 Chaussures</span>
                     <span class="cat-chip" data-cat="accessoires">👜 Accessoires</span>
+                    <span class="cat-chip" data-cat="chaussures">👟 Chaussures</span>
                     <span class="cat-chip" data-cat="bijoux">💍 Bijoux</span>
                 </div>
             </div>
 
+            <!-- Bannière promo -->
+            <div style="background:linear-gradient(135deg, var(--yellow), #c8880a);border-radius:var(--radius);padding:16px;margin:8px 0 16px;text-align:center;">
+                <div style="font-size:20px;font-weight:900;color:var(--black);">OFFRES DE LA SAISON</div>
+                <div style="font-size:32px;font-weight:900;color:var(--black);">JUSQU'À -60%</div>
+            </div>
+
+            <!-- Produits -->
             <div class="section-title">🔥 Nouveautés <span>BLK</span></div>
             <div class="product-grid" id="productGrid">
                 <div style="grid-column:span 2;text-align:center;color:#888;padding:40px 0;">Chargement...</div>
@@ -777,7 +1203,7 @@
 
 <script>
     // ================================================================
-    // 🔥 FIREBASE CONFIG
+    // 🔥 FIREBASE CONFIG — CORRECTE ET VALIDE
     // ================================================================
     const firebaseConfig = {
         apiKey: "AIzaSyB7Nwct-nYQ1jSfXh_m4u0D7YLCdAWsdm8",
@@ -826,9 +1252,13 @@
     // ================================================================
     // 🛠️ UTILS
     // ================================================================
-    function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+    function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
 
-    function formatPrice(amount) { return Number(amount).toLocaleString('fr-FR') + ' FCFA'; }
+    function formatPrice(amount) {
+        return Number(amount).toLocaleString('fr-FR') + ' FCFA';
+    }
 
     function timeAgo(date) {
         if (!date) return 'maintenant';
@@ -953,9 +1383,13 @@
                     loadProducts();
                 }
             })
-            .catch(err => { showToast('❌', err.message); })
-            .finally(() => { btn.disabled = false;
-                btn.textContent = 'Se connecter'; });
+            .catch(err => {
+                showToast('❌', err.message);
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+            });
     }
 
     function handleRegister(e) {
@@ -988,9 +1422,13 @@
                 showScreen('screen-home');
                 loadProducts();
             })
-            .catch(err => { showToast('❌', err.message); })
-            .finally(() => { btn.disabled = false;
-                btn.textContent = 'Créer mon compte'; });
+            .catch(err => {
+                showToast('❌', err.message);
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = 'Créer mon compte';
+            });
     }
 
     function handleLogout() {
@@ -1007,7 +1445,9 @@
         if (user) {
             currentUser = user;
             const doc = await db.collection('users').doc(user.uid).get();
-            if (doc.exists) { currentUserData = doc.data(); }
+            if (doc.exists) {
+                currentUserData = doc.data();
+            }
             if (document.querySelector('.screen.active')?.id === 'screen-login' ||
                 document.querySelector('.screen.active')?.id === 'screen-register') {
                 showScreen('screen-home');
@@ -1050,7 +1490,9 @@
                 });
             }
             console.log('✅ Abonnement push réussi');
-        } catch (err) { console.log('❌ Erreur abonnement:', err); }
+        } catch (err) {
+            console.log('❌ Erreur abonnement:', err);
+        }
     }
 
     function urlBase64ToUint8Array(base64String) {
@@ -1074,7 +1516,9 @@
                 read: false,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-        } catch (error) { console.error('❌ Erreur notification:', error); }
+        } catch (error) {
+            console.error('❌ Erreur notification:', error);
+        }
     }
 
     function loadNotifications() {
@@ -1156,7 +1600,9 @@
                     );
                     resolve({ isClothing, labels: labels.map(l => l.description), confidence: labels[0]?.score ||
                             0, isSimulation: false });
-                } catch (error) { reject(error); }
+                } catch (error) {
+                    reject(error);
+                }
             };
             reader.onerror = reject;
         });
@@ -1166,16 +1612,23 @@
     // 📍 GPS RÉEL
     // ================================================================
     function startGPSTracking(orderId) {
-        if (!navigator.geolocation) { showToast('⚠️', 'GPS non supporté'); return; }
+        if (!navigator.geolocation) {
+            showToast('⚠️', 'GPS non supporté');
+            return;
+        }
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                currentPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+                currentPosition = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
                 showToast('📍', 'GPS activé');
                 updateOrderPosition(orderId, currentPosition);
                 startWatching(orderId);
             },
-            (error) => { showToast('⚠️', 'Erreur GPS: ' + error.message); }, { enableHighAccuracy: true,
-                timeout: 10000 }
+            (error) => {
+                showToast('⚠️', 'Erreur GPS: ' + error.message);
+            }, { enableHighAccuracy: true, timeout: 10000 }
         );
     }
 
@@ -1183,7 +1636,10 @@
         if (watchId) navigator.geolocation.clearWatch(watchId);
         watchId = navigator.geolocation.watchPosition(
             (position) => {
-                currentPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+                currentPosition = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
                 updateOrderPosition(orderId, currentPosition);
                 updateMapDisplay(currentPosition);
             },
@@ -1194,21 +1650,30 @@
     async function updateOrderPosition(orderId, position) {
         try {
             await db.collection('orders').doc(orderId).update({
-                tracking: { lat: position.lat, lng: position.lng,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp() }
+                tracking: {
+                    lat: position.lat,
+                    lng: position.lng,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }
             });
-        } catch (error) { console.error('Erreur mise à jour GPS:', error); }
+        } catch (error) {
+            console.error('Erreur mise à jour GPS:', error);
+        }
     }
 
     function stopGPSTracking() {
-        if (watchId) { navigator.geolocation.clearWatch(watchId);
-            watchId = null; }
+        if (watchId) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+        }
         showToast('🛑', 'Suivi GPS arrêté');
     }
 
     function updateMapDisplay(position) {
         const label = document.querySelector('.map-label');
-        if (label) { label.textContent = `🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}`; }
+        if (label) {
+            label.textContent = `🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}`;
+        }
     }
 
     function showRealMap(position) {
@@ -1282,8 +1747,14 @@
     }
 
     function getCategoryEmoji(cat) {
-        const map = { 'robes': '👗', 'hauts': '👕', 'bas': '👖', 'chaussures': '👟', 'accessoires': '👜',
-            'bijoux': '💍' };
+        const map = {
+            'femmes': '👩',
+            'hommes': '👨',
+            'robes': '👗',
+            'accessoires': '👜',
+            'chaussures': '👟',
+            'bijoux': '💍'
+        };
         return map[cat] || '👕';
     }
 
@@ -1304,7 +1775,10 @@
     // ================================================================
     function viewProduct(productId) {
         const p = allProducts.find(x => x.id === productId);
-        if (!p) { showToast('❌', 'Article introuvable'); return; }
+        if (!p) {
+            showToast('❌', 'Article introuvable');
+            return;
+        }
         const container = document.getElementById('productDetailContainer');
         const img = p.imageUrl || getCategoryEmoji(p.category);
         const avgRating = p.ratings && p.ratings.length > 0 ?
@@ -1355,10 +1829,16 @@
     }
 
     function viewSellerProfile(sellerId) {
-        if (!sellerId) { showToast('⚠️', 'Vendeur inconnu'); return; }
+        if (!sellerId) {
+            showToast('⚠️', 'Vendeur inconnu');
+            return;
+        }
         showToast('👤', 'Chargement du profil vendeur...');
         db.collection('users').doc(sellerId).get().then(doc => {
-            if (!doc.exists) { showToast('❌', 'Vendeur introuvable'); return; }
+            if (!doc.exists) {
+                showToast('❌', 'Vendeur introuvable');
+                return;
+            }
             const seller = doc.data();
             showModal(`
                 <h3>👤 ${seller.name || 'Vendeur'}</h3>
@@ -1382,7 +1862,10 @@
     // 🛒 PANIER
     // ================================================================
     function addToCart(productId) {
-        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
+        if (!currentUser) {
+            showToast('🔒', 'Connecte-toi d\'abord');
+            return;
+        }
         const p = allProducts.find(x => x.id === productId);
         if (!p) return;
         const cartRef = db.collection('carts').doc(currentUser.uid);
@@ -1400,7 +1883,9 @@
             showToast('✅', 'Ajouté au panier');
             updateCartBadge();
             renderCart();
-        }).catch(err => { showToast('❌', err.message); });
+        }).catch(err => {
+            showToast('❌', err.message);
+        });
     }
 
     function updateCartBadge() {
@@ -1409,8 +1894,12 @@
             const items = doc.exists ? doc.data().items || [] : [];
             const total = items.reduce((sum, i) => sum + (i.quantity || 1), 0);
             const badge = document.getElementById('cartBadge');
-            if (total > 0) { badge.textContent = total;
-                badge.style.display = 'flex'; } else { badge.style.display = 'none'; }
+            if (total > 0) {
+                badge.textContent = total;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
         });
     }
 
@@ -1424,7 +1913,8 @@
         db.collection('carts').doc(currentUser.uid).get().then(doc => {
             const items = doc.exists ? doc.data().items || [] : [];
             if (items.length === 0) {
-                container.innerHTML = '<div style="text-align:center;color:#888;padding:40px 0;">🛒 Panier vide</div>';
+                container.innerHTML =
+                    '<div style="text-align:center;color:#888;padding:40px 0;">🛒 Panier vide</div>';
                 return;
             }
             let html = '';
@@ -1471,10 +1961,16 @@
             const items = doc.exists ? doc.data().items || [] : [];
             if (!items[idx]) return;
             const newQty = (items[idx].quantity || 1) + delta;
-            if (newQty <= 0) { items.splice(idx, 1); } else { items[idx].quantity = newQty; }
+            if (newQty <= 0) {
+                items.splice(idx, 1);
+            } else {
+                items[idx].quantity = newQty;
+            }
             return cartRef.set({ items, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        }).then(() => { renderCart();
-            updateCartBadge(); });
+        }).then(() => {
+            renderCart();
+            updateCartBadge();
+        });
     }
 
     function removeFromCart(idx) {
@@ -1484,21 +1980,28 @@
             const items = doc.exists ? doc.data().items || [] : [];
             items.splice(idx, 1);
             return cartRef.set({ items, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        }).then(() => { renderCart();
+        }).then(() => {
+            renderCart();
             updateCartBadge();
-            showToast('🗑️', 'Article retiré'); });
+            showToast('🗑️', 'Article retiré');
+        });
     }
 
     // ================================================================
     // 💳 CHECKOUT & PAIEMENT
     // ================================================================
     function goToCheckout() {
-        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
+        if (!currentUser) {
+            showToast('🔒', 'Connecte-toi d\'abord');
+            return;
+        }
         const container = document.getElementById('checkoutContainer');
         db.collection('carts').doc(currentUser.uid).get().then(doc => {
             const items = doc.exists ? doc.data().items || [] : [];
             let total = 0;
-            items.forEach(item => { total += (item.price || 0) * (item.quantity || 1); });
+            items.forEach(item => {
+                total += (item.price || 0) * (item.quantity || 1);
+            });
             const commissionAcheteur = Math.round(total * 0.03);
             const commissionVendeur = Math.round(total * 0.04);
             const totalAvecCommission = total + commissionAcheteur;
@@ -1572,18 +2075,31 @@
         const amount = parseInt(document.getElementById('depositAmount').value);
         const phone = document.getElementById('depositPhone').value;
         const pin = document.getElementById('depositPin').value;
-        if (!amount || amount < 100) { showToast('⚠️', 'Montant minimum 100 FCFA'); return; }
-        if (!phone) { showToast('⚠️', 'Numéro requis'); return; }
-        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
+        if (!amount || amount < 100) {
+            showToast('⚠️', 'Montant minimum 100 FCFA');
+            return;
+        }
+        if (!phone) {
+            showToast('⚠️', 'Numéro requis');
+            return;
+        }
+        if (!pin || pin.length !== 4) {
+            showToast('⚠️', 'Code PIN requis (4 chiffres)');
+            return;
+        }
         closeModal();
         showToast('⏳', 'Traitement du dépôt...');
         setTimeout(() => {
             const newBalance = (currentUserData.balance || 0) + amount;
-            db.collection('users').doc(currentUser.uid).update({ balance: newBalance }).then(() => {
+            db.collection('users').doc(currentUser.uid).update({
+                balance: newBalance
+            }).then(() => {
                 currentUserData.balance = newBalance;
                 showToast('✅', `Dépôt de ${formatPrice(amount)} effectué !`);
                 loadProfile();
-            }).catch(err => { showToast('❌', err.message); });
+            }).catch(err => {
+                showToast('❌', err.message);
+            });
         }, 2000);
     }
 
@@ -1616,33 +2132,57 @@
         const amount = parseInt(document.getElementById('withdrawAmount').value);
         const phone = document.getElementById('withdrawPhone').value;
         const pin = document.getElementById('withdrawPin').value;
-        if (!amount || amount < 100) { showToast('⚠️', 'Montant minimum 100 FCFA'); return; }
-        if (!phone) { showToast('⚠️', 'Numéro requis'); return; }
-        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
-        if (amount > (currentUserData.balance || 0)) { showToast('⚠️', 'Solde insuffisant'); return; }
+        if (!amount || amount < 100) {
+            showToast('⚠️', 'Montant minimum 100 FCFA');
+            return;
+        }
+        if (!phone) {
+            showToast('⚠️', 'Numéro requis');
+            return;
+        }
+        if (!pin || pin.length !== 4) {
+            showToast('⚠️', 'Code PIN requis (4 chiffres)');
+            return;
+        }
+        if (amount > (currentUserData.balance || 0)) {
+            showToast('⚠️', 'Solde insuffisant');
+            return;
+        }
         closeModal();
         showToast('⏳', 'Traitement du retrait...');
         setTimeout(() => {
             const newBalance = (currentUserData.balance || 0) - amount;
-            db.collection('users').doc(currentUser.uid).update({ balance: newBalance }).then(() => {
+            db.collection('users').doc(currentUser.uid).update({
+                balance: newBalance
+            }).then(() => {
                 currentUserData.balance = newBalance;
                 showToast('✅', `Retrait de ${formatPrice(amount)} vers ${phone} effectué !`);
                 loadProfile();
-            }).catch(err => { showToast('❌', err.message); });
+            }).catch(err => {
+                showToast('❌', err.message);
+            });
         }, 2000);
     }
 
     function processPayment() {
         const pin = document.getElementById('paymentPin').value;
-        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
+        if (!pin || pin.length !== 4) {
+            showToast('⚠️', 'Code PIN requis (4 chiffres)');
+            return;
+        }
         const btn = document.querySelector('#checkoutContainer .btn-success');
         btn.disabled = true;
         btn.textContent = 'Traitement...';
         db.collection('carts').doc(currentUser.uid).get().then(async (cartDoc) => {
             const items = cartDoc.exists ? cartDoc.data().items || [] : [];
-            if (items.length === 0) { showToast('⚠️', 'Panier vide'); return; }
+            if (items.length === 0) {
+                showToast('⚠️', 'Panier vide');
+                return;
+            }
             let total = 0;
-            items.forEach(item => { total += (item.price || 0) * (item.quantity || 1); });
+            items.forEach(item => {
+                total += (item.price || 0) * (item.quantity || 1);
+            });
             const commissionAcheteur = Math.round(total * 0.03);
             const commissionVendeur = Math.round(total * 0.04);
             const totalAvecCommission = total + commissionAcheteur;
@@ -1674,7 +2214,9 @@
                 flameGiven: false
             };
             const newBalance = (currentUserData.balance || 0) - totalAvecCommission;
-            await db.collection('users').doc(currentUser.uid).update({ balance: newBalance });
+            await db.collection('users').doc(currentUser.uid).update({
+                balance: newBalance
+            });
             currentUserData.balance = newBalance;
             const orderRef = await db.collection('orders').add(orderData);
             await db.collection('commissions').add({
@@ -1687,10 +2229,14 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'collected'
             });
-            await db.collection('carts').doc(currentUser.uid).set({ items: [],
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection('carts').doc(currentUser.uid).set({
+                items: [],
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
             if (items[0]?.sellerId) {
-                await sendNotification(items[0].sellerId, '📦 Nouvelle commande !',
+                await sendNotification(
+                    items[0].sellerId,
+                    '📦 Nouvelle commande !',
                     `${currentUserData?.name || 'Un client'} a commandé ${items.length} article(s)`, { orderId: orderRef
                         .id, type: 'new_order' }
                 );
@@ -1699,8 +2245,12 @@
             updateCartBadge();
             showScreen('screen-home');
             loadProducts();
-        }).catch(err => { showToast('❌', 'Erreur: ' + err.message); }).finally(() => { btn.disabled = false;
-            btn.textContent = '💳 Confirmer le paiement'; });
+        }).catch(err => {
+            showToast('❌', 'Erreur: ' + err.message);
+        }).finally(() => {
+            btn.disabled = false;
+            btn.textContent = '💳 Confirmer le paiement';
+        });
     }
 
     // ================================================================
@@ -1738,7 +2288,7 @@
                         'shipped': '📦 Expédiée', 'delivered': '🏠 Livrée', 'completed': '🎉 Terminée' };
                     const statusLabel = statusMap[order.status] || order.status;
                     const elapsed = Math.floor((Date.now() - order.createdAt?.toDate?.()?.getTime?.() || 0) /
-                    1000);
+                        1000);
                     const canCancel = elapsed < 12 * 3600 && order.status === 'pending';
                     const mockLat = -4.2634 + (Math.random() - 0.5) * 0.02;
                     const mockLng = 15.2429 + (Math.random() - 0.5) * 0.02;
@@ -1802,7 +2352,11 @@
     function trackOrder(orderId) {
         startGPSTracking(orderId);
         setTimeout(() => {
-            if (currentPosition) { showRealMap(currentPosition); } else { showToast('📍', 'Recherche de la position...'); }
+            if (currentPosition) {
+                showRealMap(currentPosition);
+            } else {
+                showToast('📍', 'Recherche de la position...');
+            }
         }, 1000);
     }
 
@@ -1825,7 +2379,10 @@
 
     function verifyDelivery(orderId) {
         const checked = document.getElementById('deliveryCheckbox').checked;
-        if (!checked) { showToast('⚠️', 'Coche la case pour confirmer'); return; }
+        if (!checked) {
+            showToast('⚠️', 'Coche la case pour confirmer');
+            return;
+        }
         closeModal();
         db.collection('orders').doc(orderId).update({
             status: 'completed',
@@ -1861,7 +2418,9 @@
                 </button>
                 <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Passer</button>
             `);
-        }).catch(err => { showToast('❌', err.message); });
+        }).catch(err => {
+            showToast('❌', err.message);
+        });
     }
 
     function submitReview(orderId) {
@@ -1901,7 +2460,9 @@
                 loadTracking();
                 loadProfile();
             });
-        }).catch(err => { showToast('❌', err.message); });
+        }).catch(err => {
+            showToast('❌', err.message);
+        });
     }
 
     function cancelOrder(orderId) {
@@ -1912,7 +2473,9 @@
         }).then(() => {
             showToast('🗑️', 'Commande annulée');
             loadTracking();
-        }).catch(err => { showToast('❌', err.message); });
+        }).catch(err => {
+            showToast('❌', err.message);
+        });
     }
 
     // ================================================================
@@ -1941,7 +2504,9 @@
                 }
                 let html = '';
                 const messages = [];
-                snapshot.forEach(doc => { messages.push({ id: doc.id, ...doc.data() }); });
+                snapshot.forEach(doc => {
+                    messages.push({ id: doc.id, ...doc.data() });
+                });
                 messages.reverse();
                 messages.forEach(msg => {
                     const isMe = msg.senderId === currentUser.uid;
@@ -1965,7 +2530,10 @@
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
         if (!text) return;
-        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
+        if (!currentUser) {
+            showToast('🔒', 'Connecte-toi d\'abord');
+            return;
+        }
         const recipientId = 'admin_blk';
         db.collection('messages').add({
             text: text,
@@ -1978,7 +2546,9 @@
         }).then(() => {
             input.value = '';
             showToast('✅', 'Message envoyé');
-        }).catch(err => { showToast('❌', err.message); });
+        }).catch(err => {
+            showToast('❌', err.message);
+        });
     }
 
     // ================================================================
@@ -2043,7 +2613,9 @@
         db.collection('products').doc(productId).delete().then(() => {
             showToast('🗑️', 'Article supprimé');
             loadShop();
-        }).catch(err => { showToast('❌', err.message); });
+        }).catch(err => {
+            showToast('❌', err.message);
+        });
     }
 
     // ================================================================
@@ -2091,11 +2663,11 @@
                     <div class="form-group">
                         <label>📂 Catégorie</label>
                         <select id="productCategory">
+                            <option value="femmes">👩 Femmes</option>
+                            <option value="hommes">👨 Hommes</option>
                             <option value="robes">👗 Robes</option>
-                            <option value="hauts">👕 Hauts</option>
-                            <option value="bas">👖 Bas</option>
-                            <option value="chaussures">👟 Chaussures</option>
                             <option value="accessoires">👜 Accessoires</option>
+                            <option value="chaussures">👟 Chaussures</option>
                             <option value="bijoux">💍 Bijoux</option>
                         </select>
                     </div>
@@ -2114,7 +2686,10 @@
 
     async function analyzeImageWithAI(input) {
         const result = document.getElementById('imageAnalysisResult');
-        if (!input.files || input.files.length === 0) { result.innerHTML = ''; return; }
+        if (!input.files || input.files.length === 0) {
+            result.innerHTML = '';
+            return;
+        }
         const file = input.files[0];
         result.innerHTML = '🔍 Analyse IA en cours...';
         result.style.color = 'var(--yellow)';
@@ -2141,7 +2716,10 @@
         const condition = document.getElementById('productCondition').value;
         const category = document.getElementById('productCategory').value;
         const description = document.getElementById('productDescription').value;
-        if (!name || !price) { showToast('⚠️', 'Remplis au moins le nom et le prix'); return; }
+        if (!name || !price) {
+            showToast('⚠️', 'Remplis au moins le nom et le prix');
+            return;
+        }
         const btn = document.getElementById('publishBtn');
         btn.disabled = true;
         btn.textContent = 'Publication...';
@@ -2165,8 +2743,12 @@
             showToast('🎉', 'Article publié avec succès !');
             showScreen('screen-shop');
             loadShop();
-        }).catch(err => { showToast('❌', err.message); }).finally(() => { btn.disabled = false;
-            btn.textContent = '✅ Publier l\'article'; });
+        }).catch(err => {
+            showToast('❌', err.message);
+        }).finally(() => {
+            btn.disabled = false;
+            btn.textContent = '✅ Publier l\'article';
+        });
     }
 
     // ================================================================
@@ -2241,7 +2823,10 @@
     // 🚀 ACHAT DIRECT
     // ================================================================
     function buyNow(productId) {
-        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
+        if (!currentUser) {
+            showToast('🔒', 'Connecte-toi d\'abord');
+            return;
+        }
         const p = allProducts.find(x => x.id === productId);
         if (!p) return;
         const cartRef = db.collection('carts').doc(currentUser.uid);
