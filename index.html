@@ -6,7 +6,6 @@
     <title>BLK - La mode seconde main au Congo</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👗</text></svg>" />
     <style>
-        /*  ROOT  */
         *{margin:0;padding:0;box-sizing:border-box}
         :root{--black:#0D0D0D;--dark:#1a1a1a;--yellow:#E6A01E;--green:#4A7C59;--red:#C82828;--white:#F5F0E8;--glass:rgba(255,255,255,0.08);--glass-border:rgba(255,255,255,0.12);--shadow:0 8px 32px rgba(0,0,0,0.6);--radius:16px;--font:'Segoe UI',system-ui,sans-serif}
         .theme-clair{--bg:#f5f0e8;--text:#0D0D0D;--card:#ffffff;--input:#e8e4dc}
@@ -293,6 +292,14 @@
 <!-- ====== TOAST ====== -->
 <div class="toast-container" id="toastContainer"></div>
 
+<!-- ====== MODAL ====== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
 <!-- ============================================================ -->
 <!-- 🔥 FIREBASE -->
 <!-- ============================================================ -->
@@ -303,16 +310,15 @@
 
 <script>
     // ================================================================
-    // 🔥 FIREBASE CONFIG - BONNE CLÉ
+    // 🔥 FIREBASE CONFIG - VRAIE CONFIG (copiée de Firebase Console)
     // ================================================================
     const firebaseConfig = {
-        apiKey: "AIzaSyB7Nwct-nYQ1jSfXh_m4u0D7YLCdAWsdm8",
+        apiKey: "AIzaSyB7NwC1-nYQj1jSfxh_m4u0DYLCdAWsdm8",
         authDomain: "blk-congo-29463.firebaseapp.com",
         projectId: "blk-congo-29463",
         storageBucket: "blk-congo-29463.firebasestorage.app",
         messagingSenderId: "701093221836",
-        appId: "1:701093221836:web:809a62273256fbabce3969",
-        measurementId: "G-VS62PN9E8W"
+        appId: "1:701093221836:web:809a62273256fba6bc3969"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -1797,18 +1803,6 @@
         <div class="scroll" id="walletContainer"></div>
     `;
     document.getElementById('app').appendChild(walletScreen);
-
-    // Ajouter le modal overlay
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'modal-overlay';
-    modalOverlay.id = 'modalOverlay';
-    modalOverlay.innerHTML = `
-        <div class="modal-box" id="modalBox">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <div id="modalContent"></div>
-        </div>
-    `;
-    document.body.appendChild(modalOverlay);
 </script>
 </body>
 </html>
