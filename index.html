@@ -16,826 +16,304 @@
 
 <style>
     /* ====== ROOT ====== */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-        --black: #0D0D0D;
-        --dark: #1a1a1a;
-        --yellow: #E6A01E;
-        --green: #4A7C59;
-        --red: #C82828;
-        --white: #F5F0E8;
-        --glass: rgba(255, 255, 255, 0.08);
-        --glass-border: rgba(255, 255, 255, 0.12);
-        --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-        --radius: 16px;
+        --black: #0D0D0D; --dark: #1a1a1a; --yellow: #E6A01E;
+        --green: #4A7C59; --red: #C82828; --white: #F5F0E8;
+        --glass: rgba(255,255,255,0.08); --glass-border: rgba(255,255,255,0.12);
+        --shadow: 0 8px 32px rgba(0,0,0,0.6); --radius: 16px;
         --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    .theme-clair {
-        --bg: #f5f0e8;
-        --text: #0D0D0D;
-        --card: #ffffff;
-        --input: #e8e4dc;
-    }
-    .theme-sombre {
-        --bg: #0D0D0D;
-        --text: #F5F0E8;
-        --card: #1a1a1a;
-        --input: #2a2a2a;
-    }
-    html,
-    body {
-        background: var(--bg, #0D0D0D);
-        color: var(--text, #F5F0E8);
-        font-family: var(--font);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        padding: 0;
-        margin: 0;
+    .theme-clair { --bg: #f5f0e8; --text: #0D0D0D; --card: #ffffff; --input: #e8e4dc; }
+    .theme-sombre { --bg: #0D0D0D; --text: #F5F0E8; --card: #1a1a1a; --input: #2a2a2a; }
+    html, body {
+        background: var(--bg, #0D0D0D); color: var(--text, #F5F0E8);
+        font-family: var(--font); min-height: 100vh;
+        display: flex; justify-content: center; padding: 0; margin: 0;
         transition: background 0.3s, color 0.3s;
     }
     #app {
-        width: 100%;
-        max-width: 390px;
-        min-height: 100vh;
-        background: var(--bg, #0D0D0D);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
-        transition: background 0.3s;
+        width: 100%; max-width: 390px; min-height: 100vh;
+        background: var(--bg, #0D0D0D); position: relative;
+        display: flex; flex-direction: column;
+        box-shadow: 0 0 60px rgba(0,0,0,0.9); transition: background 0.3s;
     }
     .kente {
-        height: 4px;
-        flex-shrink: 0;
+        height: 4px; flex-shrink: 0;
         background: repeating-linear-gradient(90deg,
-                var(--red) 0 20px,
-                var(--yellow) 20px 40px,
-                var(--green) 40px 60px,
-                var(--black) 60px 80px);
+            var(--red) 0 20px, var(--yellow) 20px 40px,
+            var(--green) 40px 60px, var(--black) 60px 80px);
     }
-    .screen {
-        display: none !important;
-        flex-direction: column;
-        flex: 1;
-        padding-bottom: 80px;
-    }
-    .screen.active {
-        display: flex !important;
-    }
-    .scroll {
-        flex: 1;
-        overflow-y: auto;
-        padding: 0 16px 20px;
-        scroll-behavior: smooth;
-    }
-    .scroll::-webkit-scrollbar {
-        width: 3px;
-    }
-    .scroll::-webkit-scrollbar-thumb {
-        background: var(--yellow);
-        border-radius: 10px;
-    }
+    .screen { display: none !important; flex-direction: column; flex: 1; padding-bottom: 80px; }
+    .screen.active { display: flex !important; }
+    .scroll { flex: 1; overflow-y: auto; padding: 0 16px 20px; scroll-behavior: smooth; }
+    .scroll::-webkit-scrollbar { width: 3px; }
+    .scroll::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 10px; }
     .glass {
-        background: var(--glass);
-        backdrop-filter: blur(12px);
+        background: var(--glass); backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius);
-        padding: 16px;
-        box-shadow: var(--shadow);
+        border: 1px solid var(--glass-border); border-radius: var(--radius);
+        padding: 16px; box-shadow: var(--shadow);
     }
     .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 16px 8px;
-        flex-shrink: 0;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background: rgba(13, 13, 13, 0.85);
-        backdrop-filter: blur(8px);
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 16px 8px; flex-shrink: 0; position: sticky; top: 0; z-index: 10;
+        background: rgba(13,13,13,0.85); backdrop-filter: blur(8px);
     }
     .topbar .logo {
-        font-size: 22px;
-        font-weight: 900;
-        letter-spacing: 1px;
-        color: var(--text, #fff);
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        font-size: 22px; font-weight: 900; letter-spacing: 1px;
+        color: var(--text, #fff); display: flex; align-items: center; gap: 6px;
     }
-    .topbar .logo .logo-icon {
-        font-size: 24px;
-    }
-    .topbar .logo span {
-        color: var(--yellow);
-    }
-    .topbar-actions {
-        display: flex;
-        gap: 14px;
-        align-items: center;
-    }
+    .topbar .logo .logo-icon { font-size: 24px; }
+    .topbar .logo span { color: var(--yellow); }
+    .topbar-actions { display: flex; gap: 14px; align-items: center; }
     .topbar-actions button {
-        background: none;
-        border: none;
-        color: var(--text, #fff);
-        font-size: 20px;
-        cursor: pointer;
-        position: relative;
+        background: none; border: none; color: var(--text, #fff);
+        font-size: 20px; cursor: pointer; position: relative;
     }
     .badge {
-        position: absolute;
-        top: -6px;
-        right: -8px;
-        background: var(--red);
-        color: #fff;
-        font-size: 9px;
-        font-weight: 700;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        position: absolute; top: -6px; right: -8px; background: var(--red);
+        color: #fff; font-size: 9px; font-weight: 700; border-radius: 50%;
+        width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
     }
     .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 390px;
-        background: rgba(13, 13, 13, 0.96);
-        backdrop-filter: blur(12px);
-        border-top: 1px solid #222;
-        display: flex;
-        justify-content: space-around;
-        padding: 6px 0 12px;
-        z-index: 100;
+        position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+        width: 100%; max-width: 390px; background: rgba(13,13,13,0.96);
+        backdrop-filter: blur(12px); border-top: 1px solid #222;
+        display: flex; justify-content: space-around; padding: 6px 0 12px; z-index: 100;
     }
     .nav-item {
-        background: none;
-        border: none;
-        color: #666;
-        font-size: 10px;
-        font-weight: 600;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-        cursor: pointer;
-        padding: 4px 12px;
-        transition: 0.2s;
-        font-family: var(--font);
+        background: none; border: none; color: #666; font-size: 10px;
+        font-weight: 600; display: flex; flex-direction: column;
+        align-items: center; gap: 2px; cursor: pointer; padding: 4px 12px;
+        transition: 0.2s; font-family: var(--font);
     }
-    .nav-item .nav-icon {
-        font-size: 22px;
-        line-height: 1;
-    }
-    .nav-item.active {
-        color: var(--yellow);
-    }
+    .nav-item .nav-icon { font-size: 22px; line-height: 1; }
+    .nav-item.active { color: var(--yellow); }
     .carousel {
-        position: relative;
-        height: 200px;
-        border-radius: var(--radius);
-        overflow: hidden;
-        margin: 8px 0 16px;
+        position: relative; height: 200px; border-radius: var(--radius);
+        overflow: hidden; margin: 8px 0 16px;
     }
     .carousel-slide {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        transition: opacity 0.8s ease;
-        background-size: cover;
-        background-position: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease;
+        background-size: cover; background-position: center;
+        display: flex; align-items: center; justify-content: center;
     }
-    .carousel-slide.active {
-        opacity: 1;
-    }
+    .carousel-slide.active { opacity: 1; }
     .carousel-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 20px;
+        position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; text-align: center; padding: 20px;
     }
-    .carousel-overlay h2 {
-        font-size: 28px;
-        font-weight: 900;
-        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
-        color: #fff;
-    }
-    .carousel-overlay p {
-        font-size: 14px;
-        opacity: 0.9;
-        margin-top: 6px;
-        color: #fff;
-    }
+    .carousel-overlay h2 { font-size: 28px; font-weight: 900; text-shadow: 0 2px 20px rgba(0,0,0,0.8); color: #fff; }
+    .carousel-overlay p { font-size: 14px; opacity: 0.9; margin-top: 6px; color: #fff; }
     .carousel-dots {
-        position: absolute;
-        bottom: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 8px;
+        position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+        display: flex; gap: 8px;
     }
     .carousel-dots span {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transition: 0.3s;
-        cursor: pointer;
+        width: 8px; height: 8px; border-radius: 50%;
+        background: rgba(255,255,255,0.3); transition: 0.3s; cursor: pointer;
     }
-    .carousel-dots span.active {
-        background: var(--yellow);
-        width: 24px;
-        border-radius: 4px;
-    }
+    .carousel-dots span.active { background: var(--yellow); width: 24px; border-radius: 4px; }
     .cats-scroll {
-        display: flex;
-        gap: 10px;
-        overflow-x: auto;
-        padding: 4px 0 12px;
-        scrollbar-width: none;
+        display: flex; gap: 10px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none;
     }
-    .cats-scroll::-webkit-scrollbar {
-        display: none;
-    }
+    .cats-scroll::-webkit-scrollbar { display: none; }
     .cat-chip {
-        flex-shrink: 0;
-        background: var(--glass);
-        backdrop-filter: blur(4px);
-        border: 1px solid var(--glass-border);
-        border-radius: 30px;
-        padding: 8px 18px;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text, #fff);
-        cursor: pointer;
-        transition: 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        flex-shrink: 0; background: var(--glass); backdrop-filter: blur(4px);
+        border: 1px solid var(--glass-border); border-radius: 30px;
+        padding: 8px 18px; font-size: 13px; font-weight: 600;
+        color: var(--text, #fff); cursor: pointer; transition: 0.2s;
+        display: flex; align-items: center; gap: 6px;
     }
-    .cat-chip:hover,
-    .cat-chip.active {
-        background: var(--yellow);
-        color: var(--black);
-        border-color: var(--yellow);
-    }
+    .cat-chip:hover, .cat-chip.active { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
     .product-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 8px;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
     }
     .product-card {
-        background: var(--card, #1a1a1a);
-        border-radius: var(--radius);
-        overflow: hidden;
-        cursor: pointer;
-        transition: 0.2s;
-        border: 1px solid #222;
+        background: var(--card, #1a1a1a); border-radius: var(--radius);
+        overflow: hidden; cursor: pointer; transition: 0.2s; border: 1px solid #222;
     }
-    .product-card:hover {
-        transform: translateY(-2px);
-        border-color: var(--yellow);
-    }
+    .product-card:hover { transform: translateY(-2px); border-color: var(--yellow); }
     .product-card .p-img {
-        height: 140px;
-        background: #222;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 48px;
+        height: 140px; background: #222; display: flex;
+        align-items: center; justify-content: center; font-size: 48px;
     }
-    .product-card .p-body {
-        padding: 10px 12px 14px;
-    }
+    .product-card .p-body { padding: 10px 12px 14px; }
     .product-card .p-name {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text, #fff);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 13px; font-weight: 600; color: var(--text, #fff);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .product-card .p-price {
-        font-size: 16px;
-        font-weight: 800;
-        color: var(--yellow);
-        margin: 4px 0 6px;
-    }
-    .product-card .p-seller {
-        font-size: 11px;
-        color: #888;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .product-card .p-seller .flame {
-        color: #ff6b00;
-    }
-    .product-card .p-rating {
-        font-size: 12px;
-        color: #888;
-        margin-top: 2px;
-    }
+    .product-card .p-price { font-size: 16px; font-weight: 800; color: var(--yellow); margin: 4px 0 6px; }
+    .product-card .p-seller { font-size: 11px; color: #888; display: flex; align-items: center; gap: 4px; }
+    .product-card .p-seller .flame { color: #ff6b00; }
+    .product-card .p-rating { font-size: 12px; color: #888; margin-top: 2px; }
     .btn-buy-sm {
-        width: 100%;
-        padding: 8px;
-        border: none;
-        border-radius: 10px;
-        background: var(--green);
-        color: #fff;
-        font-weight: 700;
-        font-size: 13px;
-        cursor: pointer;
-        margin-top: 6px;
-        transition: 0.2s;
+        width: 100%; padding: 8px; border: none; border-radius: 10px;
+        background: var(--green); color: #fff; font-weight: 700; font-size: 13px;
+        cursor: pointer; margin-top: 6px; transition: 0.2s;
     }
-    .btn-buy-sm:hover {
-        background: #3a9b5a;
-    }
-    .form-group {
-        margin-bottom: 14px;
-    }
+    .btn-buy-sm:hover { background: #3a9b5a; }
+    .form-group { margin-bottom: 14px; }
     .form-group label {
-        display: block;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #888;
-        margin-bottom: 4px;
+        display: block; font-size: 11px; font-weight: 700;
+        letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 4px;
     }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border-radius: 12px;
-        border: 1.5px solid #2a2a2a;
-        background: var(--input, #111);
-        color: var(--text, #fff);
-        font-size: 14px;
-        font-family: var(--font);
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%; padding: 12px 14px; border-radius: 12px;
+        border: 1.5px solid #2a2a2a; background: var(--input, #111);
+        color: var(--text, #fff); font-size: 14px; font-family: var(--font);
         transition: 0.2s;
     }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-        border-color: var(--yellow);
-        outline: none;
-        background: var(--input, #181818);
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        border-color: var(--yellow); outline: none; background: var(--input, #181818);
     }
-    .form-group textarea {
-        resize: vertical;
-        min-height: 80px;
-    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
     .btn-primary {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 14px;
+        width: 100%; padding: 14px; border: none; border-radius: 14px;
         background: linear-gradient(135deg, var(--yellow), #c8880a);
-        color: var(--black);
-        font-weight: 800;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.2s;
-        box-shadow: 0 4px 20px rgba(230, 160, 30, 0.3);
+        color: var(--black); font-weight: 800; font-size: 16px;
+        cursor: pointer; transition: 0.2s;
+        box-shadow: 0 4px 20px rgba(230,160,30,0.3);
     }
-    .btn-primary:hover {
-        transform: scale(1.01);
-    }
-    .btn-primary:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        transform: none;
-    }
-    .btn-danger {
-        background: var(--red);
-        color: #fff;
-        box-shadow: 0 4px 20px rgba(200, 40, 40, 0.3);
-    }
-    .btn-outline {
-        background: transparent;
-        border: 1.5px solid var(--glass-border);
-        color: var(--text, #fff);
-    }
-    .btn-success {
-        background: var(--green);
-        color: #fff;
-        box-shadow: 0 4px 20px rgba(74, 124, 89, 0.3);
-    }
+    .btn-primary:hover { transform: scale(1.01); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-danger { background: var(--red); color: #fff; box-shadow: 0 4px 20px rgba(200,40,40,0.3); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--glass-border); color: var(--text, #fff); }
+    .btn-success { background: var(--green); color: #fff; box-shadow: 0 4px 20px rgba(74,124,89,0.3); }
     .timer-box {
-        background: var(--card, #1a1a1a);
-        border-radius: var(--radius);
-        padding: 16px;
-        text-align: center;
-        border: 1px solid #2a2a2a;
+        background: var(--card, #1a1a1a); border-radius: var(--radius);
+        padding: 16px; text-align: center; border: 1px solid #2a2a2a;
     }
-    .timer-box .time {
-        font-size: 32px;
-        font-weight: 900;
-        font-variant-numeric: tabular-nums;
-        color: var(--yellow);
-        letter-spacing: 2px;
-    }
-    .timer-box .status {
-        font-size: 12px;
-        color: #888;
-        margin-top: 4px;
-    }
-    .chat-messages {
-        max-height: 400px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 8px 4px;
-    }
+    .timer-box .time { font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--yellow); letter-spacing: 2px; }
+    .timer-box .status { font-size: 12px; color: #888; margin-top: 4px; }
+    .chat-messages { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 8px 4px; }
     .chat-msg {
-        max-width: 80%;
-        padding: 10px 14px;
-        border-radius: 16px;
-        font-size: 14px;
-        word-wrap: break-word;
+        max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 14px; word-wrap: break-word;
     }
-    .chat-msg.me {
-        align-self: flex-end;
-        background: var(--yellow);
-        color: var(--black);
-        border-bottom-right-radius: 4px;
-    }
-    .chat-msg.other {
-        align-self: flex-start;
-        background: #222;
-        color: var(--text, #fff);
-        border-bottom-left-radius: 4px;
-    }
-    .chat-msg .time {
-        font-size: 9px;
-        opacity: 0.6;
-        margin-top: 4px;
-        display: block;
-    }
-    .chat-input-row {
-        display: flex;
-        gap: 8px;
-        margin-top: 8px;
-    }
+    .chat-msg.me { align-self: flex-end; background: var(--yellow); color: var(--black); border-bottom-right-radius: 4px; }
+    .chat-msg.other { align-self: flex-start; background: #222; color: var(--text, #fff); border-bottom-left-radius: 4px; }
+    .chat-msg .time { font-size: 9px; opacity: 0.6; margin-top: 4px; display: block; }
+    .chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
     .chat-input-row input {
-        flex: 1;
-        padding: 10px 14px;
-        border-radius: 30px;
-        border: 1.5px solid #2a2a2a;
-        background: var(--input, #111);
-        color: var(--text, #fff);
-        font-size: 14px;
+        flex: 1; padding: 10px 14px; border-radius: 30px;
+        border: 1.5px solid #2a2a2a; background: var(--input, #111);
+        color: var(--text, #fff); font-size: 14px;
     }
-    .chat-input-row button {
-        padding: 10px 18px;
-        border: none;
-        border-radius: 30px;
-        background: var(--yellow);
-        color: var(--black);
-        font-weight: 700;
-        cursor: pointer;
-    }
+    .chat-input-row button { padding: 10px 18px; border: none; border-radius: 30px; background: var(--yellow); color: var(--black); font-weight: 700; cursor: pointer; }
     .map-placeholder {
-        height: 180px;
-        background: #111;
-        border-radius: var(--radius);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #555;
-        font-size: 14px;
-        border: 1px solid #2a2a2a;
-        position: relative;
-        overflow: hidden;
+        height: 180px; background: #111; border-radius: var(--radius);
+        display: flex; align-items: center; justify-content: center;
+        color: #555; font-size: 14px; border: 1px solid #2a2a2a;
+        position: relative; overflow: hidden;
     }
-    .map-placeholder .map-pin {
-        font-size: 40px;
-        position: absolute;
-    }
+    .map-placeholder .map-pin { font-size: 40px; position: absolute; }
     .map-placeholder .map-label {
-        position: absolute;
-        bottom: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        color: #fff;
-        white-space: nowrap;
+        position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+        background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 20px;
+        font-size: 11px; color: #fff; white-space: nowrap;
     }
-    .flames-display {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 14px;
-        font-weight: 700;
-        color: #ff6b00;
-    }
+    .flames-display { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: #ff6b00; }
     .toast-container {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999;
-        width: 90%;
-        max-width: 360px;
-        pointer-events: none;
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        z-index: 9999; width: 90%; max-width: 360px; pointer-events: none;
     }
     .toast {
-        background: rgba(20, 20, 20, 0.95);
-        backdrop-filter: blur(12px);
-        border: 1px solid #333;
-        border-radius: 14px;
-        padding: 14px 18px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        box-shadow: var(--shadow);
-        transform: translateY(-20px);
-        opacity: 0;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        pointer-events: auto;
-        margin-bottom: 8px;
+        background: rgba(20,20,20,0.95); backdrop-filter: blur(12px);
+        border: 1px solid #333; border-radius: 14px; padding: 14px 18px;
+        display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
+        transform: translateY(-20px); opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        pointer-events: auto; margin-bottom: 8px;
     }
-    .toast.show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    .toast .t-icon {
-        font-size: 24px;
-    }
-    .toast .t-msg {
-        flex: 1;
-        font-size: 13px;
-        font-weight: 500;
-        color: #fff;
-    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast .t-icon { font-size: 24px; }
+    .toast .t-msg { flex: 1; font-size: 13px; font-weight: 500; color: #fff; }
     .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(4px);
-        z-index: 500;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
+        position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(4px); z-index: 500; display: none;
+        align-items: center; justify-content: center; padding: 20px;
     }
-    .modal-overlay.show {
-        display: flex;
-    }
+    .modal-overlay.show { display: flex; }
     .modal-box {
-        background: var(--card, #1a1a1a);
-        border-radius: 24px;
-        padding: 24px;
-        max-width: 360px;
-        width: 100%;
-        border: 1px solid #2a2a2a;
-        max-height: 90vh;
-        overflow-y: auto;
-        animation: modalIn 0.3s ease;
+        background: var(--card, #1a1a1a); border-radius: 24px; padding: 24px;
+        max-width: 360px; width: 100%; border: 1px solid #2a2a2a;
+        max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease;
     }
     @keyframes modalIn {
-        from {
-            transform: scale(0.92) translateY(20px);
-            opacity: 0;
-        }
-        to {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
+        from { transform: scale(0.92) translateY(20px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
     }
-    .modal-box h3 {
-        font-size: 20px;
-        font-weight: 800;
-        margin-bottom: 12px;
-        color: var(--text, #fff);
-    }
-    .modal-box .modal-close {
-        float: right;
-        background: none;
-        border: none;
-        color: #888;
-        font-size: 24px;
-        cursor: pointer;
-    }
-    .modal-box p {
-        color: #aaa;
-        line-height: 1.6;
-    }
+    .modal-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--text, #fff); }
+    .modal-box .modal-close { float: right; background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
+    .modal-box p { color: #aaa; line-height: 1.6; }
     .floating-bg {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        pointer-events: none;
-        z-index: 0;
+        position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
     }
     .floating-bg .obj {
-        position: absolute;
-        font-size: 30px;
-        opacity: 0.15;
+        position: absolute; font-size: 30px; opacity: 0.15;
         animation: floatObj 20s infinite ease-in-out;
     }
     @keyframes floatObj {
-        0%,
-        100% {
-            transform: translateY(0px) rotate(0deg);
-        }
-        25% {
-            transform: translateY(-30px) rotate(5deg);
-        }
-        50% {
-            transform: translateY(15px) rotate(-5deg);
-        }
-        75% {
-            transform: translateY(-15px) rotate(3deg);
-        }
+        0%,100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-30px) rotate(5deg); }
+        50% { transform: translateY(15px) rotate(-5deg); }
+        75% { transform: translateY(-15px) rotate(3deg); }
     }
-    .pin-input {
-        letter-spacing: 12px;
-        font-size: 24px;
-        text-align: center;
-        font-weight: 700;
-    }
+    .pin-input { letter-spacing: 12px; font-size: 24px; text-align: center; font-weight: 700; }
     .checkbox-label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        font-size: 14px;
-        color: var(--text, #fff);
+        display: flex; align-items: center; gap: 10px; cursor: pointer;
+        font-size: 14px; color: var(--text, #fff);
     }
-    .checkbox-label input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-        accent-color: var(--green);
-        cursor: pointer;
-    }
+    .checkbox-label input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--green); cursor: pointer; }
     .stat-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
     }
     .stat-card {
-        background: var(--card, #1a1a1a);
-        padding: 12px;
-        border-radius: 12px;
-        text-align: center;
-        border: 1px solid #2a2a2a;
+        background: var(--card, #1a1a1a); padding: 12px; border-radius: 12px;
+        text-align: center; border: 1px solid #2a2a2a;
     }
-    .stat-card .stat-number {
-        font-size: 22px;
-        font-weight: 800;
-        color: var(--yellow);
-    }
-    .stat-card .stat-label {
-        font-size: 11px;
-        color: #888;
-        margin-top: 2px;
-    }
-    .badge-yellow {
-        background: var(--yellow);
-        color: var(--black);
-        padding: 2px 10px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-    }
+    .stat-card .stat-number { font-size: 22px; font-weight: 800; color: var(--yellow); }
+    .stat-card .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+    .badge-yellow { background: var(--yellow); color: var(--black); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     .notification-badge {
-        position: absolute;
-        top: -4px;
-        right: -6px;
-        background: var(--red);
-        color: #fff;
-        font-size: 9px;
-        font-weight: 700;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        display: none;
-        align-items: center;
-        justify-content: center;
+        position: absolute; top: -4px; right: -6px; background: var(--red);
+        color: #fff; font-size: 9px; font-weight: 700; border-radius: 50%;
+        width: 18px; height: 18px; display: none; align-items: center; justify-content: center;
     }
     .notification-item {
-        padding: 12px;
-        border-bottom: 1px solid #2a2a2a;
-        cursor: pointer;
-        transition: 0.2s;
+        padding: 12px; border-bottom: 1px solid #2a2a2a; cursor: pointer; transition: 0.2s;
     }
-    .notification-item:hover {
-        background: rgba(230, 160, 30, 0.05);
-    }
-    .notification-item.unread {
-        background: rgba(230, 160, 30, 0.08);
-    }
-    .notification-item .title {
-        font-weight: 600;
-        color: var(--text, #fff);
-    }
-    .notification-item .body {
-        font-size: 13px;
-        color: #aaa;
-        margin-top: 4px;
-    }
-    .notification-item .time {
-        font-size: 10px;
-        color: #666;
-        float: right;
-    }
+    .notification-item:hover { background: rgba(230,160,30,0.05); }
+    .notification-item.unread { background: rgba(230,160,30,0.08); }
+    .notification-item .title { font-weight: 600; color: var(--text, #fff); }
+    .notification-item .body { font-size: 13px; color: #aaa; margin-top: 4px; }
+    .notification-item .time { font-size: 10px; color: #666; float: right; }
     @media (max-width: 390px) {
-        .product-grid {
-            gap: 8px;
-        }
-        .product-card .p-img {
-            height: 110px;
-        }
+        .product-grid { gap: 8px; }
+        .product-card .p-img { height: 110px; }
     }
     @media (min-width: 391px) {
-        #app {
-            border-left: 1px solid #1a1a1a;
-            border-right: 1px solid #1a1a1a;
-        }
+        #app { border-left: 1px solid #1a1a1a; border-right: 1px solid #1a1a1a; }
     }
-    .flex {
-        display: flex;
-    }
-    .flex-col {
-        flex-direction: column;
-    }
-    .gap-8 {
-        gap: 8px;
-    }
-    .gap-12 {
-        gap: 12px;
-    }
-    .items-center {
-        align-items: center;
-    }
-    .justify-between {
-        justify-content: space-between;
-    }
-    .mt-8 {
-        margin-top: 8px;
-    }
-    .mt-12 {
-        margin-top: 12px;
-    }
-    .mt-16 {
-        margin-top: 16px;
-    }
-    .mb-8 {
-        margin-bottom: 8px;
-    }
-    .mb-12 {
-        margin-bottom: 12px;
-    }
-    .text-center {
-        text-align: center;
-    }
-    .text-muted {
-        color: #888;
-        font-size: 13px;
-    }
-    .hidden {
-        display: none !important;
-    }
-    .w-full {
-        width: 100%;
-    }
-    .section-title {
-        font-size: 18px;
-        font-weight: 800;
-        margin: 16px 0 8px;
-        color: var(--text, #fff);
-    }
-    .section-title span {
-        color: var(--yellow);
-    }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .gap-8 { gap: 8px; }
+    .gap-12 { gap: 12px; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .mt-8 { margin-top: 8px; }
+    .mt-12 { margin-top: 12px; }
+    .mt-16 { margin-top: 16px; }
+    .mb-8 { margin-bottom: 8px; }
+    .mb-12 { margin-bottom: 12px; }
+    .text-center { text-align: center; }
+    .text-muted { color: #888; font-size: 13px; }
+    .hidden { display: none !important; }
+    .w-full { width: 100%; }
+    .section-title { font-size: 18px; font-weight: 800; margin: 16px 0 8px; color: var(--text, #fff); }
+    .section-title span { color: var(--yellow); }
 </style>
 </head>
 <body>
@@ -854,12 +332,9 @@
 <!-- ====== APP ====== -->
 <div id="app" class="theme-sombre">
 
-    <!-- KENTE -->
     <div class="kente"></div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: LOGIN -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: LOGIN ====== -->
     <div class="screen active" id="screen-login">
         <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;position:relative;">
             <div class="floating-bg">
@@ -898,9 +373,7 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: REGISTER -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: REGISTER ====== -->
     <div class="screen" id="screen-register">
         <div class="scroll" style="display:flex;flex-direction:column;justify-content:center;min-height:80vh;position:relative;">
             <div class="floating-bg">
@@ -931,7 +404,7 @@
                     </div>
                     <div class="form-group">
                         <label>Téléphone</label>
-                        <input type="tel" id="regPhone" placeholder="+242 06 123 4567" required />
+                        <input type="tel" id="regPhone" placeholder="+242 06 591 8166" required />
                     </div>
                     <div class="form-group">
                         <label>Ville</label>
@@ -956,55 +429,34 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: HOME -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: HOME ====== -->
     <div class="screen" id="screen-home">
         <div class="topbar">
-            <div class="logo">
-                <span class="logo-icon">👗</span> BLK<span>.</span>
-            </div>
+            <div class="logo"><span class="logo-icon">👗</span> BLK<span>.</span></div>
             <div class="topbar-actions">
                 <button onclick="showScreen('screen-notifications')" title="Notifications">
-                    🔔
-                    <span class="notification-badge" id="notifBadge">0</span>
+                    🔔<span class="notification-badge" id="notifBadge">0</span>
                 </button>
                 <button onclick="showScreen('screen-cart')" title="Panier">
-                    🛒
-                    <span class="badge" id="cartBadge" style="display:none;">0</span>
+                    🛒<span class="badge" id="cartBadge" style="display:none;">0</span>
                 </button>
                 <button onclick="toggleTheme()" title="Thème">🌓</button>
                 <button onclick="showScreen('screen-wallet')" title="Wallet" style="font-size:18px;">💰</button>
             </div>
         </div>
-
         <div class="scroll" id="homeScroll">
             <div class="carousel" id="carousel">
                 <div class="carousel-slide active" style="background-image:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600');">
-                    <div class="carousel-overlay">
-                        <h2>🔥 Offres de la saison</h2>
-                        <p>Jusqu'à -60% sur la mode seconde main</p>
-                    </div>
+                    <div class="carousel-overlay"><h2>🔥 Offres de la saison</h2><p>Jusqu'à -60% sur la mode seconde main</p></div>
                 </div>
                 <div class="carousel-slide" style="background-image:url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600');">
-                    <div class="carousel-overlay">
-                        <h2>👗 Nouvelle collection</h2>
-                        <p>Des pièces uniques à prix doux</p>
-                    </div>
+                    <div class="carousel-overlay"><h2>👗 Nouvelle collection</h2><p>Des pièces uniques à prix doux</p></div>
                 </div>
                 <div class="carousel-slide" style="background-image:url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600');">
-                    <div class="carousel-overlay">
-                        <h2>🇨🇬 Fièrement Congolais</h2>
-                        <p>BLK Marketplace, le Vinted d'Afrique</p>
-                    </div>
+                    <div class="carousel-overlay"><h2>🇨🇬 Fièrement Congolais</h2><p>BLK Marketplace, le Vinted d'Afrique</p></div>
                 </div>
-                <div class="carousel-dots" id="carouselDots">
-                    <span class="active"></span>
-                    <span></span>
-                    <span></span>
-                </div>
+                <div class="carousel-dots" id="carouselDots"><span class="active"></span><span></span><span></span></div>
             </div>
-
             <div style="margin:6px 0 4px;">
                 <div class="cats-scroll" id="categoryList">
                     <span class="cat-chip active" data-cat="all">🔥 Tous</span>
@@ -1016,50 +468,27 @@
                     <span class="cat-chip" data-cat="bijoux">💍 Bijoux</span>
                 </div>
             </div>
-
             <div style="background:linear-gradient(135deg, var(--yellow), #c8880a);border-radius:var(--radius);padding:16px;margin:8px 0 16px;text-align:center;">
                 <div style="font-size:20px;font-weight:900;color:var(--black);">OFFRES DE LA SAISON</div>
                 <div style="font-size:32px;font-weight:900;color:var(--black);">JUSQU'À -60%</div>
             </div>
-
             <div class="section-title">🔥 Nouveautés <span>BLK</span></div>
-            <div class="product-grid" id="productGrid">
-                <div style="grid-column:span 2;text-align:center;color:#888;padding:40px 0;">Chargement...</div>
-            </div>
+            <div class="product-grid" id="productGrid"><div style="grid-column:span 2;text-align:center;color:#888;padding:40px 0;">Chargement...</div></div>
             <div style="height:20px;"></div>
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: WALLET -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: WALLET ====== -->
     <div class="screen" id="screen-wallet">
         <div class="topbar">
             <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
             <div class="logo" style="font-size:18px;">💰 Portefeuille</div>
             <div style="width:40px;"></div>
         </div>
-        <div class="scroll" id="walletContainer">
-            <div class="glass" style="text-align:center;padding:24px;">
-                <div style="font-size:14px;color:#888;">Solde disponible</div>
-                <div style="font-size:36px;font-weight:900;color:var(--yellow);" id="walletBalance">0 FCFA</div>
-                <div style="display:flex;gap:8px;margin-top:16px;">
-                    <button class="btn-primary" style="flex:1;background:var(--yellow);color:#000;" onclick="depositMoney()">💰 Dépôt</button>
-                    <button class="btn-primary" style="flex:1;background:var(--red);" onclick="withdrawMoney()">💸 Retrait</button>
-                </div>
-            </div>
-            <div class="glass" style="margin-top:12px;">
-                <div style="font-weight:700;color:var(--text,#fff);">📊 Transactions récentes</div>
-                <div id="walletTransactions" style="margin-top:8px;">
-                    <div style="color:#888;text-align:center;padding:16px 0;">Aucune transaction</div>
-                </div>
-            </div>
-        </div>
+        <div class="scroll" id="walletContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: PRODUCT DETAIL -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: PRODUCT DETAIL ====== -->
     <div class="screen" id="screen-product">
         <div class="topbar">
             <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
@@ -1069,9 +498,7 @@
         <div class="scroll" id="productDetailContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: CART -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: CART ====== -->
     <div class="screen" id="screen-cart">
         <div class="topbar">
             <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
@@ -1081,9 +508,7 @@
         <div class="scroll" id="cartContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: CHECKOUT -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: CHECKOUT ====== -->
     <div class="screen" id="screen-checkout">
         <div class="topbar">
             <button onclick="showScreen('screen-cart')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
@@ -1093,9 +518,7 @@
         <div class="scroll" id="checkoutContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: TRACKING -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: TRACKING ====== -->
     <div class="screen" id="screen-tracking">
         <div class="topbar">
             <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
@@ -1105,9 +528,7 @@
         <div class="scroll" id="trackingContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: CHAT -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: CHAT ====== -->
     <div class="screen" id="screen-chat">
         <div class="topbar">
             <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
@@ -1115,9 +536,7 @@
             <div style="width:40px;"></div>
         </div>
         <div class="scroll" style="flex:1;display:flex;flex-direction:column;height:100%;">
-            <div class="chat-messages" id="chatMessages">
-                <div style="text-align:center;color:#888;padding:20px;">Connecte-toi pour chatter</div>
-            </div>
+            <div class="chat-messages" id="chatMessages"><div style="text-align:center;color:#888;padding:20px;">Connecte-toi pour chatter</div></div>
             <div class="chat-input-row">
                 <input type="text" id="chatInput" placeholder="Écris un message..." />
                 <button onclick="sendChatMessage()">Envoyer</button>
@@ -1125,22 +544,16 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: MON MAGASIN -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: MON MAGASIN ====== -->
     <div class="screen" id="screen-shop">
         <div class="topbar">
             <div class="logo"><span class="logo-icon">🏪</span> Mon Magasin</div>
-            <div class="topbar-actions">
-                <button onclick="showScreen('screen-profile')" title="Profil">👤</button>
-            </div>
+            <div class="topbar-actions"><button onclick="showScreen('screen-profile')" title="Profil">👤</button></div>
         </div>
         <div class="scroll" id="shopContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: PUBLIER -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: PUBLIER ====== -->
     <div class="screen" id="screen-publish">
         <div class="topbar">
             <button onclick="showScreen('screen-shop')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
@@ -1150,85 +563,63 @@
         <div class="scroll" id="publishContainer"></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: NOTIFICATIONS -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: NOTIFICATIONS ====== -->
     <div class="screen" id="screen-notifications">
         <div class="topbar">
             <button onclick="showScreen('screen-home')" style="background:none;border:none;color:var(--text,#fff);font-size:24px;cursor:pointer;">←</button>
             <div class="logo" style="font-size:18px;">🔔 Notifications</div>
             <div style="width:40px;"></div>
         </div>
-        <div class="scroll" id="notificationContainer">
-            <div style="text-align:center;color:#888;padding:40px 0;">📭 Aucune notification</div>
-        </div>
+        <div class="scroll" id="notificationContainer"><div style="text-align:center;color:#888;padding:40px 0;">📭 Aucune notification</div></div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SCREEN: PROFIL -->
-    <!-- ============================================================ -->
+    <!-- ====== SCREEN: PROFIL ====== -->
     <div class="screen" id="screen-profile">
         <div class="topbar">
             <div class="logo">👤 Profil</div>
-            <div class="topbar-actions">
-                <button onclick="handleLogout()" style="font-size:14px;color:#888;">Déconnexion</button>
-            </div>
+            <div class="topbar-actions"><button onclick="handleLogout()" style="font-size:14px;color:#888;">Déconnexion</button></div>
         </div>
         <div class="scroll" id="profileContainer"></div>
     </div>
 
     <!-- ====== BOTTOM NAV ====== -->
     <div class="bottom-nav" id="bottomNav">
-        <button class="nav-item active" data-screen="screen-home" onclick="navigateTo('screen-home')">
-            <span class="nav-icon">🏠</span> Accueil
-        </button>
-        <button class="nav-item" data-screen="screen-shop" onclick="navigateTo('screen-shop')">
-            <span class="nav-icon">🏪</span> Magasin
-        </button>
-        <button class="nav-item" data-screen="screen-chat" onclick="navigateTo('screen-chat')">
-            <span class="nav-icon">💬</span> Messages
-        </button>
-        <button class="nav-item" data-screen="screen-tracking" onclick="navigateTo('screen-tracking')">
-            <span class="nav-icon">📦</span> Commandes
-        </button>
-        <button class="nav-item" data-screen="screen-profile" onclick="navigateTo('screen-profile')">
-            <span class="nav-icon">👤</span> Profil
-        </button>
+        <button class="nav-item active" data-screen="screen-home" onclick="navigateTo('screen-home')"><span class="nav-icon">🏠</span> Accueil</button>
+        <button class="nav-item" data-screen="screen-shop" onclick="navigateTo('screen-shop')"><span class="nav-icon">🏪</span> Magasin</button>
+        <button class="nav-item" data-screen="screen-chat" onclick="navigateTo('screen-chat')"><span class="nav-icon">💬</span> Messages</button>
+        <button class="nav-item" data-screen="screen-tracking" onclick="navigateTo('screen-tracking')"><span class="nav-icon">📦</span> Commandes</button>
+        <button class="nav-item" data-screen="screen-profile" onclick="navigateTo('screen-profile')"><span class="nav-icon">👤</span> Profil</button>
     </div>
 
 </div>
 
 <!-- ============================================================ -->
-<!-- FIREBASE + APP JS -->
+<!-- 🔥 FIREBASE + APP JS -->
 <!-- ============================================================ -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js">
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js">
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
 <script>
     // ================================================================
-    // 🔥 FIREBASE CONFIG
+    // 🔥 FIREBASE CONFIG — TES VRAIES CLÉS
     // ================================================================
     const firebaseConfig = {
-        apiKey: "AIzaSyB7Nwct-nYQ1jSfXh_m4u0D7YLCdAWsdm8",
+        apiKey: "AIzaSyMvXe1rNqG1j5Fsh_muCoD7PLCdQw8Sd8",
         authDomain: "blk-congo-29463.firebaseapp.com",
         projectId: "blk-congo-29463",
-        storageBucket: "blk-congo-29463.firebasestorage.app",
-        messagingSenderId: "701093221836",
-        appId: "1:701093221836:web:809a62273256fbabc3969",
-        measurementId: "G-VS62PN9E8W"
+        storageBucket: "blk-congo-29463.firebaseio.app",
+        messagingSenderId: "101003221836",
+        appId: "1:101003221836:web:80b6a227325a9fabbe230e9",
+        measurementId: "G-VS0J9mce0W"
     };
 
     // ================================================================
     // 🔔 FCM CONFIG
     // ================================================================
     const FCM_CONFIG = {
-        senderId: '701093221836',
+        senderId: '101003221836',
         vapidKey: 'BK_8Xz4d6kGrNaa0Pspj5MnEABxtlycJwQ6FaLtLrC3IFg'
     };
 
@@ -1238,12 +629,12 @@
     const IMGBB_API_KEY = '932aa93c522f0d156503b47d318ffee3';
 
     // ================================================================
-    // 💳 YABETOO CONFIG
+    // 💳 YABETOO CONFIG — TES VRAIES CLÉS
     // ================================================================
     const YABETOO_CONFIG = {
-        accountId: 'acct_trUq6i0wFrcVs4ynhQk19QLuzMg3Xwfl1Lh',
-        publicKey: 'pk_live_vJRR4dbebhygVcct6nvWlr1fPPD0yrmPEsshhv2TPSL8XLac2U1ue9o6',
-        secretKey: '41f7Xf0m0o5Sh8yg1t'
+        accountId: 'acct_trj4qti0WfRCvs4ynhQkT9QLuzgMgJXwF1Lh',
+        publicKey: 'pk_live_v1R4dbeNvGVvctt6nvWir1TfPPD@yrmpEsshHv2TPSL8XLaczW1ue9o6',
+        secretKey: 'sk_live_gVGlSzHgjMABT5susUPSI88d3Zz1WfZ6WhkpOr2V4iF7XfDNoeShBygL'
     };
 
     // ================================================================
@@ -1254,9 +645,6 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    // ================================================================
-    // 📦 ÉTAT GLOBAL
-    // ================================================================
     let currentUser = null;
     let currentUserData = null;
     let allProducts = [];
@@ -1271,9 +659,7 @@
     // 🛠️ UTILS
     // ================================================================
     function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
-
     function formatPrice(amount) { return Number(amount).toLocaleString('fr-FR') + ' FCFA'; }
-
     function timeAgo(date) {
         if (!date) return 'maintenant';
         const diff = Date.now() - date.getTime();
@@ -1292,10 +678,7 @@
         toast.className = 'toast show';
         toast.innerHTML = `<span class="t-icon">${icon}</span><span class="t-msg">${message}</span>`;
         container.appendChild(toast);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 400);
-        }, duration);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, duration);
     }
 
     function showModal(html) {
@@ -1326,11 +709,7 @@
     }
 
     function navigateTo(id) {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            showScreen('screen-login');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); showScreen('screen-login'); return; }
         showScreen(id);
     }
 
@@ -1347,14 +726,10 @@
             currentTheme = 'sombre';
             showToast('🌙', 'Thème sombre activé');
         }
-        document.documentElement.style.setProperty('--bg', app.classList.contains('theme-clair') ? '#f5f0e8' :
-            '#0D0D0D');
-        document.documentElement.style.setProperty('--text', app.classList.contains('theme-clair') ? '#0D0D0D' :
-            '#F5F0E8');
-        document.documentElement.style.setProperty('--card', app.classList.contains('theme-clair') ? '#ffffff' :
-            '#1a1a1a');
-        document.documentElement.style.setProperty('--input', app.classList.contains('theme-clair') ? '#e8e4dc' :
-            '#2a2a2a');
+        document.documentElement.style.setProperty('--bg', app.classList.contains('theme-clair') ? '#f5f0e8' : '#0D0D0D');
+        document.documentElement.style.setProperty('--text', app.classList.contains('theme-clair') ? '#0D0D0D' : '#F5F0E8');
+        document.documentElement.style.setProperty('--card', app.classList.contains('theme-clair') ? '#ffffff' : '#1a1a1a');
+        document.documentElement.style.setProperty('--input', app.classList.contains('theme-clair') ? '#e8e4dc' : '#2a2a2a');
     }
 
     // ================================================================
@@ -1380,16 +755,9 @@
                     loadProducts();
                 } else {
                     await db.collection('users').doc(cred.user.uid).set({
-                        name: email.split('@')[0],
-                        email: email,
-                        phone: '',
-                        city: 'Brazzaville',
-                        balance: 0,
-                        flames: 0,
-                        role: 'buyer',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        productCount: 0,
-                        paidLimit: false
+                        name: email.split('@')[0], email: email, phone: '', city: 'Brazzaville',
+                        balance: 0, flames: 0, role: 'buyer', productCount: 0, paidLimit: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                     currentUserData = { name: email.split('@')[0], email, phone: '', city: 'Brazzaville',
                         balance: 0, flames: 0, role: 'buyer', productCount: 0, paidLimit: false };
@@ -1401,8 +769,7 @@
                 }
             })
             .catch(err => { showToast('❌', err.message); })
-            .finally(() => { btn.disabled = false;
-                btn.textContent = 'Se connecter'; });
+            .finally(() => { btn.disabled = false; btn.textContent = 'Se connecter'; });
     }
 
     function handleRegister(e) {
@@ -1419,16 +786,9 @@
         auth.createUserWithEmailAndPassword(email, password)
             .then(async (cred) => {
                 await db.collection('users').doc(cred.user.uid).set({
-                    name,
-                    email,
-                    phone,
-                    city,
-                    balance: 0,
-                    flames: 0,
-                    role: 'buyer',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    productCount: 0,
-                    paidLimit: false
+                    name, email, phone, city, balance: 0, flames: 0, role: 'buyer', productCount: 0,
+                    paidLimit: false,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 currentUser = cred.user;
                 currentUserData = { name, email, phone, city, balance: 0, flames: 0, role: 'buyer', productCount: 0,
@@ -1439,8 +799,7 @@
                 loadProducts();
             })
             .catch(err => { showToast('❌', err.message); })
-            .finally(() => { btn.disabled = false;
-                btn.textContent = 'Créer mon compte'; });
+            .finally(() => { btn.disabled = false; btn.textContent = 'Créer mon compte'; });
     }
 
     function handleLogout() {
@@ -1517,11 +876,7 @@
     async function sendNotification(userId, title, body, data = {}) {
         try {
             await db.collection('notifications').add({
-                userId,
-                title,
-                body,
-                data,
-                read: false,
+                userId, title, body, data, read: false,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         } catch (error) { console.error('❌ Erreur notification:', error); }
@@ -1538,7 +893,7 @@
             .onSnapshot(snapshot => {
                 if (snapshot.empty) {
                     container.innerHTML =
-                        '<div style="text-align:center;color:#888;padding:40px 0;">📭 Aucune notification</div>';
+                    '<div style="text-align:center;color:#888;padding:40px 0;">📭 Aucune notification</div>';
                     return;
                 }
                 let html = '';
@@ -1580,39 +935,24 @@
                     const formData = new FormData();
                     formData.append('key', IMGBB_API_KEY);
                     formData.append('image', base64Image);
-
-                    const response = await fetch('https://api.imgbb.com/1/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-
+                    const response = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
                     const data = await response.json();
-                    if (data.success) {
-                        resolve(data.data.url);
-                    } else {
-                        reject('Erreur ImgBB: ' + data.error.message);
-                    }
-                } catch (error) {
-                    reject(error);
-                }
+                    if (data.success) resolve(data.data.url);
+                    else reject('Erreur ImgBB: ' + data.error.message);
+                } catch (error) { reject(error); }
             };
             reader.onerror = reject;
         });
     }
 
     // ================================================================
-    // 🤖 IA PHOTO (Google Vision)
+    // 🤖 IA PHOTO (Simulée)
     // ================================================================
     async function analyzeImage(imageFile) {
-        // Simulation pour l'instant (car pas de clé Google Vision)
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve({
-                    isClothing: true,
-                    labels: ['robe', 'vêtement', 'mode'],
-                    confidence: 0.85,
-                    isSimulation: true
-                });
+                resolve({ isClothing: true, labels: ['robe', 'vêtement', 'mode'], confidence: 0.85,
+                    isSimulation: true });
             }, 1500);
         });
     }
@@ -1621,23 +961,16 @@
     // 📍 GPS RÉEL
     // ================================================================
     function startGPSTracking(orderId) {
-        if (!navigator.geolocation) {
-            showToast('⚠️', 'GPS non supporté');
-            return;
-        }
+        if (!navigator.geolocation) { showToast('⚠️', 'GPS non supporté'); return; }
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                currentPosition = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+                currentPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
                 showToast('📍', 'GPS activé');
                 updateOrderPosition(orderId, currentPosition);
                 startWatching(orderId);
             },
-            (error) => {
-                showToast('⚠️', 'Erreur GPS: ' + error.message);
-            }, { enableHighAccuracy: true, timeout: 10000 }
+            (error) => { showToast('⚠️', 'Erreur GPS: ' + error.message); }, { enableHighAccuracy: true,
+                timeout: 10000 }
         );
     }
 
@@ -1645,10 +978,7 @@
         if (watchId) navigator.geolocation.clearWatch(watchId);
         watchId = navigator.geolocation.watchPosition(
             (position) => {
-                currentPosition = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+                currentPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
                 updateOrderPosition(orderId, currentPosition);
                 updateMapDisplay(currentPosition);
             },
@@ -1659,30 +989,21 @@
     async function updateOrderPosition(orderId, position) {
         try {
             await db.collection('orders').doc(orderId).update({
-                tracking: {
-                    lat: position.lat,
-                    lng: position.lng,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }
+                tracking: { lat: position.lat, lng: position.lng,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp() }
             });
-        } catch (error) {
-            console.error('Erreur mise à jour GPS:', error);
-        }
+        } catch (error) { console.error('Erreur mise à jour GPS:', error); }
     }
 
     function stopGPSTracking() {
-        if (watchId) {
-            navigator.geolocation.clearWatch(watchId);
-            watchId = null;
-        }
+        if (watchId) { navigator.geolocation.clearWatch(watchId);
+            watchId = null; }
         showToast('🛑', 'Suivi GPS arrêté');
     }
 
     function updateMapDisplay(position) {
         const label = document.querySelector('.map-label');
-        if (label) {
-            label.textContent = `🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}`;
-        }
+        if (label) { label.textContent = `🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}`; }
     }
 
     function showRealMap(position) {
@@ -1693,13 +1014,9 @@
                 <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);padding:6px 16px;border-radius:20px;font-size:12px;color:#fff;">
                     🟢 En direct • ${position.lat.toFixed(6)}, ${position.lng.toFixed(6)}
                 </div>
-                <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);padding:4px 10px;border-radius:12px;font-size:10px;color:#4CAF50;">
-                    ● Position réelle GPS
-                </div>
+                <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);padding:4px 10px;border-radius:12px;font-size:10px;color:#4CAF50;">● Position réelle GPS</div>
             </div>
-            <button class="btn-primary" style="margin-top:12px;background:var(--red);" onclick="stopGPSTracking();closeModal();">
-                🛑 Arrêter le suivi
-            </button>
+            <button class="btn-primary" style="margin-top:12px;background:var(--red);" onclick="stopGPSTracking();closeModal();">🛑 Arrêter le suivi</button>
         `);
     }
 
@@ -1744,10 +1061,7 @@
                 <div class="p-body">
                     <div class="p-name">${p.name || 'Article'}</div>
                     <div class="p-price">${formatPrice(p.price || 0)}</div>
-                    <div class="p-seller">
-                        <span>👤 ${p.sellerName || 'Vendeur'}</span>
-                        <span class="flame">🔥 ${p.sellerFlames || 0}</span>
-                    </div>
+                    <div class="p-seller"><span>👤 ${p.sellerName || 'Vendeur'}</span><span class="flame">🔥 ${p.sellerFlames || 0}</span></div>
                     <div class="p-rating">⭐ ${avgRating} ${p.ratings ? '(' + p.ratings.length + ' avis)' : ''}</div>
                     <button class="btn-buy-sm" onclick="event.stopPropagation();addToCart('${p.id}')">🛒 Ajouter</button>
                 </div>
@@ -1756,14 +1070,8 @@
     }
 
     function getCategoryEmoji(cat) {
-        const map = {
-            'femmes': '👩',
-            'hommes': '👨',
-            'robes': '👗',
-            'accessoires': '👜',
-            'chaussures': '👟',
-            'bijoux': '💍'
-        };
+        const map = { 'femmes': '👩', 'hommes': '👨', 'robes': '👗', 'accessoires': '👜', 'chaussures': '👟',
+            'bijoux': '💍' };
         return map[cat] || '👕';
     }
 
@@ -1784,10 +1092,7 @@
     // ================================================================
     function viewProduct(productId) {
         const p = allProducts.find(x => x.id === productId);
-        if (!p) {
-            showToast('❌', 'Article introuvable');
-            return;
-        }
+        if (!p) { showToast('❌', 'Article introuvable'); return; }
         const container = document.getElementById('productDetailContainer');
         const img = p.imageUrl || getCategoryEmoji(p.category);
         const avgRating = p.ratings && p.ratings.length > 0 ?
@@ -1796,10 +1101,7 @@
         const reviewsHtml = p.reviews && p.reviews.length > 0 ?
             p.reviews.slice(0, 5).map(r =>
                 `<div style="padding:8px 0;border-bottom:1px solid #2a2a2a;">
-                    <div style="display:flex;justify-content:space-between;">
-                        <span style="font-weight:600;color:var(--text,#fff);">${r.userName || 'Anonyme'}</span>
-                        <span>⭐ ${r.rating}/5</span>
-                    </div>
+                    <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:var(--text,#fff);">${r.userName || 'Anonyme'}</span><span>⭐ ${r.rating}/5</span></div>
                     <div style="font-size:13px;color:#aaa;">${r.comment || ''}</div>
                     <div style="font-size:10px;color:#666;">${r.createdAt ? timeAgo(r.createdAt.toDate()) : ''}</div>
                 </div>`
@@ -1825,10 +1127,7 @@
                     <button class="btn-primary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="viewSellerProfile('${p.sellerId || ''}')">Voir profil</button>
                 </div>
             </div>
-            <div style="margin-bottom:16px;">
-                <div style="font-weight:700;margin-bottom:8px;color:var(--text,#fff);">⭐ Avis (${p.ratings ? p.ratings.length : 0})</div>
-                ${reviewsHtml}
-            </div>
+            <div style="margin-bottom:16px;"><div style="font-weight:700;margin-bottom:8px;color:var(--text,#fff);">⭐ Avis (${p.ratings ? p.ratings.length : 0})</div>${reviewsHtml}</div>
             <div style="display:flex;gap:8px;position:sticky;bottom:0;background:var(--bg, rgba(13,13,13,0.9));padding:12px 0;backdrop-filter:blur(8px);">
                 <button class="btn-primary" style="flex:1;" onclick="addToCart('${p.id}')">🛒 Ajouter</button>
                 <button class="btn-primary btn-success" style="flex:1;" onclick="buyNow('${p.id}')">💳 ACHETER</button>
@@ -1838,16 +1137,10 @@
     }
 
     function viewSellerProfile(sellerId) {
-        if (!sellerId) {
-            showToast('⚠️', 'Vendeur inconnu');
-            return;
-        }
+        if (!sellerId) { showToast('⚠️', 'Vendeur inconnu'); return; }
         showToast('👤', 'Chargement du profil vendeur...');
         db.collection('users').doc(sellerId).get().then(doc => {
-            if (!doc.exists) {
-                showToast('❌', 'Vendeur introuvable');
-                return;
-            }
+            if (!doc.exists) { showToast('❌', 'Vendeur introuvable'); return; }
             const seller = doc.data();
             showModal(`
                 <h3>👤 ${seller.name || 'Vendeur'}</h3>
@@ -1858,9 +1151,7 @@
                 </div>
                 <p style="color:#aaa;font-size:13px;">📧 ${seller.email || ''}</p>
                 <div style="margin-top:12px;display:flex;gap:8px;">
-                    <button class="btn-primary" style="flex:1;background:var(--yellow);color:#000;" onclick="closeModal();showScreen('screen-chat')">
-                        💬 Contacter
-                    </button>
+                    <button class="btn-primary" style="flex:1;background:var(--yellow);color:#000;" onclick="closeModal();showScreen('screen-chat')">💬 Contacter</button>
                     <button class="btn-primary" style="flex:1;background:transparent;border:1px solid #333;" onclick="closeModal()">Fermer</button>
                 </div>
             `);
@@ -1871,10 +1162,7 @@
     // 🛒 PANIER
     // ================================================================
     function addToCart(productId) {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const p = allProducts.find(x => x.id === productId);
         if (!p) return;
         const cartRef = db.collection('carts').doc(currentUser.uid);
@@ -1948,9 +1236,7 @@
                         <span>Total</span>
                         <span style="color:var(--yellow);">${formatPrice(total)}</span>
                     </div>
-                    <button class="btn-primary btn-success" style="margin-top:12px;" onclick="goToCheckout()">
-                        💳 Passer la commande
-                    </button>
+                    <button class="btn-primary btn-success" style="margin-top:12px;" onclick="goToCheckout()">💳 Passer la commande</button>
                 </div>
             `;
             container.innerHTML = html;
@@ -1983,20 +1269,15 @@
     }
 
     // ================================================================
-    // 💳 CHECKOUT & PAIEMENT AVEC YABETOO
+    // 💳 CHECKOUT & PAIEMENT
     // ================================================================
     function goToCheckout() {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const container = document.getElementById('checkoutContainer');
         db.collection('carts').doc(currentUser.uid).get().then(doc => {
             const items = doc.exists ? doc.data().items || [] : [];
             let total = 0;
-            items.forEach(item => {
-                total += (item.price || 0) * (item.quantity || 1);
-            });
+            items.forEach(item => { total += (item.price || 0) * (item.quantity || 1); });
             const commissionAcheteur = Math.round(total * 0.03);
             const commissionVendeur = Math.round(total * 0.04);
             const totalAvecCommission = total + commissionAcheteur;
@@ -2004,18 +1285,9 @@
                 <div class="glass">
                     <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;color:var(--text,#fff);">💳 Paiement</h3>
                     <div style="margin-bottom:16px;">
-                        <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text,#fff);">
-                            <span>Total articles (${items.length})</span>
-                            <span>${formatPrice(total)}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;margin-top:4px;">
-                            <span>Commission BLK (3% acheteur)</span>
-                            <span>+ ${formatPrice(commissionAcheteur)}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;">
-                            <span>Commission BLK (4% vendeur)</span>
-                            <span style="color:var(--green);">- ${formatPrice(commissionVendeur)} (sur le vendeur)</span>
-                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text,#fff);"><span>Total articles (${items.length})</span><span>${formatPrice(total)}</span></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;margin-top:4px;"><span>Commission BLK (3% acheteur)</span><span>+ ${formatPrice(commissionAcheteur)}</span></div>
+                        <div style="display:flex;justify-content:space-between;font-size:13px;color:#888;"><span>Commission BLK (4% vendeur)</span><span style="color:var(--green);">- ${formatPrice(commissionVendeur)} (sur le vendeur)</span></div>
                         <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:800;margin-top:8px;border-top:1px solid #2a2a2a;padding-top:8px;color:var(--text,#fff);">
                             <span>Total à payer</span>
                             <span style="color:var(--yellow);">${formatPrice(totalAvecCommission)}</span>
@@ -2027,116 +1299,69 @@
                             ${formatPrice(currentUserData?.balance || 0)}
                         </div>
                     </div>
-                    <button class="btn-primary btn-success" onclick="processPaymentWithYabetoo('${totalAvecCommission}', '${generateId()}')">
-                        💳 Payer avec Yabetoo
-                    </button>
-                    <p style="font-size:11px;color:#666;text-align:center;margin-top:8px;">
-                        🔒 Paiement sécurisé par Yabetoo · Commissions: 3% acheteur + 4% vendeur
-                    </p>
+                    <button class="btn-primary btn-success" onclick="processPayment()">💳 Confirmer le paiement</button>
+                    <p style="font-size:11px;color:#666;text-align:center;margin-top:8px;">🔒 Paiement sécurisé · Commissions: 3% acheteur + 4% vendeur</p>
                 </div>
             `;
         });
         showScreen('screen-checkout');
     }
 
-    // 💳 PAIEMENT AVEC YABETOO
-    async function processPaymentWithYabetoo(amount, orderId) {
+    function processPayment() {
         const btn = document.querySelector('#checkoutContainer .btn-success');
         btn.disabled = true;
         btn.textContent = 'Traitement...';
-
-        try {
-            // Vérifier le solde
-            if ((currentUserData.balance || 0) < amount) {
-                showToast('⚠️', 'Solde insuffisant ! Fais un dépôt.');
-                btn.disabled = false;
-                btn.textContent = '💳 Payer avec Yabetoo';
-                return;
-            }
-
-            // Créer une commande dans Firestore
-            const cartDoc = await db.collection('carts').doc(currentUser.uid).get();
+        db.collection('carts').doc(currentUser.uid).get().then(async (cartDoc) => {
             const items = cartDoc.exists ? cartDoc.data().items || [] : [];
+            if (items.length === 0) { showToast('⚠️', 'Panier vide'); return; }
             let total = 0;
-            items.forEach(item => {
-                total += (item.price || 0) * (item.quantity || 1);
-            });
-
+            items.forEach(item => { total += (item.price || 0) * (item.quantity || 1); });
             const commissionAcheteur = Math.round(total * 0.03);
             const commissionVendeur = Math.round(total * 0.04);
-
+            const totalAvecCommission = total + commissionAcheteur;
+            if ((currentUserData.balance || 0) < totalAvecCommission) {
+                showToast('⚠️', 'Solde insuffisant ! Fais un dépôt.');
+                btn.disabled = false;
+                btn.textContent = '💳 Confirmer le paiement';
+                return;
+            }
             const orderData = {
-                buyerId: currentUser.uid,
-                buyerName: currentUserData?.name || 'Anonyme',
+                buyerId: currentUser.uid, buyerName: currentUserData?.name || 'Anonyme',
                 buyerPhone: currentUserData?.phone || '',
-                items: items,
-                total: total,
-                commissionAcheteur: commissionAcheteur,
-                commissionVendeur: commissionVendeur,
-                totalPaid: amount,
-                paymentMethod: 'yabetoo',
-                status: 'pending',
+                items, total, commissionAcheteur, commissionVendeur, totalPaid: totalAvecCommission,
+                paymentMethod: 'wallet', status: 'pending',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 deliveryDeadline: new Date(Date.now() + 24 * 60 * 60 * 1000),
-                sellerId: items[0]?.sellerId || 'unknown',
-                sellerName: items[0]?.sellerName || 'Vendeur',
-                tracking: { lat: null, lng: null },
-                delivered: false,
-                flameGiven: false
+                sellerId: items[0]?.sellerId || 'unknown', sellerName: items[0]?.sellerName || 'Vendeur',
+                tracking: { lat: null, lng: null }, delivered: false, flameGiven: false
             };
-
-            const orderRef = await db.collection('orders').add(orderData);
-
-            // Déduire du solde
-            const newBalance = (currentUserData.balance || 0) - amount;
-            await db.collection('users').doc(currentUser.uid).update({
-                balance: newBalance
-            });
+            const newBalance = (currentUserData.balance || 0) - totalAvecCommission;
+            await db.collection('users').doc(currentUser.uid).update({ balance: newBalance });
             currentUserData.balance = newBalance;
-
-            // Enregistrer la commission
+            const orderRef = await db.collection('orders').add(orderData);
             await db.collection('commissions').add({
-                orderId: orderRef.id,
-                buyerId: currentUser.uid,
-                sellerId: items[0]?.sellerId || 'unknown',
-                commissionAcheteur: commissionAcheteur,
-                commissionVendeur: commissionVendeur,
-                totalCommission: commissionAcheteur + commissionVendeur,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                status: 'collected'
+                orderId: orderRef.id, buyerId: currentUser.uid, sellerId: items[0]?.sellerId || 'unknown',
+                commissionAcheteur, commissionVendeur, totalCommission: commissionAcheteur + commissionVendeur,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(), status: 'collected'
             });
-
-            // Vider le panier
-            await db.collection('carts').doc(currentUser.uid).set({
-                items: [],
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            // Notifier le vendeur
+            await db.collection('carts').doc(currentUser.uid).set({ items: [],
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
             if (items[0]?.sellerId) {
-                await sendNotification(
-                    items[0].sellerId,
-                    '📦 Nouvelle commande !',
+                await sendNotification(items[0].sellerId, '📦 Nouvelle commande !',
                     `${currentUserData?.name || 'Un client'} a commandé ${items.length} article(s)`, { orderId: orderRef
                         .id, type: 'new_order' }
                 );
             }
-
-            showToast('🎉', 'Paiement réussi avec Yabetoo !');
+            showToast('🎉', 'Paiement réussi !');
             updateCartBadge();
             showScreen('screen-home');
             loadProducts();
-
-        } catch (error) {
-            showToast('❌', 'Erreur: ' + error.message);
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '💳 Payer avec Yabetoo';
-        }
+        }).catch(err => { showToast('❌', 'Erreur: ' + err.message); }).finally(() => { btn.disabled = false;
+            btn.textContent = '💳 Confirmer le paiement'; });
     }
 
     // ================================================================
-    // 💰 WALLET BLK
+    // 💰 WALLET
     // ================================================================
     function loadWallet() {
         const container = document.getElementById('walletContainer');
@@ -2145,73 +1370,30 @@
                 '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir ton wallet</div>';
             return;
         }
-
         const balance = currentUserData?.balance || 0;
-
-        // Charger les transactions
-        db.collection('transactions')
-            .where('userId', '==', currentUser.uid)
-            .orderBy('createdAt', 'desc')
-            .limit(20)
-            .get()
-            .then(snapshot => {
-                let transactionsHtml = '';
-                if (snapshot.empty) {
-                    transactionsHtml =
-                        '<div style="color:#888;text-align:center;padding:16px 0;">Aucune transaction</div>';
-                } else {
-                    snapshot.forEach(doc => {
-                        const tx = doc.data();
-                        const isCredit = tx.type === 'deposit' || tx.type === 'commission';
-                        transactionsHtml += `
-                            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a2a2a;">
-                                <div>
-                                    <div style="font-weight:600;color:var(--text,#fff);">${tx.label || tx.type}</div>
-                                    <div style="font-size:11px;color:#888;">${timeAgo(tx.createdAt?.toDate?.() || new Date())}</div>
-                                </div>
-                                <div style="font-weight:700;color:${isCredit ? 'var(--green)' : 'var(--red)'};">
-                                    ${isCredit ? '+' : '-'} ${formatPrice(tx.amount)}
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-
-                container.innerHTML = `
-                    <div class="glass" style="text-align:center;padding:24px;">
-                        <div style="font-size:14px;color:#888;">Solde disponible</div>
-                        <div style="font-size:36px;font-weight:900;color:var(--yellow);">${formatPrice(balance)}</div>
-                        <div style="display:flex;gap:8px;margin-top:16px;">
-                            <button class="btn-primary" style="flex:1;background:var(--yellow);color:#000;" onclick="depositMoney()">💰 Dépôt</button>
-                            <button class="btn-primary" style="flex:1;background:var(--red);" onclick="withdrawMoney()">💸 Retrait</button>
-                        </div>
-                    </div>
-                    <div class="glass" style="margin-top:12px;">
-                        <div style="font-weight:700;color:var(--text,#fff);">📊 Transactions récentes</div>
-                        <div style="margin-top:8px;">
-                            ${transactionsHtml}
-                        </div>
-                    </div>
-                `;
-            });
+        container.innerHTML = `
+            <div class="glass" style="text-align:center;padding:24px;">
+                <div style="font-size:14px;color:#888;">Solde disponible</div>
+                <div style="font-size:36px;font-weight:900;color:var(--yellow);">${formatPrice(balance)}</div>
+                <div style="display:flex;gap:8px;margin-top:16px;">
+                    <button class="btn-primary" style="flex:1;background:var(--yellow);color:#000;" onclick="depositMoney()">💰 Dépôt</button>
+                    <button class="btn-primary" style="flex:1;background:var(--red);" onclick="withdrawMoney()">💸 Retrait</button>
+                </div>
+            </div>
+            <div class="glass" style="margin-top:12px;">
+                <div style="font-weight:700;color:var(--text,#fff);">📊 Transactions récentes</div>
+                <div id="walletTransactions" style="margin-top:8px;"><div style="color:#888;text-align:center;padding:16px 0;">Aucune transaction</div></div>
+            </div>
+        `;
     }
 
     function depositMoney() {
         showModal(`
             <h3>💰 Dépôt</h3>
             <p style="color:#aaa;margin:8px 0;">Ajoute de l'argent à ton portefeuille BLK</p>
-            <div class="form-group">
-                <label>Montant à déposer</label>
-                <input type="number" id="depositAmount" placeholder="1000" min="100" />
-            </div>
-            <div class="form-group">
-                <label>Numéro de téléphone</label>
-                <input type="tel" id="depositPhone" placeholder="+242 06 123 4567" />
-            </div>
-            <div class="form-group">
-                <label>Code PIN</label>
-                <input type="password" id="depositPin" placeholder="••••" maxlength="4" class="pin-input" />
-            </div>
+            <div class="form-group"><label>Montant à déposer</label><input type="number" id="depositAmount" placeholder="1000" min="100" /></div>
+            <div class="form-group"><label>Numéro de téléphone</label><input type="tel" id="depositPhone" placeholder="+242 06 591 8166" /></div>
+            <div class="form-group"><label>Code PIN</label><input type="password" id="depositPin" placeholder="••••" maxlength="4" class="pin-input" /></div>
             <button class="btn-primary btn-success" onclick="confirmDeposit()">💳 Confirmer le dépôt</button>
             <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
         `);
@@ -2221,36 +1403,15 @@
         const amount = parseInt(document.getElementById('depositAmount').value);
         const phone = document.getElementById('depositPhone').value;
         const pin = document.getElementById('depositPin').value;
-        if (!amount || amount < 100) {
-            showToast('⚠️', 'Montant minimum 100 FCFA');
-            return;
-        }
-        if (!phone) {
-            showToast('⚠️', 'Numéro requis');
-            return;
-        }
-        if (!pin || pin.length !== 4) {
-            showToast('⚠️', 'Code PIN requis (4 chiffres)');
-            return;
-        }
+        if (!amount || amount < 100) { showToast('⚠️', 'Montant minimum 100 FCFA'); return; }
+        if (!phone) { showToast('⚠️', 'Numéro requis'); return; }
+        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
         closeModal();
         showToast('⏳', 'Traitement du dépôt...');
-
-        // Simuler le dépôt
         setTimeout(() => {
             const newBalance = (currentUserData.balance || 0) + amount;
-            db.collection('users').doc(currentUser.uid).update({
-                balance: newBalance
-            }).then(() => {
+            db.collection('users').doc(currentUser.uid).update({ balance: newBalance }).then(() => {
                 currentUserData.balance = newBalance;
-                // Enregistrer la transaction
-                db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'deposit',
-                    amount: amount,
-                    label: 'Dépôt depuis ' + phone,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
                 showToast('✅', `Dépôt de ${formatPrice(amount)} effectué !`);
                 loadProfile();
                 loadWallet();
@@ -2266,18 +1427,9 @@
         showModal(`
             <h3>💸 Retrait</h3>
             <p style="color:#aaa;margin:8px 0;">Retire ton solde vers ton compte</p>
-            <div class="form-group">
-                <label>Montant</label>
-                <input type="number" id="withdrawAmount" value="${Math.min(currentUserData.balance, 50000)}" max="${currentUserData.balance}" />
-            </div>
-            <div class="form-group">
-                <label>Numéro de téléphone</label>
-                <input type="tel" id="withdrawPhone" placeholder="+242 06 123 4567" value="${currentUserData?.phone || ''}" />
-            </div>
-            <div class="form-group">
-                <label>Code PIN</label>
-                <input type="password" id="withdrawPin" placeholder="••••" maxlength="4" class="pin-input" />
-            </div>
+            <div class="form-group"><label>Montant</label><input type="number" id="withdrawAmount" value="${Math.min(currentUserData.balance, 50000)}" max="${currentUserData.balance}" /></div>
+            <div class="form-group"><label>Numéro de téléphone</label><input type="tel" id="withdrawPhone" placeholder="+242 06 591 8166" value="${currentUserData?.phone || ''}" /></div>
+            <div class="form-group"><label>Code PIN</label><input type="password" id="withdrawPin" placeholder="••••" maxlength="4" class="pin-input" /></div>
             <button class="btn-primary btn-danger" onclick="confirmWithdraw()">💸 Confirmer le retrait</button>
             <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
         `);
@@ -2287,38 +1439,16 @@
         const amount = parseInt(document.getElementById('withdrawAmount').value);
         const phone = document.getElementById('withdrawPhone').value;
         const pin = document.getElementById('withdrawPin').value;
-        if (!amount || amount < 100) {
-            showToast('⚠️', 'Montant minimum 100 FCFA');
-            return;
-        }
-        if (!phone) {
-            showToast('⚠️', 'Numéro requis');
-            return;
-        }
-        if (!pin || pin.length !== 4) {
-            showToast('⚠️', 'Code PIN requis (4 chiffres)');
-            return;
-        }
-        if (amount > (currentUserData.balance || 0)) {
-            showToast('⚠️', 'Solde insuffisant');
-            return;
-        }
+        if (!amount || amount < 100) { showToast('⚠️', 'Montant minimum 100 FCFA'); return; }
+        if (!phone) { showToast('⚠️', 'Numéro requis'); return; }
+        if (!pin || pin.length !== 4) { showToast('⚠️', 'Code PIN requis (4 chiffres)'); return; }
+        if (amount > (currentUserData.balance || 0)) { showToast('⚠️', 'Solde insuffisant'); return; }
         closeModal();
         showToast('⏳', 'Traitement du retrait...');
-
         setTimeout(() => {
             const newBalance = (currentUserData.balance || 0) - amount;
-            db.collection('users').doc(currentUser.uid).update({
-                balance: newBalance
-            }).then(() => {
+            db.collection('users').doc(currentUser.uid).update({ balance: newBalance }).then(() => {
                 currentUserData.balance = newBalance;
-                db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    type: 'withdraw',
-                    amount: amount,
-                    label: 'Retrait vers ' + phone,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
                 showToast('✅', `Retrait de ${formatPrice(amount)} vers ${phone} effectué !`);
                 loadProfile();
                 loadWallet();
@@ -2396,19 +1526,13 @@
                             </style>
                             <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
                                 ${order.status === 'accepted' || order.status === 'shipped' ? `
-                                    <button class="btn-primary" style="flex:1;padding:8px;font-size:12px;background:var(--yellow);color:#000;" onclick="trackOrder('${order.id}')">
-                                        📍 Voir position (GPS)
-                                    </button>
+                                    <button class="btn-primary" style="flex:1;padding:8px;font-size:12px;background:var(--yellow);color:#000;" onclick="trackOrder('${order.id}')">📍 Voir position (GPS)</button>
                                 ` : ''}
                                 ${order.status === 'delivered' ? `
-                                    <button class="btn-primary btn-success" style="flex:1;padding:8px;font-size:12px;" onclick="confirmDelivery('${order.id}')">
-                                        ✅ J'ai reçu le colis
-                                    </button>
+                                    <button class="btn-primary btn-success" style="flex:1;padding:8px;font-size:12px;" onclick="confirmDelivery('${order.id}')">✅ J'ai reçu le colis</button>
                                 ` : ''}
                                 ${order.status === 'pending' && canCancel ? `
-                                    <button class="btn-primary btn-danger" style="flex:1;padding:8px;font-size:12px;" onclick="cancelOrder('${order.id}')">
-                                        ❌ Annuler
-                                    </button>
+                                    <button class="btn-primary btn-danger" style="flex:1;padding:8px;font-size:12px;" onclick="cancelOrder('${order.id}')">❌ Annuler</button>
                                 ` : ''}
                             </div>
                         </div>
@@ -2425,11 +1549,7 @@
     function trackOrder(orderId) {
         startGPSTracking(orderId);
         setTimeout(() => {
-            if (currentPosition) {
-                showRealMap(currentPosition);
-            } else {
-                showToast('📍', 'Recherche de la position...');
-            }
+            if (currentPosition) { showRealMap(currentPosition); } else { showToast('📍', 'Recherche de la position...'); }
         }, 1000);
     }
 
@@ -2443,19 +1563,14 @@
                     📦 J'ai bien reçu le colis
                 </label>
             </div>
-            <button class="btn-primary btn-success" onclick="verifyDelivery('${orderId}')">
-                ✅ Confirmer
-            </button>
+            <button class="btn-primary btn-success" onclick="verifyDelivery('${orderId}')">✅ Confirmer</button>
             <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Annuler</button>
         `);
     }
 
     function verifyDelivery(orderId) {
         const checked = document.getElementById('deliveryCheckbox').checked;
-        if (!checked) {
-            showToast('⚠️', 'Coche la case pour confirmer');
-            return;
-        }
+        if (!checked) { showToast('⚠️', 'Coche la case pour confirmer'); return; }
         closeModal();
         db.collection('orders').doc(orderId).update({
             status: 'completed',
@@ -2466,10 +1581,7 @@
             showModal(`
                 <h3>📝 Donne ton avis</h3>
                 <p style="color:#aaa;margin:8px 0;">Comment s'est passée la transaction ?</p>
-                <div class="form-group">
-                    <label>Commentaire</label>
-                    <textarea id="reviewComment" placeholder="Partage ton expérience..." rows="3"></textarea>
-                </div>
+                <div class="form-group"><label>Commentaire</label><textarea id="reviewComment" placeholder="Partage ton expérience..." rows="3"></textarea></div>
                 <div style="margin:12px 0;">
                     <label class="checkbox-label">
                         <input type="checkbox" id="flameCheckbox" checked />
@@ -2486,9 +1598,7 @@
                         <option value="1">⭐ - Mauvais</option>
                     </select>
                 </div>
-                <button class="btn-primary btn-success" onclick="submitReview('${orderId}')">
-                    📤 Envoyer
-                </button>
+                <button class="btn-primary btn-success" onclick="submitReview('${orderId}')">📤 Envoyer</button>
                 <button class="btn-primary" style="background:transparent;border:1px solid #333;margin-top:8px;" onclick="closeModal()">Passer</button>
             `);
         }).catch(err => { showToast('❌', err.message); });
@@ -2598,13 +1708,9 @@
         if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const recipientId = 'admin_blk';
         db.collection('messages').add({
-            text: text,
-            senderId: currentUser.uid,
-            senderName: currentUserData?.name || 'Utilisateur',
-            recipientId: recipientId,
-            participants: [currentUser.uid, recipientId],
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            read: false
+            text: text, senderId: currentUser.uid, senderName: currentUserData?.name || 'Utilisateur',
+            recipientId, participants: [currentUser.uid, recipientId],
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(), read: false
         }).then(() => {
             input.value = '';
             showToast('✅', 'Message envoyé');
@@ -2627,23 +1733,12 @@
             container.innerHTML = `
                 <div style="margin-bottom:12px;">
                     <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                        <div class="stat-card" style="flex:1;min-width:100px;">
-                            <div class="stat-number">${count}</div>
-                            <div class="stat-label">Articles publiés</div>
-                        </div>
-                        <div class="stat-card" style="flex:1;min-width:100px;">
-                            <div class="stat-number">🔥 ${currentUserData?.flames || 0}</div>
-                            <div class="stat-label">Flammes reçues</div>
-                        </div>
-                        <div class="stat-card" style="flex:1;min-width:100px;">
-                            <div class="stat-number">${formatPrice(currentUserData?.balance || 0)}</div>
-                            <div class="stat-label">Solde</div>
-                        </div>
+                        <div class="stat-card" style="flex:1;min-width:100px;"><div class="stat-number">${count}</div><div class="stat-label">Articles publiés</div></div>
+                        <div class="stat-card" style="flex:1;min-width:100px;"><div class="stat-number">🔥 ${currentUserData?.flames || 0}</div><div class="stat-label">Flammes reçues</div></div>
+                        <div class="stat-card" style="flex:1;min-width:100px;"><div class="stat-number">${formatPrice(currentUserData?.balance || 0)}</div><div class="stat-label">Solde</div></div>
                     </div>
                 </div>
-                <button class="btn-primary" style="margin-bottom:16px;" onclick="showScreen('screen-publish')">
-                    ➕ Publier un article
-                </button>
+                <button class="btn-primary" style="margin-bottom:16px;" onclick="showScreen('screen-publish')">➕ Publier un article</button>
                 <div style="font-weight:700;margin-bottom:8px;color:var(--text,#fff);">📦 Mes articles</div>
                 <div class="product-grid" id="shopProductGrid">
                     ${count === 0 ? '<div style="grid-column:span 2;text-align:center;color:#888;padding:20px 0;">Aucun article publié</div>' : ''}
@@ -2677,7 +1772,7 @@
     }
 
     // ================================================================
-    // ➕ PUBLIER (AVEC IA PHOTO)
+    // ➕ PUBLIER
     // ================================================================
     function showPublishScreen() {
         const container = document.getElementById('publishContainer');
@@ -2685,57 +1780,14 @@
             <div class="glass">
                 <h3 style="font-size:20px;font-weight:800;margin-bottom:12px;color:var(--text,#fff);">➕ Publier un article</h3>
                 <form id="publishForm" onsubmit="publishProduct(event)">
-                    <div class="form-group">
-                        <label>📸 Photo de l'article</label>
-                        <input type="file" id="productImage" accept="image/*" onchange="analyzeImageWithAI(this)" />
-                        <div id="imageAnalysisResult" style="margin-top:6px;font-size:12px;"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>🏷️ Nom de l'article</label>
-                        <input type="text" id="productName" placeholder="ex: Robe Wax" required />
-                    </div>
-                    <div class="form-group">
-                        <label>💰 Prix (FCFA)</label>
-                        <input type="number" id="productPrice" placeholder="15000" required />
-                    </div>
-                    <div class="form-group">
-                        <label>📏 Taille</label>
-                        <select id="productSize">
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M" selected>M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>📦 État</label>
-                        <select id="productCondition">
-                            <option value="Neuf">✨ Neuf (avec étiquette)</option>
-                            <option value="Bon état" selected>👌 Bon état</option>
-                            <option value="Correct">🔄 Correct</option>
-                            <option value="À rénover">🔧 À rénover</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>📂 Catégorie</label>
-                        <select id="productCategory">
-                            <option value="femmes">👩 Femmes</option>
-                            <option value="hommes">👨 Hommes</option>
-                            <option value="robes">👗 Robes</option>
-                            <option value="accessoires">👜 Accessoires</option>
-                            <option value="chaussures">👟 Chaussures</option>
-                            <option value="bijoux">💍 Bijoux</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>📝 Description</label>
-                        <textarea id="productDescription" placeholder="Décris ton article (tissu, couleur, occasion...)" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary" id="publishBtn">
-                        ✅ Publier l'article
-                    </button>
+                    <div class="form-group"><label>📸 Photo de l'article</label><input type="file" id="productImage" accept="image/*" onchange="analyzeImageWithAI(this)" /><div id="imageAnalysisResult" style="margin-top:6px;font-size:12px;"></div></div>
+                    <div class="form-group"><label>🏷️ Nom de l'article</label><input type="text" id="productName" placeholder="ex: Robe Wax" required /></div>
+                    <div class="form-group"><label>💰 Prix (FCFA)</label><input type="number" id="productPrice" placeholder="15000" required /></div>
+                    <div class="form-group"><label>📏 Taille</label><select id="productSize"><option value="XS">XS</option><option value="S">S</option><option value="M" selected>M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option></select></div>
+                    <div class="form-group"><label>📦 État</label><select id="productCondition"><option value="Neuf">✨ Neuf (avec étiquette)</option><option value="Bon état" selected>👌 Bon état</option><option value="Correct">🔄 Correct</option><option value="À rénover">🔧 À rénover</option></select></div>
+                    <div class="form-group"><label>📂 Catégorie</label><select id="productCategory"><option value="femmes">👩 Femmes</option><option value="hommes">👨 Hommes</option><option value="robes">👗 Robes</option><option value="accessoires">👜 Accessoires</option><option value="chaussures">👟 Chaussures</option><option value="bijoux">💍 Bijoux</option></select></div>
+                    <div class="form-group"><label>📝 Description</label><textarea id="productDescription" placeholder="Décris ton article (tissu, couleur, occasion...)" rows="3"></textarea></div>
+                    <button type="submit" class="btn-primary" id="publishBtn">✅ Publier l'article</button>
                 </form>
             </div>
         `;
@@ -2744,10 +1796,7 @@
 
     async function analyzeImageWithAI(input) {
         const result = document.getElementById('imageAnalysisResult');
-        if (!input.files || input.files.length === 0) {
-            result.innerHTML = '';
-            return;
-        }
+        if (!input.files || input.files.length === 0) { result.innerHTML = ''; return; }
         const file = input.files[0];
         result.innerHTML = '🔍 Analyse IA en cours...';
         result.style.color = 'var(--yellow)';
@@ -2768,13 +1817,10 @@
 
     async function publishProduct(e) {
         e.preventDefault();
-
-        // Vérifier la limite de 50 articles
         const count = await db.collection('products')
             .where('sellerId', '==', currentUser.uid)
             .get()
             .then(snapshot => snapshot.size);
-
         if (count >= 50 && !currentUserData.paidLimit) {
             showToast('🔒', '⚠️ Limite de 50 articles atteinte ! Payez 5 000 FCFA pour continuer.');
             showModal(`
@@ -2786,53 +1832,36 @@
             `);
             return;
         }
-
         const name = document.getElementById('productName').value;
         const price = parseInt(document.getElementById('productPrice').value);
         const size = document.getElementById('productSize').value;
         const condition = document.getElementById('productCondition').value;
         const category = document.getElementById('productCategory').value;
         const description = document.getElementById('productDescription').value;
-
-        if (!name || !price) {
-            showToast('⚠️', 'Remplis au moins le nom et le prix');
-            return;
-        }
-
+        if (!name || !price) { showToast('⚠️', 'Remplis au moins le nom et le prix'); return; }
         const btn = document.getElementById('publishBtn');
         btn.disabled = true;
         btn.textContent = 'Publication...';
-
         let imageUrl = null;
         const imageFile = document.getElementById('productImage').files[0];
         if (imageFile) {
-            try {
-                imageUrl = await uploadToImgBB(imageFile);
-            } catch (error) {
+            try { imageUrl = await uploadToImgBB(imageFile); } catch (error) {
                 showToast('❌', 'Erreur upload image: ' + error);
                 btn.disabled = false;
                 btn.textContent = '✅ Publier l\'article';
                 return;
             }
         }
-
         const productData = {
-            name,
-            price,
-            size,
-            condition,
-            category,
+            name, price, size, condition, category,
             description: description || 'Aucune description',
             sellerId: currentUser.uid,
             sellerName: currentUserData?.name || 'Vendeur',
             sellerFlames: currentUserData?.flames || 0,
-            imageUrl: imageUrl,
-            ratings: [],
-            reviews: [],
+            imageUrl, ratings: [], reviews: [],
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             available: true
         };
-
         try {
             await db.collection('products').add(productData);
             await db.collection('users').doc(currentUser.uid).update({
@@ -2842,19 +1871,13 @@
             showToast('🎉', 'Article publié avec succès !');
             showScreen('screen-shop');
             loadShop();
-        } catch (err) {
-            showToast('❌', err.message);
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '✅ Publier l\'article';
-        }
+        } catch (err) { showToast('❌', err.message); } finally { btn.disabled = false;
+            btn.textContent = '✅ Publier l\'article'; }
     }
 
     function payForUnlock() {
-        // Simuler le paiement de déblocage (5000 FCFA)
         closeModal();
         showToast('⏳', 'Traitement du paiement...');
-
         setTimeout(() => {
             if ((currentUserData.balance || 0) >= 5000) {
                 const newBalance = (currentUserData.balance || 0) - 5000;
@@ -2884,10 +1907,8 @@
                 '<div style="text-align:center;color:#888;padding:40px 0;">Connecte-toi pour voir ton profil</div>';
             return;
         }
-
         const data = currentUserData;
         let stats = { orders: 0, sales: 0, weekSales: 0, monthSales: 0, yearSales: 0, totalSales: 0 };
-
         db.collection('orders').where('buyerId', '==', currentUser.uid).get().then(snapshot => {
             stats.orders = snapshot.size;
             db.collection('orders').where('sellerId', '==', currentUser.uid).get().then(sellerSnapshot => {
@@ -2915,9 +1936,7 @@
                             <span style="background:#2a2a2a;padding:4px 16px;border-radius:20px;font-size:12px;color:var(--text,#fff);">🔥 ${data.flames || 0} flammes</span>
                             <span style="background:#2a2a2a;padding:4px 16px;border-radius:20px;font-size:12px;color:var(--text,#fff);">📦 ${data.productCount || 0} articles</span>
                         </div>
-                        <div style="margin-top:12px;font-size:20px;font-weight:800;color:var(--yellow);">
-                            ${formatPrice(data.balance || 0)}
-                        </div>
+                        <div style="margin-top:12px;font-size:20px;font-weight:800;color:var(--yellow);">${formatPrice(data.balance || 0)}</div>
                         <div style="font-size:11px;color:#888;">Solde BLK</div>
                         <div style="margin-top:8px;">
                             ${data.paidLimit ? '<span class="badge-yellow">✅ Illimité</span>' : '<span style="background:#2a2a2a;padding:4px 12px;border-radius:20px;font-size:11px;color:#888;">50 articles gratuits</span>'}
@@ -2939,9 +1958,7 @@
                         </div>
                     </div>
                     <div style="margin-top:12px;">
-                        <button class="btn-primary" style="background:var(--yellow);color:#000;" onclick="showScreen('screen-shop')">
-                            🏪 Mon Magasin
-                        </button>
+                        <button class="btn-primary" style="background:var(--yellow);color:#000;" onclick="showScreen('screen-shop')">🏪 Mon Magasin</button>
                     </div>
                 `;
             });
@@ -2952,10 +1969,7 @@
     // 🚀 ACHAT DIRECT
     // ================================================================
     function buyNow(productId) {
-        if (!currentUser) {
-            showToast('🔒', 'Connecte-toi d\'abord');
-            return;
-        }
+        if (!currentUser) { showToast('🔒', 'Connecte-toi d\'abord'); return; }
         const p = allProducts.find(x => x.id === productId);
         if (!p) return;
         const cartRef = db.collection('carts').doc(currentUser.uid);
@@ -2982,18 +1996,15 @@
         const slides = document.querySelectorAll('.carousel-slide');
         const dots = document.querySelectorAll('.carousel-dots span');
         let current = 0;
-
         function showSlide(index) {
             slides.forEach((s, i) => s.classList.toggle('active', i === index));
             dots.forEach((d, i) => d.classList.toggle('active', i === index));
         }
-
         if (carouselInterval) clearInterval(carouselInterval);
         carouselInterval = setInterval(() => {
             current = (current + 1) % slides.length;
             showSlide(current);
         }, 5000);
-
         dots.forEach((dot, i) => {
             dot.addEventListener('click', () => {
                 current = i;
@@ -3010,6 +2021,8 @@
     console.log('🇨🇬 BLK Marketplace v3.0 — Fièrement Congolais');
     console.log('🔥 Application prête à être utilisée !');
     console.log('📱 https://blk-marketplace.vercel.app');
+    console.log('✅ Firebase configuré avec les bonnes clés');
+    console.log('✅ Yabetoo configuré avec les bonnes clés');
 </script>
 </body>
 </html>
